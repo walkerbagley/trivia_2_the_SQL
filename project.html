@@ -7,6 +7,7 @@
         <meta name="author" content="Patrick Schlosser, Dagny Brand, Zach Brown, Walker Bagley">
         <meta  name="keywords" content="Trivia, Game, bar trivia, bar, jackbox, trivia room">
     </head>
+<body>
     <h1>
         Trivia 2: The SQL
     </h1>
@@ -25,7 +26,7 @@
 
             <p>
             Our application will allow users to join game rooms, similar to the Jackbox experience, where they can play against the others in their rooms. The users can also form teams to play on in the game room. The game rooms are established by hosts, who choose the game deck to be played ahead of time. Additionally, because the host uses the application to create a game deck instead of having to create one from scratch, they won't know the answers ahead of time and will be able to play in the game room as well! (Good for small gatherings!).
-            </p>
+        </p>
 
             <p>
             Lastly, the application will store user and team game history and scores after each game. This will allow users to see their improvement over time. 
@@ -77,12 +78,13 @@
             <p>Assumptions</p>
             <ul>
                 <li>
-                Users can be on multiple trivia teams. During a single game, this is not allowed and will be enforced by the application layer. However, especially in games hosted by different hosts or at different times, it is reasonable to assume that users may join multiple teams. 
+                    Users can be on multiple trivia teams. During a single game, this is not allowed and will be enforced by the application layer. However, especially in games hosted by different hosts or at different times, it is reasonable to assume that users may join multiple teams. 
                 </li>
                 <li>
-                All questions are part of a category. Questions need some way to be grouped, especially for rounds within a game, so categories are a good solution. Questions that don’t fit well within specific categories can be included in a ‘Miscellaneous’ or ‘General Knowledge’ category.
+                    All questions are part of a category. Questions need some way to be grouped, especially for rounds within a game, so categories are a good solution. Questions that don’t fit well within specific categories can be included in a ‘Miscellaneous’ or ‘General Knowledge’ category.
                 </li>
             </ul>
         </li>    
     </ol>
+</body>
 </html>
