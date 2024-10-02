@@ -1,0 +1,88 @@
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>Trivia2</title>
+        <meta name="author" content="Patrick Schlosser, Dagny Brand, Zach Brown, Walker Bagley">
+        <meta  name="keywords" content="Trivia, Game, bar trivia, bar, jackbox, trivia room">
+    </head>
+    <h1>
+        Trivia 2: The SQL
+    </h1>
+    <ol>
+        <li>
+            <h3>
+                Description
+            </h3>
+            <p>
+            We want to create an application to enhance the trivia experience by offering customizable and reactive question decks, easy room and team formation, score histories, and efficient scoring. To do this, we are recreating the pen-and-paper bar trivia format and transforming it into a database-driven application.
+            </p>
+
+            <p>
+            Firstly, our database will hold many trivia questions, along with multiple choice answers and the correct answers. These questions will be associated with one or more categories. The database will also hold game decks, which are made up of questions from our database. Hosts, such as bars, will be able to make an account on the application where they can access available game decks and favorite them. They will also be able to create their own decks by selecting categories they want to see featured in the decks. The application will then create these decks by pulling in questions associated with the given categories. Questions will also have a difficulty rating, associated with the amount of users who get it correct, which will be reflected in the difficulty of the deck.
+            </p>
+
+            <p>
+            Our application will allow users to join game rooms, similar to the Jackbox experience, where they can play against the others in their rooms. The users can also form teams to play on in the game room. The game rooms are established by hosts, who choose the game deck to be played ahead of time. Additionally, because the host uses the application to create a game deck instead of having to create one from scratch, they won't know the answers ahead of time and will be able to play in the game room as well! (Good for small gatherings!).
+            </p>
+
+            <p>
+            Lastly, the application will store user and team game history and scores after each game. This will allow users to see their improvement over time. 
+            </p>
+        </li>
+        <li>
+            <h3>Usefulness</h3>
+            Our project will ensure efficient data management and a seamless user experience. Many bar trivia nights are mostly spent grading answers by hand and shouting answers over the din of the crowd; it is also difficult to ensure question difficulty and quality without repetition. Many home led small trivia games require a significant amount of preparation to find or write questions as well as a presenter who cannot play since he knows the answers. Our app will solve all of these problems since it will allow for instant automatic grading and ranking for each team, provide decks of questions for instant game play for all, and allow each team or player to easily read, understand, and respond to each question. 
+
+
+            Similar products include TriviaHub, TriviaMaker, Crowdpurr, TriviaRat, and Kahoot.
+            <ul>
+                <li>TriviaHub provides a variety of pre-made quizzes and allows customization to fit different themes and occasions, but is heavily paywalled.</li>
+                <li>TriviaMaker is an online tool that lets users create and host custom trivia games in various formats, such as multiple choice, grid, and list, but is focused on various formats for education rather than traditional trivia nights.</li>
+                <li>Crowdpurr is a live-audience trivia platform where participants use their mobile devices to answer questions, but it focuses on non trivia night style events. Crowdpurr also has a poor UI, many advertisements, and expensive premium tiers.</li>
+                <li>TriviaRat is a simple, no-setup-required trivia hosting platform. It allows hosts to create unique room codes, but does not provide the question packs and game history we will provide. It also costs $20 a month for workable features.</li>
+                <li>Kahoot limits the number of participants without paying a fee and also does not present the classic trivia experience but rather a time based game.</li>
+                Our product will be unique because it offers a classic trivia night experience completely for free. Hosts can create their own decks and host a virtual room for participants to join.
+            </ul>
+        </li>
+        <li>
+            <h3>Realness</h3>
+            <a href="https://github.com/uberspot/OpenTriviaQA/tree/master">Data</a>
+            <p>
+            A quick examination shows that this dataset contains many categories, each with a significant volume of questions. Each category contains a text file which we can read in the questions from. Each question is marked with a correct answer and multiple options for a multiple choice option. There are significantly greater than 10000 questions in the entire dataset, so we should have plenty of content for the trivia games. The data pertaining to individual games, users, lobbies, etc. will be manually created as we go since the main pieces of data that we need to manage are content related.
+            </p>
+        </li>
+        <li>
+            <h3>Functionality</h3>
+            Hosts are able to create decks, buy decks, and use decks to make games. Users are able to join the games. 
+                <h4>Basic Functions:</h4>
+                <ul>
+                    <li> CRUD (Create, Read, Update, and Delete) functionality is needed throughout our application. Hosts need to be able to manage their decks by creating new ones, changing existing ones to better fit their audiences, or deleting decks that are no longer in use. Hosts also need to be able to create games. From an administrative side, we need to be able to manage the question base by adding more to provide a continually novel experience, updating questions with incorrect answers or adjusting difficulties, and deleting questions that are poorly phrased or no longer true. Users need to be able to create teams and update their names and members as they are dynamic entities. As more information is gleaned about the questions, new categories can be created to better describe them or existing categories renamed to more aptly describe the questions. </li>
+                    <li>The most interesting query is the ability of hosts to create decks by selecting sets of questions that conform to various parameters including number, category, topic, difficulty, and more. The questions can then be selected from these decks. Other potential queries include finding which teams participated in a game and their respective scores. </li>
+                </ul>
+                
+            </p>
+            <p>
+                <h4>Advanced Functions:</h4>
+                <ul>
+                    <li>Dynamic Difficulty: By assigning a difficulty to each question in the dataset, we can adjust the average difficulty of queried questions in order to make the games harder or easier. In addition, the correctness of responses from users can be used to adjust initial expectations on the difficulty of a questions </li>
+                    <li>Intelligence in Deck Selection: By taking user input in the areas of interest for their game, we can prompt them with decks that closely match the type of trivia they’d like to play. This includes selecting decks with the appropriate categories, number of questions, distributions of difficulties and more. This can also include ensuring that hosts receive questions on a wide variety of topics within a category and avoiding duplicate or similar questions. </li>
+                </ul>                
+            </p>
+        </li>
+        <li>
+            <h3>ER Diagram</h3>
+            <a href="https://excalidraw.com/#json=WSEmEAqeyFtgMWGdMy3tn,jpZhvMmT1iKVciLAIJnUQQ">Link</a>
+            <p>Assumptions</p>
+            <ul>
+                <li>
+                Users can be on multiple trivia teams. During a single game, this is not allowed and will be enforced by the application layer. However, especially in games hosted by different hosts or at different times, it is reasonable to assume that users may join multiple teams. 
+                </li>
+                <li>
+                All questions are part of a category. Questions need some way to be grouped, especially for rounds within a game, so categories are a good solution. Questions that don’t fit well within specific categories can be included in a ‘Miscellaneous’ or ‘General Knowledge’ category.
+                </li>
+            </ul>
+        </li>    
+    </ol>
+</html>
