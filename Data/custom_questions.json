@@ -1,0 +1,1093 @@
+[
+    {
+        "type": "mc",
+        "category": "eng_lit",
+        "difficulty": 2,
+        "question": "Define elan",
+        "a": "a vigorous spirit or enthusiasm",
+        "d1": "a baked dish consisting of an open-topped pastry case with a savory or sweet filling",
+        "d2": "a disk of metal such as one from which a coin is made",
+        "d3": "a person's dress hairstyle, typically an elaborate one"
+    },
+    {
+        "type": "mc",
+        "category": "eng_lit",
+        "difficulty": 2,
+        "question": "Which is not a possible definition of 'race condition'?",
+        "a": "a runner's intangible variables like health, sleep, or emotional aptitude",
+        "d1": "a possible bug in a system whose behavior is dependent on the sequence or timing of other uncontrollable events",
+        "d2": "the amount of moisture found in a track",
+        "d3": "the state of well-being of an ethnic group"
+    },
+    {
+        "category": "gen",
+        "difficulty": 2,
+        "question": "What is a cluster of bananas in a store called?",
+        "a": "a hand",
+        "d1": " a bunch",
+        "d2": "a moke",
+        "d3": "a plum"
+    },
+    {
+        "category": "pc",
+        "difficulty": 2,
+        "question": "What band wrote 'I'm Shipping Up to Boston'?",
+        "a": "Dropkick Murphys",
+        "d1": "The Dubliners",
+        "d2": "U2",
+        "d3": "Thin Lizzy"
+    },
+    {
+        "category": "pc",
+        "difficulty": 2,
+        "attributes": ["sports"],
+        "question": "What NFL logo faces left?",
+        "a": "Eagles",
+        "d1": "Packers",
+        "d2": "Texans",
+        "d3": "Vikings"
+    },
+    {
+        "category": "pc",
+        "difficulty": 3,
+        "attributes": ["videogames"],
+        "question": "What does the DS Super Mario game say when opened?",
+        "a": "It's me Mario",
+        "d1": "Itsumi Mario",
+        "d2": "Time to go",
+        "d3": "Yippee"
+    },
+    {
+        "category": "tv",
+        "difficulty": 1,
+        "attributes": ["cartoon"],
+        "question": "What is the mark of a chef in Ratatouille?",
+        "a": "Messy apron, clean sleeves",
+        "d1": "Forearm burns",
+        "d2": "A signature peasant dish",
+        "d3": "Working from instinct"
+    },
+    {
+        "category": "gen",
+        "difficulty": 3,
+        "question": "Who was the first person to pee on the moon?",
+        "a": "Edwin Aldrin",
+        "d1": "Neil Armstrong",
+        "d2": "Yuri Gagarin",
+        "d3": "Buzz Lightyear"
+    },
+    {
+        "category": "pc",
+        "difficulty": 2,
+        "attributes": [
+            "quotes"
+        ],
+        "question": "Who said you can have any color you want as long as it's black?",
+        "a": "Henry Ford",
+        "d1": "Mick Jagger",
+        "d2": "Keith Richards",
+        "d3": "Kanye West"
+    },
+    {
+        "category": "hist",
+        "difficulty": 1,
+        "attributes": [
+            "usa"
+        ],
+        "question": "Who enacted the New Deal?",
+        "a": "Franklin Roosevelt",
+        "d1": "Theodore Roosevelt Jr.",
+        "d2": "Herbert Hoover",
+        "d3": "Richard Nixon"
+    },
+    {
+        "category": "hist",
+        "difficulty": 3,
+        "attributes": [
+            "usa"
+        ],
+        "question": "Whose administration was responsible for the Teapot Dome Scandle?",
+        "a": "Warren Harding",
+        "d1": "Theodore Roosevelt Jr.",
+        "d2": "Herbert Hoover",
+        "d3": "Franklin Roosevelt"
+    },
+    {
+        "category": "hist",
+        "difficulty": 2,
+        "attributes": [
+            "usa"
+        ],
+        "question": "How many presidents have been assassinated",
+        "a": "4",
+        "d1": "1",
+        "d2": "2",
+        "d3": "3"
+    },
+    {
+        "category": "hist",
+        "difficulty": 2,
+        "attributes": [
+            "usa"
+        ],
+        "question": "Which president spent the shortest time in office?",
+        "a": "William Henry Harrison",
+        "d1": "Abraham Lincoln",
+        "d2": "William McKinley",
+        "d3": "John F. Kennedy"
+    },
+    {
+        "type": "mc",
+        "category": "hist",
+        "difficulty": 3,
+        "attributes": [
+            "usa"
+        ],
+        "question": "Beer City, a town with no rules, was once located in what modern state?",
+        "a": "Oklahoma",
+        "d1": "New York",
+        "d2": "Wisconsin",
+        "d3": "Virginia"
+    },
+    {
+        "category": "hist",
+        "difficulty": 2,
+        "attributes": [
+            "usa"
+        ],
+        "question": "Which president spent the longest time in office?",
+        "a": "Franklin D. Roosevelt",
+        "d1": "Grover Cleveland",
+        "d2": "Woodrow Wilson",
+        "d3": "Ronald Reagan"
+    },
+    {
+        "category": "hist",
+        "difficulty": 1,
+        "attributes": [
+            "usa"
+        ],
+        "question": "How many U.S. presidents have there been (2022)?",
+        "a": "46",
+        "d1": "42",
+        "d2": "44",
+        "d3": "48"
+    },
+    {
+        "type": "mc",
+        "category": "hist",
+        "difficulty": 2,
+        "attributes": [
+            "usa"
+        ],
+        "question": "Which event did lead the U.S. into war?",
+        "a": "The Berlin Crisis",
+        "d1": "Brooks Sumner Affair",
+        "d2": "The Bombing of Pearl Harbor",
+        "d3": "Naval impressment"
+    },
+    {
+        "category": "hist",
+        "difficulty": 1,
+        "question": "Which event from the French Revolution was lead by women?",
+        "a": "The March on Versailles",
+        "d1": "The Storming of the Bastille",
+        "d2": "The Tennis Court Oath",
+        "d3": "The establishment of the Paris Commune"
+    },
+    {
+        "category": "hist",
+        "difficulty": 1,
+        "question": "The 100 Years War was fought between which countries (in alphabetical order)?",
+        "a": "England and France",
+        "a2": "Britain and France",
+        "d1": "Austria and France",
+        "d2": "Austria and Spain",
+        "d3": "Austria and England"
+    },
+    {
+        "category": "hist",
+        "difficulty": 3,
+        "question": "Which Frenchman lead the First Crusade?",
+        "a": "Godfrey of Bouillon",
+        "d1": "Louis VII",
+        "d2": "Philip II",
+        "d3": "Louis V"
+    },
+    {
+        "category": "hist",
+        "difficulty": 2,
+        "question": "How many major crusades were there?",
+        "a": "8",
+        "d1": "6",
+        "d2": "7",
+        "d3": "9"
+    },
+    {
+        "category": "hist",
+        "difficulty": 3,
+        "question": "Who founded the Achaemenid empire?",
+        "a": "Cyrus the Great",
+        "d1": "Xerxes the Great",
+        "d2": "Darius the Great",
+        "d3": "Alexander the Great"
+    },
+    {
+        "category": "hist",
+        "difficulty": 1,
+        "question": "Who won the Peloponnesian War?",
+        "a": "Sparta",
+        "d1": "Athens",
+        "d2": "Greece",
+        "d3": "Persia"
+    },
+    {
+        "category": "hist",
+        "type": "mc",
+        "difficulty": 3,
+        "question": "Who fought in the Battle of Thermopylae",
+        "a": "Xerxes the Great",
+        "d1": "Cyrus the Great",
+        "d2": "Darius the Great",
+        "d3": "Alexander the Great"
+    },
+    {
+        "category": "hist",
+        "difficulty": 3,
+        "attributes": [
+            "mythology"
+        ],
+        "question": "Who was the Egyptian god of the sky?",
+        "a": "Horus",
+        "d1": "Isis",
+        "d2": "Osiris",
+        "d3": "Ra"
+    },
+    {
+        "category": "hist",
+        "difficulty": 1,
+        "attributes": [
+            "mythology"
+        ],
+        "question": "Who killed Osiris?",
+        "a": "Seth",
+        "d1": "Khonsu",
+        "d2": "Hathor",
+        "d3": "Ammit"
+    },
+    {
+        "category": "hist",
+        "difficulty": 2,
+        "attributes": [
+            "mythology"
+        ],
+        "question": "Who is the Egyptian god of the dead?",
+        "a": "Anubis",
+        "d1": "Isis",
+        "d2": "Osiris",
+        "d3": "Hathor"
+    },
+    {
+        "category": "hist",
+        "difficulty": 1,
+        "attributes": [
+            "mythology"
+        ],
+        "question": "What is Ra the god of?",
+        "a": "The sun",
+        "d1": "The dead",
+        "d2": "The underworld",
+        "d3": "Final judgement"
+    },
+    {
+        "category": "hist",
+        "difficulty": 1,
+        "attributes": [
+            "mythology"
+        ],
+        "question": "Who is the king of the Greek gods?",
+        "a": "Zeus",
+        "d1": "Posiden",
+        "d2": "Hades",
+        "d3": "Apollo"
+    },
+    {
+        "category": "hist",
+        "difficulty": 1,
+        "attributes": [
+            "mythology"
+        ],
+        "question": "Who is the king of the Roman gods?",
+        "a": "Jupiter",
+        "d1": "Neptune",
+        "d2": "Saturn",
+        "d3": "Venus"
+    },
+    {
+        "category": "hist",
+        "difficulty": 1,
+        "attributes": [
+            "mythology"
+        ],
+        "question": "Who is the king of the Egyptian gods?",
+        "a": "Ra",
+        "d1": "Anubis",
+        "d2": "Osiris",
+        "d3": "Khonsu"
+    },
+    {
+        "category": "hist",
+        "difficulty": 1,
+        "attributes": [
+            "mythology"
+        ],
+        "question": "Who is the king of the Norse gods?",
+        "a": "Odin",
+        "d1": "Thor",
+        "d2": "Balder",
+        "d3": "Hod"
+    },
+    {
+        "category": "hist",
+        "difficulty": 3,
+        "attributes": [
+            "mythology"
+        ],
+        "question": "Who was the first living being in Norse mythology?",
+        "a": "Ymir",
+        "d1": "Odin",
+        "d2": "Vili",
+        "d3": "Ve"
+    },
+    {
+        "category": "hist",
+        "difficulty": 2,
+        "attributes": [
+            "mythology"
+        ],
+        "question": "Who was killed by mistletoe in Norse mythology?",
+        "a": "Balder",
+        "d1": "Loki",
+        "d2": "Frigg",
+        "d3": "Freyr"
+    },
+    {
+        "category": "hist",
+        "difficulty": 3,
+        "attributes": [
+            "mythology"
+        ],
+        "question": "The Vanir clan contains gods of what?",
+        "a": "Fertility",
+        "d1": "The heavens",
+        "d2": "Creation",
+        "d3": "Death and the afterlife"
+    },
+    {
+        "category": "hist",
+        "difficulty": 2,
+        "attributes": [
+            "mythology"
+        ],
+        "question": "What is the Tree of Life in Norse mythology?",
+        "a": "Yggdrasil",
+        "d1": "Ginnungagap",
+        "d2": "Alfheimr",
+        "d3": "Nioavellir"
+    },
+    {
+        "category": "hist",
+        "difficulty": 3,
+        "attributes": [
+            "mythology"
+        ],
+        "question": "Who killed Balder in Norse mythology?",
+        "a": "Hod",
+        "d1": "Hel",
+        "d2": "Loki",
+        "d3": "Vale"
+    },
+    {
+        "type": "mc",
+        "category": "hist",
+        "difficulty": 2,
+        "attributes": [
+            "mythology"
+        ],
+        "question": "Which of the following Roman deities is not a deity of war?",
+        "a": "Pomona",
+        "d1": "Nerio",
+        "d2": "Mars",
+        "d3": "Bellona"
+    },
+    {
+        "category": "hist",
+        "difficulty": 1,
+        "attributes": [
+            "mythology"
+        ],
+        "question": "Who is the Roman god(dess) of hope?",
+        "a": "Spes",
+        "d1": "Vesta",
+        "d2": "Venus",
+        "d3": "Saturn"
+    },
+    {
+        "category": "hist",
+        "difficulty": 1,
+        "attributes": [
+            "mythology"
+        ],
+        "question": "Juno is the goddess of what in Roman mythology?",
+        "a": "Marriage",
+        "d1": "Nature",
+        "d2": "Beauty",
+        "d3": "Fertility"
+    },
+    {
+        "category": "hist",
+        "difficulty": 1,
+        "attributes": [
+            "mythology"
+        ],
+        "question": "Who is the Greek god of the sea?",
+        "a": "Posiden",
+        "d1": "Zeus",
+        "d2": "Hermes",
+        "d3": "Apollo"
+    },
+    {
+        "category": "hist",
+        "difficulty": 1,
+        "attributes": [
+            "physics"
+        ],
+        "question": "Who lead the Manhattan Project",
+        "a": "Robert Oppenheimer",
+        "d1": "Albert Einstien",
+        "d2": "Walther Gerlach",
+        "d3": "Franklin Roosevelt"
+    },
+    {
+        "category": "hist",
+        "difficulty": 3,
+        "attributes": [
+            "physics"
+        ],
+        "question": "Who first split the atom?",
+        "a": "Ernest Rutherford",
+        "d1": "Albert Einstien",
+        "d2": "Robert Oppenheimer",
+        "d3": "Fritz Strassmann"
+    },
+    {
+        "category": "hist",
+        "difficulty": 1,
+        "question": "From which century was the first documented mention of the world being round?",
+        "a": "5th century BC",
+        "d1": "1st century BC",
+        "d2": "15th century AD",
+        "d3": "12th century AD"
+    },
+    {
+        "category": "hist",
+        "difficulty": 1,
+        "attributes": [
+            "max"
+        ],
+        "question": "Which leader controlled the most territory in history?",
+        "a": "Genghis Khan",
+        "d1": "George W. Bush",
+        "d2": "Adolf Hitler",
+        "d3": "Attila the Hun"
+    },
+    {
+        "category": "hist",
+        "difficulty": 2,
+        "question": "Who is known as the Scourge of God?",
+        "a": "Attila the Hun",
+        "d1": "Genghis Khan",
+        "d2": "Tamerlane",
+        "d3": "Tarmashirin Khan"
+    },
+    {
+        "category": "hist",
+        "difficulty": 3,
+        "question": "Who called himself the sword of Islam?",
+        "a": "Tamerlane",
+        "d1": "Zahiruddin Babur",
+        "d2": "Muhammad",
+        "d3": "Ali"
+    },
+    {
+        "category": "hist",
+        "difficulty": 1,
+        "attributes": [
+            "math"
+        ],
+        "question": "Who invented Algebra?",
+        "a": "Al-Khwarizmi",
+        "d1": "Isaac Newton",
+        "d2": "Pythagoras",
+        "d3": "Archimedes"
+    },
+    {
+        "category": "stem",
+        "difficulty": 1,
+        "attributes": [
+            "biology"
+        ],
+        "question": "Where is chlorophyll found?",
+        "a": "chloroplasts",
+        "d1": "plastids",
+        "d2": "chloroplastids",
+        "d3": "vacuole"
+    },
+    {
+        "category": "stem",
+        "difficulty": 1,
+        "attributes": [
+            "biology"
+        ],
+        "question": "What is cytosol?",
+        "a": "the cytoplasmic matrix, a liquid suspending organelles",
+        "d1": "digests or breaks down worn-out cell parts",
+        "d2": "develops spindle fibers in cell division",
+        "d3": "holds and replicates RNA"
+    },
+    {
+        "category": "stem",
+        "difficulty": 1,
+        "attributes": [
+            "biology"
+        ],
+        "question": "What is the least essential organ?",
+        "a": "appendix",
+        "d1": "small intestine",
+        "d2": "liver",
+        "d3": "left kidney"
+    },
+    {
+        "category": "stem",
+        "difficulty": 2,
+        "attributes": [
+            "physics"
+        ],
+        "question": "What component of the force from fluid flow is perpendicular to the oncoming flow direction?",
+        "a": "lift",
+        "d1": "drag",
+        "d2": "total (net) aerodynamic force",
+        "d3": "thrust"
+    },
+    {
+        "category": "stem",
+        "difficulty": 1,
+        "attributes": [
+            "physics"
+        ],
+        "question": "What is the equation for spring force?",
+        "a": "F=-kx",
+        "d1": "F=ma",
+        "d2": "F=G(mm/r^2)",
+        "d3": "F=p/t"
+    },
+    {
+        "category": "stem",
+        "difficulty": 1,
+        "attributes": [
+            "physics"
+        ],
+        "question": "What is the SI unit of resistance?",
+        "a": "Ohms",
+        "d1": "Amps",
+        "d2": "Volts",
+        "d3": "Watts"
+    },
+    {
+        "category": "stem",
+        "difficulty": 1,
+        "attributes": [
+            "math"
+        ],
+        "question": "What is the equation for pi?",
+        "a": "Circumference/Diameter",
+        "a2": "C/D",
+        "d1": "Circumference/Radius",
+        "d2": "Circumference*Diameter",
+        "d3": "Circumference*radius"
+    },
+    {
+        "category": "stem",
+        "difficulty": 3,
+        "attributes": [
+            "math"
+        ],
+        "question": "What does Stokes Theorem tell us?",
+        "a": "The line integral of a vector field over a loop is equal to the flux of its curl through the enclosed surface",
+        "d1": "The direction of greatest change of a scalar function",
+        "d2": "The convergence or divergence of a vector field",
+        "d3": "The direction of the line integral over a continuous bounded region is given by the Right-hand rule"
+    },
+    {
+        "category": "stem",
+        "difficulty": 3,
+        "attributes": [
+            "math"
+        ],
+        "question": "What is 0 in set theory?",
+        "a": "{}",
+        "a2": "the empty set",
+        "d1": "{0}",
+        "d2": "{{{}},{}}",
+        "d3": "{1}"
+    },
+    {
+        "category": "stem",
+        "difficulty": 3,
+        "attributes": [
+            "math"
+        ],
+        "question": "What is the smallest level of infinity?",
+        "a": "Aleph-zero",
+        "a2": "Aleph-Naught",
+        "d1": "the cardinality of the real numbers",
+        "d2": "the cardinality of the imaginary numbers",
+        "d3": "Aleph-one"
+    },
+    {
+        "category": "stem",
+        "difficulty": 3,
+        "attributes": [
+            "cs"
+        ],
+        "question": "What does the GIL do in Python?",
+        "a": "Ensures that only one thread is running at once",
+        "d1": "Allows it to breath underwater",
+        "d2": "Increases run speed",
+        "d3": "Increases slither speed"
+    },
+    {
+        "category": "stem",
+        "difficulty": 2,
+        "question": "What environmental factor triggers leaves changing colors?",
+        "a": "Increasing length of night",
+        "d1": "Decreasing temperature",
+        "d2": "Decreasing food supply",
+        "d3": "Changing moisture level"
+    },
+    {
+        "category": "world",
+        "difficulty": 1,
+        "attributes": [
+            "politics"
+        ],
+        "question": "The CCP leads which country?",
+        "a": "China",
+        "d1": "Columbia",
+        "d2": "Cameroon",
+        "d3": "Central African Republic"
+    },
+    {
+        "category": "world",
+        "difficulty": 1,
+        "attributes": [
+            "geography"
+        ],
+        "question": "How many continents are located entirely in the Southern Hemisphere?",
+        "a": "2",
+        "d1": "0",
+        "d2": "1",
+        "d3": "3"
+    },
+    {
+        "category": "world",
+        "difficulty": 1,
+        "question": "Aside from Russia (whose borders are disputed) which country has the most neighbors?",
+        "a": "China",
+        "d1": "Brazil",
+        "d2": "Germany",
+        "d3": "Central African Republic"
+    },
+    {
+        "category": "world",
+        "difficulty": 1,
+        "question": "Which two countries have the longest international border?",
+        "a": "Canada and the U.S.",
+        "a2": "Canada and U.S.A.",
+        "a3": "America and Canada",
+        "d1": "Kazakhstan and Russia",
+        "d2": "Argentina and Chile",
+        "d3": "China and Russia"
+    },
+    {
+        "category": "world",
+        "difficulty": 3,
+        "attributes": [
+            "politics"
+        ],
+        "question": "Who is the leader of Brazil (2022)?",
+        "a": "Jair Bolsonaro",
+        "d1": "Alberto Fernandez",
+        "d2": "Gabriel Boric",
+        "d3": "Gustavo Petro"
+    },
+    {
+        "category": "world",
+        "difficulty": 2,
+        "question": "How many countries boder Mexico?",
+        "a": "3",
+        "d1": "0",
+        "d2": "1",
+        "d3": "2"
+    },
+    {
+        "category": "world",
+        "difficulty": 2,
+        "attributes": [
+            "politics"
+        ],
+        "question": "Who is the chancellor of Germany in 2022?",
+        "a": "Olaf Scholz",
+        "d1": "Angela Merkel",
+        "d2": "Frank-Walter Steinmeier",
+        "d3": "Annalena Baerbock"
+    },
+    {
+        "category": "world",
+        "difficulty": 2,
+        "attributes": [
+            "max"
+        ],
+        "question": "What is the largest country in Africa?",
+        "a": "Algeria",
+        "d1": "Egypt",
+        "d2": "Sudan",
+        "d3": "Democratic Republic of the Congo"
+    },
+    {
+        "category": "world",
+        "difficulty": 2,
+        "attributes": [
+            "max"
+        ],
+        "question": "What is the tallest building in the world (2022)?",
+        "a": "Burj Khalifa",
+        "d1": "Merdeka 118",
+        "d2": "Shanghai Tower",
+        "d3": "Abraj Al-Bait Clock Tower"
+    },
+    {
+        "category": "world",
+        "difficulty": 1,
+        "attributes": [
+            "max"
+        ],
+        "question": "What is the largest river by discharge?",
+        "a": "Amazon",
+        "a2": "Amazon River",
+        "d1": "Congo",
+        "d2": "Ganges",
+        "d3": "Nile"
+    },
+    {
+        "category": "hist",
+        "difficulty": 2,
+        "attributes": [
+            "max"
+        ],
+        "question": "Who was the longest-reigning monarch in history?",
+        "a": "King Louis XIV",
+        "d1": "Queen Elizabeth II (England)",
+        "d2": "Bhumibol Adulyadej (Thailand)",
+        "d3": "Johann II (Liechtenstein)"
+    },
+    {
+        "category": "world",
+        "difficulty": 1,
+        "attributes": [
+            "max"
+        ],
+        "question": "What is the lowest place on Earth above water?",
+        "a": "The Dead Sea",
+        "a2": "Dead Sea",
+        "d1": "Death Valley",
+        "d2": "Lake Assal",
+        "d3": "The Mariana Trench"
+    },
+    {
+        "category": "world",
+        "difficulty": 1,
+        "attributes": [
+            "max"
+        ],
+        "question": "What is the lowest place on Earth's Crust?",
+        "a": "Mariana's Trench",
+        "d1": "The Dead Sea",
+        "d2": "Turpan Pendi",
+        "d3": "The Abyssal zone"
+    },
+    {
+        "category": "hist",
+        "difficulty": 2,
+        "question": "What was the last Feudal state?",
+        "a": "Sark",
+        "d1": "Germany",
+        "d2": "Holy Roman Empire",
+        "d3": "Portugal"
+    },
+    {
+        "category": "hist",
+        "difficulty": 2,
+        "question": "Who did Alexander Hamilton marry?",
+        "a": "Elizabeth Schuyler",
+        "d1": "Angelica Schuyler",
+        "d2": "Peggy Schuyler",
+        "d3": "Cornelia Schuyler"
+    },
+    {
+        "category": "stem",
+        "difficulty": 1,
+        "attributes": [
+            "chemistry"
+        ],
+        "question": "What is kombucha made from?",
+        "a": "A culture of bacteria and yeast",
+        "d1": "A mix of tea leaves and spices",
+        "d2": "Time fermented anti-oxidants",
+        "d3": "A colony of pH raising bacteria"
+    },
+    {
+        "category": "stem",
+        "difficulty": 1,
+        "attributes": [
+            "biology"
+        ],
+        "question": "How many parts does a cow stomach have?",
+        "a": "4",
+        "a2": "Four",
+        "d1": "1",
+        "d2": "7",
+        "d3": "2"
+    },
+    {
+        "category": "stem",
+        "difficulty": 1,
+        "attributes": [
+            "chemistry"
+        ],
+        "question": "What is the functional group of an alcohol",
+        "a2": "OH",
+        "a": "-OH",
+        "a3": "hydroxyl group",
+        "d1": "-COOH",
+        "d2": "R-COOH",
+        "d3": "-OH2"
+    },
+    {
+        "category": "stem",
+        "difficulty": 2,
+        "attributes": [
+            "chemistry"
+        ],
+        "question": "How many elements on the periodic table (2022)",
+        "a": "118",
+        "d1": "104",
+        "d2": "114",
+        "d3": "108"
+    },
+    {
+        "category": "stem",
+        "difficulty": 2,
+        "attributes": [
+            "chemistry"
+        ],
+        "question": "At what temperature does water boil in Kelvin?",
+        "a": "373",
+        "d1": "451",
+        "d2": "412",
+        "d3": "100"
+    },
+    {
+        "category": "stem",
+        "difficulty": 3,
+        "attributes": [
+            "chemistry"
+        ],
+        "question": "What is standard pressure in kilopascals?",
+        "a": "101",
+        "d1": "1",
+        "d2": "760",
+        "d3": "273"
+    },
+    {
+        "category": "stem",
+        "difficulty": 3,
+        "question": "How many atoms are in a drop of water?",
+        "a": "5E21",
+        "a2": "5x10^21",
+        "d1": "5E17",
+        "d2": "5E12",
+        "d3": "5E25"
+    },
+    {
+        "category": "eng_lit",
+        "difficulty": 2,
+        "question": "Define cud",
+        "a": "Food brought up into the mouth by a ruminating animal",
+        "d1": "The group of Baltic-Finnish peoples",
+        "d2": "A thick mass of coagulated liquid, especially blood, or of material stuck together",
+        "d3": "A foolish or clumsy person"
+    },
+    {
+        "category": "pc",
+        "difficulty": 3,
+        "attributes": [
+            "quotes"
+        ],
+        "question": "Who said 're-statement of the obvious is the first duty of intelligent men'",
+        "a": "George Orwell",
+        "d1": "C.S. Lewis",
+        "d2": "Ernest Hemingway",
+        "d3": "Aldous Huxley"
+    },
+    {
+        "category": "stem",
+        "difficulty": 3,
+        "question": "How many people are documented surviving rabies (2020)?",
+        "a": "29",
+        "d1": "0",
+        "d2": "45",
+        "d3": "72"
+    },
+    {
+        "category": "world",
+        "difficulty": 2,
+        "question": "If there were 1 billion fewer people in China and India, what would be the most populous country (2022)?",
+        "a": "China",
+        "d1": "India",
+        "d2": "The U.S.",
+        "d3": "Indonesia"
+    },
+    {
+        "category": "stem",
+        "difficulty": 3,
+        "attributes": [
+            "biology"
+        ],
+        "question": "What animal (besides humans) keep frogs as pets?",
+        "a": "Giant tarantulas",
+        "d1": "Dogfish",
+        "d2": "European water voles",
+        "d3": "Burmese pythons"
+    },
+    {
+        "type": "mc",
+        "category": "stem",
+        "difficulty": 2,
+        "attributes": [
+            "max",
+            "biology"
+        ],
+        "question": "What is the oldest?",
+        "a": "Tyrannosaurus rex",
+        "d1": "Grass",
+        "d2": "Woolly mammoth",
+        "d3": "The common cold virus"
+    },
+    {
+        "type": "mc",
+        "category": "hist",
+        "difficulty": 3,
+        "attributes": [
+            "max"
+        ],
+        "question": "What is the oldest?",
+        "a": "University of Oxford",
+        "d1": "The Aztec Empire",
+        "d2": "The first bubonic plague pandemic",
+        "d3": "Joan of Arc"
+    },
+    {
+        "category": "eng_lit",
+        "difficulty": 3,
+        "question": "Which of the following could be described as a tittle?",
+        "a": "The dot in an 'i' or 'j'",
+        "d1": "A very small serving or portion",
+        "d2": "A small, unprecise amount of some ingredient",
+        "d3": "A belittling comment or insult"
+    },
+    {
+        "category": "eng_lit",
+        "difficulty": 3,
+        "question": "What is a/the glabella?",
+        "a": "The area of skin, in humans, between the eyebrows",
+        "d1": "A figure characterized by warlike inclinations, especially in Greek stories and mythology",
+        "d2": "A point, in multidimensional statistics, around which data clusters in a pattern",
+        "d3": "The healer or shaman of some ancient tribes from Northeast Asia"
+    },
+    {
+        "category": "eng_lit",
+        "difficulty": 3,
+        "question": "What is the word for the rumbling of a stomach?",
+        "a": "Wamble",
+        "d1": "Rumination",
+        "d2": "Clargs",
+        "d3": "Ruction"
+    },
+    {
+        "category": "eng_lit",
+        "difficulty": 3,
+        "question": "Define vagitus",
+        "a": "A baby's first cry",
+        "d1": "Unwanted vegitation",
+        "d2": "In military slang, the differences between you and your enemy",
+        "d3": "A rupture in the uterine lining"
+    },
+    {
+        "category": "stem",
+        "difficulty": 3,
+        "question": "What does Wi-Fi stand for?",
+        "a": "Wireless fidelity",
+        "d1": "Wireless fingerprint",
+        "d2": "Wireless information - file integration",
+        "d3": "Wireless input for identification"
+    },
+    {
+        "category": "eng_lit",
+        "difficulty": 3,
+        "question": "What does DVD stand for?",
+        "a": "Digital versatile disc",
+        "d1": "Detailed video disc",
+        "d2": "Digital video disc",
+        "d3": "Detailed versatile display"
+    },
+    {
+        "type": "mc",
+        "category": "eng_lit",
+        "difficulty": 1,
+        "question": "Define glib",
+        "a": "Lacking depth and substance",
+        "d1": "Snakelike",
+        "d2": "Incorrect or harmful",
+        "d3": "Given in such a way as to lead another into error"
+    },
+    {
+        "type": "mc",
+        "category": "eng_lit",
+        "difficulty": 3,
+        "question": "Define deflagration",
+        "a": "Subsonic combustion which propagates across the surface of an explosive",
+        "d1": "The process of ruining one's reputation",
+        "d2": "A state of overheat and sweat especially when caused by eating spicy food",
+        "d3": "The process of implosion especially due to inordinate pressure underwater"
+    },
+    {
+        "category": "temp",
+        "difficulty": 1,
+        "question": "",
+        "a": "",
+        "d1": "",
+        "d2": "",
+        "d3": ""
+    }
+]
