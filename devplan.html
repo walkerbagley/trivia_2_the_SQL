@@ -8,35 +8,69 @@
         <meta  name="keywords" content="Trivia, Game, bar trivia, bar, jackbox, trivia room">
     </head>
     <body>
+        <h1>Development Plan</h1>
         <ol>
             <li>
-                
+                <h3>Relational Schema</h3>
             </li>
+            <ul>
+                <li>Games(<u>id</u>)</li>
+                <li>Scores(score, <u>game.id</u>, <u>team.id</u>)</li>
+                <li>Hosts(<u>host_id</u>)</li>
+                <li>Decks(<u>name</u>, description)</li>
+                <li>Teams(<u>id</u>, name)</li>
+                <li>Users(<u>user_id</u>, user_name)</li>
+                <li>Questions(<u>question_id</u>, question, difficulty, correct_answer, A, B, C, D)</li>
+                <li>Categories(<u>name</u>)</li>
+                <li>Form(<u>user_id</u>, <u>team_id</u>)</li>
+                <li>Describe(<u>category.name</u>, <u>question_id</u></li>
+                <li>Contain(<u>question_id</u>, <u>deck.name</u>)</li>
+                <li>Present(<u>game.id</u>, <u>deck.name</u></li>
+                <li>Own(<u>deck.name</u>, <u>host_id</u></li>
+                <li>Run(<u>host_id</u>, <u>game.id</u>)</li>
+                <li>Score(<u>team.id</u>, <u>game.id</u>, score)</li>
+                <li>Determine(<u>team.id</u>, <u>game.id</u>, score)</li>
+            </ul>
             <li>
-                <p>
-                    Database - Supabase (Postgres);
-                    Backend - Django (Python);
-                    Frontend - React (TypeScript)
-                </p>
-            </li>
-            <li>
-                We will get data from https://github.com/uberspot/OpenTriviaQA; In addition, we will make some data up as well. We will write some questions ourselves and make some accounts ourselves as well.
-            </li>
-            <li>
+                <h3>Technology Stack</h3>
                 <ul>
-                    <li>Oct 9th: Clean and parse data, standup database
-                    </li>
-                    <li>Oct 17th: Working MVP  with basic CRUD functionality</li>
-                    <li>Nov 6th: Stage 3 - basic functionality done
-                    </li>
-                    <li>Nov 25th: Develop advanced functions</li>
-                    <li>Dec 6th: First draft of report written</li>
-                    <li>Dec 10th: Review functionality and ensure a bug free experience</li>
-                    <li>Dec 15th: Stage 4 - finish report, make video, and clean up code</li>
+                    <li>Database - Supabase (Postgres)</li>
+                    <li>Backend - Django (Python)</li>
+                    <li>Frontend - React (TypeScript)</li>
                 </ul>
             </li>
-            <li></li>
-            <li></li>
+            <li>
+                <h3>Data</h3>
+                We will get data from <a href="https://github.com/uberspot/OpenTriviaQA" target="_blank">https://github.com/uberspot/OpenTriviaQA</a>. In addition, we will make some data up as well. We will write some questions ourselves and make some accounts ourselves as well.
+            </li>
+            <li>
+                <h3>Division of Labor</h3>
+                <ul>
+                    <li><b>Dagny:</b> work on react front end, write report</li>
+                    <li><b>Patrick:</b> parse data, work on front end, curate custom data</li>
+                    <li><b>Walker:</b> front end, repository management, backend algorithms</li>
+                    <li><b>Zach:</b> stand up database, work on db schema, API framework</li>
+                </ul>
+            </li>
+            <li>
+                <h3>Project Timeline</h3>
+                <ol>
+                    <li>Weekly meetings on Tuesdays at 9pm</li>
+                    <li><b>Oct 9th:</b> Clean and parse data, standup database
+                    </li>
+                    <li><b>Oct 17th:</b> Working MVP  with basic CRUD functionality</li>
+                    <li><b>Nov 6th:</b> Stage 3 - basic functionality done
+                    </li>
+                    <li><b>Nov 25th:</b> Develop advanced functions</li>
+                    <li><b>Dec 6th:</b> First draft of report written</li>
+                    <li><b>Dec 10th:</b> Review functionality and ensure a bug free experience</li>
+                    <li><b>Dec 15th:</b> Stage 4 - finish report, make video, and clean up code</li>
+                </ol>
+            </li>
+            <li>
+                <h3>Project Demo URL</h3>
+                <a href="http://db8.cse.nd.edu/cse30246/trivia_2_the_SQL/" target="_blank">http://db8.cse.nd.edu/cse30246/trivia_2_the_SQL/</a>
+            </li>
         </ol>
     </body>
 </html>
