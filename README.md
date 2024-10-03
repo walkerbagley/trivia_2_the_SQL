@@ -1,10 +1,12 @@
 # trivia_2_the_SQL
 Database Concepts Project: Trivia Web Application
+Walker Bagley, Dagny Brand, Zach Brown, Patrick Schlosser
 
 
 ### Question Details
 Questions should have the following attributes in the database:
 {
+        "id": "question_id"
         "category": "category name",
         "difficulty": 1-3,
         "question": "question statement",
