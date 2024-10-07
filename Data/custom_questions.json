@@ -38,9 +38,8 @@
         "d3": "Thin Lizzy"
     },
     {
-        "category": "pc",
+        "category": "sports",
         "difficulty": 2,
-        "attributes": ["sports"],
         "question": "What NFL logo faces left?",
         "a": "Eagles",
         "d1": "Packers",
