@@ -25,4 +25,4 @@ Current categories and attributes (10/7/2024):
 Categories:
 {'hobbies', 'sports', 'kids', 'world', 'tv', 'newest', 'general', 'pop culture', 'brain-teasers', 'religion', 'entertainment', 'humanities', 'stem', 'history'}
 Attributes:
-{'tv', 'physics', 'usa', 'biology', 'music', 'sports', 'math', 'videogames', 'politics', 'geography', 'people', 'literature', 'movies', 'quotes', 'animals', 'mythology', 'cs', 'max', 'cartoon', 'chemistry', 'video-games', 'celebrities'}
+{'music', 'literature', 'animals', 'chemistry', 'max', 'math', 'quotes', 'cartoon', 'geography', 'biology', 'politics', 'tv', 'physics', 'movies', 'video-games', 'mythology', 'celebrities', 'cs', 'videogames', 'people', 'usa'}
