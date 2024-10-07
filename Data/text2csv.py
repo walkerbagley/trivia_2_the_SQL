@@ -59,6 +59,7 @@ def txt_to_csv(path):
   bank["C"]=dist3
   bank["D"]=dist4
   bank["Category"]=category
+  bank["Difficulty"]=1
   df=pd.DataFrame(bank)
   return df
 
