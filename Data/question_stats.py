@@ -11,6 +11,7 @@ with open(path,"r") as fh:
         categories.add(q['Category'])
         for a in q["Attributes"]:
             attributes.add(a)
+print(f"Number of questions: {len(qs)}")
 print("Categories:")
 print(categories)
 print("Attributes:")

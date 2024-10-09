@@ -72,8 +72,10 @@ def transform_json_question(question_dict):
     return q
 
 def transform_csv_question(row):
+    if not row[2]:
+        return
     q = {
-        "Questions": row[1],
+        "Question": row[1],
         "A": row[2],
         "Difficulty": int(row[8]),
         "Attributes": []
@@ -94,12 +96,28 @@ def transform_csv_question(row):
 
     options = []
     for i in row[3:7]:
-        if i == row[1]:
+        if i == row[2]:
             continue
         options.append(i)
-    q["B"] = options[0]
-    q["C"] = options[1]
-    q["D"] = options[2]
+    try:
+        q["B"] = options[0]
+    except:
+        print(row)
+        print(options)
+        raise Exception
+    if row[2] not in {"True","False"}:
+        if len(options)==3:
+            q["C"] = options[1]
+            q["D"] = options[2]    
+        elif len(options)==2:
+            q["C"] = options[1]
+            q["D"] = "" 
+        elif len(options)==1:
+            q["C"] = ""
+            q["D"] = ""  
+    else:
+        q["C"] = ""
+        q["D"] = ""
     return q
 
 
@@ -115,7 +133,9 @@ for root, dirs, files in os.walk(categories_path):
             for row in csv_reader:
                 if not row[0]:
                     continue
-                questions.append(transform_csv_question(row))
+                parsed = transform_csv_question(row)
+                if parsed:
+                    questions.append(parsed)
 
 with open(out_path, "w+") as ofh:
     json.dump(questions, ofh)
