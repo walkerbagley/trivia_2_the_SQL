@@ -11,15 +11,21 @@ with open(questions_json, 'r') as js:
     for question in questions:
         row = []
         try:
-            row.append(question['Question'].strip())
+            row.append(' '.join(question['Question'].strip().split('\t')))
         except:
-            row.append(question['Questions'].strip())
+            row.append(' '.join(question['Questions'].strip().split('\t')))
         row.append(question['Difficulty'])
-        row.append(question['A'].strip())
-        row.append(question['B'].strip())
-        row.append(question['C'].strip())
-        row.append(question['D'].strip())
-        row.append(question['Category'].strip())
+        row.append(' '.join(question['A'].strip().split('\t')))
+        row.append(' '.join(question['B'].strip().split('\t')))
+        try:
+            row.append(' '.join(question['C'].strip().split('\t')))
+        except:
+            row.append('')
+        try:
+            row.append(' '.join(question['D'].strip().split('\t')))
+        except:
+            row.append('')
+        row.append(' '.join(question['Category'].strip().split('\t')))
         csv_content.append('\t'.join(map(str, row)))
 
 with open(questions_csv, 'w') as csv:
