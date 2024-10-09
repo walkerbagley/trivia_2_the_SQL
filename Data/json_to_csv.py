@@ -1,8 +1,10 @@
 import json
 
 questions_json = './questions.json'
-questions_csv = './questions.csv'
+questions_csv = './questions.tsv'
 csv_content = []
+
+csv_content.append('question,difficulty,A,B,C,D,category')
 
 with open(questions_json, 'r') as js:
     questions = json.loads(js.readlines()[0])
