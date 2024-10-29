@@ -1,0 +1,9 @@
+.accountpage {
+    color: #573e79ff;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    background-color: rgb(161, 219, 67);
+    font-family:Verdana, Geneva, Tahoma, sans-serif
+  }

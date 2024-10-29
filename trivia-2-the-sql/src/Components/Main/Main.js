@@ -2,7 +2,6 @@ import React from 'react'
 import './styles.css'
 
 import { useNavigate } from "react-router-dom";
-import Header from "./../Header/Header.js";
 
 const Main =  () => {
     const navigate = useNavigate();
@@ -17,7 +16,7 @@ const Main =  () => {
             </button>
             <button
                 class="button-52"
-                onClick={() => navigate('../Main')}>
+                onClick={() => navigate('/Host')}>
                 Host Game
             </button>
         </div>

@@ -40,7 +40,7 @@
   
   .navbar button:hover {
     background-color: rgb(84, 145, 149); /* Darker shade on hover */
-    color: #573e79ff;; /* Text color on hover */
+    color: white; /* Text color on hover */
   }
   /* End of header css */
   

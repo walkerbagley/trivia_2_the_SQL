@@ -6,10 +6,11 @@ const Decks =  () => {
 
     }
     return (
-    <div class="decklist">
+    <div class="deckspage">
+      <li class="decklist">
         <h1>Deck List</h1>
-
+      </li>
     </div>
   );
 }
-export default Header;
+export default Decks;
