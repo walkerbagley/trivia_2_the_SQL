@@ -6,33 +6,33 @@ import { useNavigate } from "react-router-dom";
 const Header =  () => {
     const navigate = useNavigate();
     return (
-    <div class="navbar">
+    <nav class="navbar">
         <div class="title">Trivia 2: The SQL</div>
         <button
             class="button-52"
             role="button"
-            onClick={() => navigate('../Main')}>
+            onClick={() => navigate('/')}>
             Home Page
         </button>
         <button
             class="button-52"
             role="button"
-            onClick={() => navigate('../Login')}>
+            onClick={() => navigate('/Login')}>
             Login
         </button>
         <button
             class="button-52"
             role="button"
-            onClick={() => navigate('../Account')}>
+            onClick={() => navigate('/Account')}>
             Account
         </button>
         <button
             class="button-52"
             role="button"
-            onClick={() => navigate('../Decks')}>
+            onClick={() => navigate('/Decks')}>
             Decks
         </button>
-    </div>
+    </nav>
   );
 }
 export default Header;

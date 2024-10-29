@@ -1,18 +1,21 @@
 /* Start of header css */
 
 .navbar {
-    background-color: #add8e6; /* color of navbar */
-    color: black;
+    background-color: #60a4a9ff; /* color of navbar (blue) */
+    color: #573e79ff;
     padding: 16px;
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: top;
+    width: 100%;
+    font-family:Verdana, Geneva, Tahoma, sans-serif
+
   }
   
   .navbar .title {
     flex-grow: 1; /*  title takes available space */
     text-align: left; /* Align title to the left */
-    font-size: 20px;
+    font-size: 30px;
   }
   
   .navbar .icon {
@@ -26,17 +29,18 @@
   }
   
   .navbar button {
-    background: white;
-    border: 1px solid black;
-    color: black;
+    background: #a1db43ff;
+    border: 2px solid #573e79ff;
+    color: #573e79ff;
     padding: 5px 10px; /* Padding for buttons */
     cursor: pointer;
     border-radius: 4px; /* Rounded corners */
+    float: right;
   }
   
   .navbar button:hover {
-    background-color: #6995b9; /* Darker shade on hover */
-    color: black; /* Text color on hover */
+    background-color: rgb(84, 145, 149); /* Darker shade on hover */
+    color: #573e79ff;; /* Text color on hover */
   }
   /* End of header css */
   
@@ -46,10 +50,10 @@
     letter-spacing: 1px;
     padding: 13px 20px 13px;
     outline: 0;
-    border: 1px solid black;
+    border: 1px solid white;
     cursor: pointer;
     position: relative;
-    background-color: rgba(0, 0, 0, 0);
+    background-color: #a1db43ff;
     user-select: none;
     -webkit-user-select: none;
     touch-action: manipulation;
@@ -58,7 +62,7 @@
   
   .button-52:after {
     content: "";
-    background-color: #ffe54c;
+    background-color: #ffbe0aff;
     width: 100%;
     z-index: -1;
     position: absolute;
