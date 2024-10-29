@@ -13,9 +13,11 @@ const PreHost =  () => {
     return (
     <div class="hostpage">
         <h1>Your Game ID: {getGameID()}</h1>
-        <h2>Choose Deck: </h2>
-        <button class='hostbutton'>Random</button>
-        <button class='hostbutton'>Browze Personal Decks</button>
+        <div class="buttons">
+            <h2>Choose Deck: </h2>
+            <button class='button-52'>Random</button>
+            <button class='button-52'>Browze Personal Decks</button>
+        </div>
     </div>
   );
 }
