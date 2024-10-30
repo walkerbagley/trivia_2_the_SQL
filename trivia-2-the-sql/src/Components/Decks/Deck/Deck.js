@@ -1,15 +1,15 @@
 import React from 'react'
 import './styles.css'
 
-const Deck =  () => {
-    const play_game = () => {
-
-    }
+const Deck =  (deckID) => {
+    let deckName = "deck"
+    let description = "description"
     return (
-    <div class="decklist">
-        <h1>Deck List</h1>
-
-    </div>
+      <div class="deckbox">
+        <h1 class="title">{deckName}</h1>
+        <hr></hr>
+        <h3 class="description">{description}</h3>
+      </div>
   );
 }
-export default Header;
+export default Deck;

@@ -11,7 +11,7 @@ const Login =  () => {
     }
     return (
         <div class="loginpage">
-            {AuthRegister}
+            <AuthRegister/>
             {/* <form class="form" action={login}>
                 <label class='username' for="username">Username: </label>
                 <input class='username' type="text" id="username" name="username" required/>

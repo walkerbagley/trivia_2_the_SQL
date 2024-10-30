@@ -1,15 +1,39 @@
 import React from 'react'
 import './styles.css'
+import Deck from './Deck/Deck.js'
 
 const Decks =  () => {
-    const play_game = () => {
-
-    }
     return (
     <div class="deckspage">
-      <li class="decklist">
-        <h1>Deck List</h1>
-      </li>
+      <h1>Deck List</h1>
+      <div class="grid-container">
+        <Deck class="grid-item"/>
+        <Deck class="grid-item"/>
+        <Deck class="grid-item"/>
+        <Deck class="grid-item"/>
+        <Deck class="grid-item"/>
+        <Deck class="grid-item"/>
+        <Deck class="grid-item"/>
+        <Deck class="grid-item"/>
+        <Deck class="grid-item"/>
+        <Deck class="grid-item"/>
+        <Deck class="grid-item"/>
+        <Deck class="grid-item"/>
+        <Deck class="grid-item"/>
+        <Deck class="grid-item"/>
+        <Deck class="grid-item"/>
+        <Deck class="grid-item"/>
+        <Deck class="grid-item"/>
+        <Deck class="grid-item"/>
+        <Deck class="grid-item"/>
+        <Deck class="grid-item"/>
+        <Deck class="grid-item"/>
+        <Deck class="grid-item"/>
+        <Deck class="grid-item"/>
+        <Deck class="grid-item"/>
+        <Deck class="grid-item"/>
+      </div>
+      
     </div>
   );
 }

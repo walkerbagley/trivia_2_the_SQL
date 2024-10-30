@@ -1,6 +1,7 @@
 import React from 'react';
 import Main from './Components/Main/Main.js'
 import PreHost from './Components/Host/Host.js'
+import PreGame from './Components/Play/Play.js'
 import Login from './Components/Login/Login.js'
 import Decks from './Components/Decks/Decks.js'
 import Account from './Components/Account/Account.js'
@@ -31,6 +32,7 @@ const App = () => {
         <Routes>
           <Route exact path='/' element={<Main/>}/>
           <Route exact path='/Host' element={<PreHost/>}/>
+          <Route exact path='/Game' element={<PreGame/>}/>
           <Route exact path='/Login' element={<Login/>}/>
           <Route exact path='/Decks' element={<Decks/>}/>
           <Route exact path='/Account' element={<Account/>}/>
