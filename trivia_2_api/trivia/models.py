@@ -7,12 +7,15 @@
 # Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
 
+from trivia_2_api import manage
+
 
 class DeckQuestions(models.Model):
     deck = models.OneToOneField('Decks', models.DO_NOTHING, primary_key=True)  # The composite primary key (deck_id, question_id) found, that is not supported. The first column is selected.
     question = models.ForeignKey('Questions', models.DO_NOTHING)
 
     class Meta:
+        managed = False
         db_table = 'DeckQuestions'
         unique_together = (('deck', 'question'),)
 
@@ -23,6 +26,7 @@ class Decks(models.Model):
     description = models.TextField()
 
     class Meta:
+        managed = False
         db_table = 'Decks'
 
 
@@ -34,6 +38,7 @@ class Games(models.Model):
     end_time = models.DateTimeField(blank=True, null=True)
 
     class Meta:
+        managed = False
         db_table = 'Games'
 
 
@@ -42,6 +47,7 @@ class HostDecks(models.Model):
     deck = models.ForeignKey(Decks, models.DO_NOTHING)
 
     class Meta:
+        managed = False
         db_table = 'HostDecks'
         unique_together = (('host', 'deck'),)
 
@@ -52,6 +58,7 @@ class Hosts(models.Model):
     hashed_password = models.TextField()
 
     class Meta:
+        managed = False
         db_table = 'Hosts'
 
 
@@ -60,6 +67,7 @@ class QuestionAttributes(models.Model):
     attribute = models.TextField()
 
     class Meta:
+        managed = False
         db_table = 'QuestionAttributes'
 
 
@@ -74,6 +82,7 @@ class Questions(models.Model):
     category = models.TextField()
 
     class Meta:
+        managed = False
         db_table = 'Questions'
 
 
@@ -83,6 +92,7 @@ class Scores(models.Model):
     score = models.BigIntegerField()
 
     class Meta:
+        managed = False
         db_table = 'Scores'
         unique_together = (('team', 'game'),)
 
@@ -92,6 +102,7 @@ class TeamMembers(models.Model):
     user = models.ForeignKey('Users', models.DO_NOTHING)
 
     class Meta:
+        managed = False
         db_table = 'TeamMembers'
         unique_together = (('team', 'user'),)
 
@@ -101,6 +112,7 @@ class Teams(models.Model):
     name = models.TextField()
 
     class Meta:
+        managed = False
         db_table = 'Teams'
 
 
@@ -110,4 +122,5 @@ class Users(models.Model):
     hashed_password = models.TextField()
 
     class Meta:
+        managed = False
         db_table = 'Users'
