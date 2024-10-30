@@ -16,7 +16,7 @@ const PreHost =  () => {
         <div class="buttons">
             <h2>Choose Deck: </h2>
             <button class='button-52'>Random</button>
-            <button class='button-52'>Browze Personal Decks</button>
+            <button class='button-52'>Browse Personal Decks</button>
         </div>
     </div>
   );
