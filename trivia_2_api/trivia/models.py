@@ -7,12 +7,10 @@
 # Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
 
-from trivia_2_api import manage
 
-
-class DeckQuestions(models.Model):
-    deck = models.OneToOneField('Decks', models.DO_NOTHING, primary_key=True)  # The composite primary key (deck_id, question_id) found, that is not supported. The first column is selected.
-    question = models.ForeignKey('Questions', models.DO_NOTHING)
+class DeckQuestion(models.Model):
+    deck = models.OneToOneField('Deck', models.DO_NOTHING, primary_key=True)  # The composite primary key (deck_id, question_id) found, that is not supported. The first column is selected.
+    question = models.ForeignKey('Question', models.DO_NOTHING)
 
     class Meta:
         managed = False
@@ -20,7 +18,7 @@ class DeckQuestions(models.Model):
         unique_together = (('deck', 'question'),)
 
 
-class Decks(models.Model):
+class Deck(models.Model):
     id = models.UUIDField(primary_key=True)
     name = models.TextField()
     description = models.TextField()
@@ -30,10 +28,10 @@ class Decks(models.Model):
         db_table = 'Decks'
 
 
-class Games(models.Model):
+class Game(models.Model):
     id = models.UUIDField(primary_key=True)
-    deck = models.ForeignKey(Decks, models.DO_NOTHING)
-    host = models.ForeignKey('Hosts', models.DO_NOTHING)
+    deck = models.ForeignKey(Deck, models.DO_NOTHING)
+    host = models.ForeignKey('Host', models.DO_NOTHING)
     start_time = models.DateTimeField()
     end_time = models.DateTimeField(blank=True, null=True)
 
@@ -42,9 +40,9 @@ class Games(models.Model):
         db_table = 'Games'
 
 
-class HostDecks(models.Model):
-    host = models.OneToOneField('Hosts', models.DO_NOTHING, primary_key=True)  # The composite primary key (host_id, deck_id) found, that is not supported. The first column is selected.
-    deck = models.ForeignKey(Decks, models.DO_NOTHING)
+class HostDeck(models.Model):
+    host = models.OneToOneField('Host', models.DO_NOTHING, primary_key=True)  # The composite primary key (host_id, deck_id) found, that is not supported. The first column is selected.
+    deck = models.ForeignKey(Deck, models.DO_NOTHING)
 
     class Meta:
         managed = False
@@ -52,7 +50,7 @@ class HostDecks(models.Model):
         unique_together = (('host', 'deck'),)
 
 
-class Hosts(models.Model):
+class Host(models.Model):
     id = models.UUIDField(primary_key=True)
     host_name = models.TextField()
     hashed_password = models.TextField()
@@ -62,8 +60,8 @@ class Hosts(models.Model):
         db_table = 'Hosts'
 
 
-class QuestionAttributes(models.Model):
-    question = models.OneToOneField('Questions', models.DO_NOTHING, primary_key=True)
+class QuestionAttribute(models.Model):
+    question = models.OneToOneField('Question', models.DO_NOTHING, primary_key=True)
     attribute = models.TextField()
 
     class Meta:
@@ -71,7 +69,7 @@ class QuestionAttributes(models.Model):
         db_table = 'QuestionAttributes'
 
 
-class Questions(models.Model):
+class Question(models.Model):
     id = models.UUIDField(primary_key=True)
     question = models.TextField()
     difficulty = models.SmallIntegerField()
@@ -86,9 +84,9 @@ class Questions(models.Model):
         db_table = 'Questions'
 
 
-class Scores(models.Model):
-    team = models.OneToOneField('Teams', models.DO_NOTHING, primary_key=True)  # The composite primary key (team_id, game_id) found, that is not supported. The first column is selected.
-    game = models.ForeignKey(Games, models.DO_NOTHING)
+class Score(models.Model):
+    team = models.OneToOneField('Team', models.DO_NOTHING, primary_key=True)  # The composite primary key (team_id, game_id) found, that is not supported. The first column is selected.
+    game = models.ForeignKey(Game, models.DO_NOTHING)
     score = models.BigIntegerField()
 
     class Meta:
@@ -97,9 +95,9 @@ class Scores(models.Model):
         unique_together = (('team', 'game'),)
 
 
-class TeamMembers(models.Model):
-    team = models.OneToOneField('Teams', models.DO_NOTHING, primary_key=True)  # The composite primary key (team_id, user_id) found, that is not supported. The first column is selected.
-    user = models.ForeignKey('Users', models.DO_NOTHING)
+class TeamMember(models.Model):
+    team = models.OneToOneField('Team', models.DO_NOTHING, primary_key=True)  # The composite primary key (team_id, user_id) found, that is not supported. The first column is selected.
+    user = models.ForeignKey('User', models.DO_NOTHING)
 
     class Meta:
         managed = False
@@ -107,7 +105,7 @@ class TeamMembers(models.Model):
         unique_together = (('team', 'user'),)
 
 
-class Teams(models.Model):
+class Team(models.Model):
     id = models.UUIDField(primary_key=True)
     name = models.TextField()
 
@@ -116,7 +114,7 @@ class Teams(models.Model):
         db_table = 'Teams'
 
 
-class Users(models.Model):
+class User(models.Model):
     id = models.UUIDField(primary_key=True)
     user_name = models.TextField()
     hashed_password = models.TextField()
@@ -124,3 +122,4 @@ class Users(models.Model):
     class Meta:
         managed = False
         db_table = 'Users'
+
