@@ -16,6 +16,8 @@ import './variables.css'
 
 import { initializeParse } from '@parse/react';
 
+import axios from 'axios';
+
 initializeParse(
   'YOUR_SERVER_URL',
   'YOUR_APPLICATION_ID',
@@ -26,17 +28,24 @@ let isLoggedIn = false;
 
 const App = () => {
   const url = "";
-  const [data, setData] = useState([]);
+  state = {
+    details : [],
+    user: "",
+  };
 
-  const fetchInfo = () => { 
-    return fetch(url) 
-            .then((res) => res.json()) 
-            .then((d) => setData(d)) 
-    }
-    
-    useEffect(() => {
-      fetchInfo();
-    }, [])
+  componentDidMount() {
+
+    let data ;
+
+    axios.get('http://localhost:8000/')
+    .then(res => {
+        data = res.data;
+        this.setState({
+            details : data    
+        });
+    })
+    .catch(err => {})
+  }
 
     return (
       <div>
