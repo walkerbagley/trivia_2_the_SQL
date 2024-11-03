@@ -13,7 +13,7 @@ import './styles.css';
 
 export default function Components() {
     return (
-        <div className="page">
+        <Router>
             <Header/>
             <Routes>
             <Route exact path='/' element={<Main/>}/>
@@ -28,6 +28,6 @@ export default function Components() {
             {/* <Route path="/login" element={<AuthLogin />} /> */}
             {/* <Route path="*" element={<Navigate to="/auth" replace />} /> */}
             </Routes>
-        </div>
+        </Router>
     );
 };
