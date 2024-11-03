@@ -27,3 +27,14 @@ Questions are classified in the following ways:
 Current categories and attributes (10/7/2024):
 - Categories: `{'hobbies', 'sports', 'kids', 'world', 'tv', 'newest', 'general', 'pop culture', 'brain-teasers', 'religion', 'entertainment', 'humanities', 'stem', 'history'}`
 - Attributes: `{'music', 'literature', 'animals', 'chemistry', 'max', 'math', 'quotes', 'cartoon', 'geography', 'biology', 'politics', 'tv', 'physics', 'movies', 'video-games', 'mythology', 'celebrities', 'cs', 'videogames', 'people', 'usa'}`
+
+
+### Dev Plan
+Oct 9th: Clean and parse data, standup database
+Oct 17th: Working MVP with basic CRUD functionality
+Nov 6th: Stage 3 - basic functionality done
+Nov 25th: Develop advanced functions
+Dec 6th: First draft of report written
+Dec 10th: Review functionality and ensure a bug free experience
+Dec 15th: Stage 4 - finish report, make video, and clean up code
+
