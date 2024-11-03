@@ -3,8 +3,8 @@ import './styles.css'
 
 const Account =  () => {
     return (
-    <div class="accountpage">
-      <li class="decklist">
+    <div className="accountpage">
+      <li className="decklist">
         <h1>Deck List</h1>
       </li>
     </div>

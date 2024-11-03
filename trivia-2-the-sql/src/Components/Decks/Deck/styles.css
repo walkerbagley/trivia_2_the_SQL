@@ -1,80 +1,21 @@
-/* Start of header css */
-
-.navbar {
-    background-color: #add8e6; /* color of navbar */
-    color: black;
-    padding: 16px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .navbar .title {
-    flex-grow: 1; /*  title takes available space */
-    text-align: left; /* Align title to the left */
-    font-size: 20px;
-  }
-  
-  .navbar .icon {
-    cursor: pointer;
-    font-size: 24px;
-  }
-  
-  .navbar .navigation {
-    display: flex;
-    gap: 10px; /* Space between buttons */
-  }
-  
-  .navbar button {
-    background: white;
-    border: 1px solid black;
-    color: black;
-    padding: 5px 10px; /* Padding for buttons */
-    cursor: pointer;
-    border-radius: 4px; /* Rounded corners */
-  }
-  
-  .navbar button:hover {
-    background-color: #6995b9; /* Darker shade on hover */
-    color: black; /* Text color on hover */
-  }
-  /* End of header css */
-  
-  .button-52 {
-    font-size: 16px;
-    font-weight: 200;
-    letter-spacing: 1px;
-    padding: 13px 20px 13px;
-    outline: 0;
-    border: 1px solid black;
-    cursor: pointer;
-    position: relative;
-    background-color: rgba(0, 0, 0, 0);
-    user-select: none;
-    -webkit-user-select: none;
-    touch-action: manipulation;
-    z-index: 100;
-  }
-  
-  .button-52:after {
-    content: "";
-    background-color: #ffe54c;
-    width: 100%;
-    z-index: -1;
-    position: absolute;
-    height: 100%;
-    top: 7px;
-    left: 7px;
-    transition: 0.2s;
-  }
-  
-  .button-52:hover:after {
-    top: 0px;
-    left: 0px;
-  }
-  
-  @media (min-width: 768px) {
-    .button-52 {
-      padding: 13px 50px 13px;
-    }
-  }
+.deckbox {
+  font: var(--main-font);
+  margin: 10px;
+  overflow: wrap;
+}
+.grid-item { 
+  background-color: white; 
+  border: 2px solid var(--main-text-color);; 
+  border-radius: 5px; 
+  padding: 20px; 
+  text-align: center; 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+}
+.title {
+  display: block;
+  width: 100%;
+  border-bottom: 1px solid;
+}
+.description {
+  display: block;
+}

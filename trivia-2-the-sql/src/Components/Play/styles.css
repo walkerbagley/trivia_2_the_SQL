@@ -1,0 +1,5 @@
+.playpage {
+    background-color: var(--main-background-color);
+    font: var(--main-font);
+    color: var(--main-background-color)
+}

@@ -1,30 +1,40 @@
-import React from 'react';
-import Main from './Components/Main/Main.js'
-import PreHost from './Components/Host/Host.js'
-import Login from './Components/Login/Login.js'
-import Decks from './Components/Decks/Decks.js'
-import Account from './Components/Account/Account.js'
-import Header from './Components/Header/Header.js'
+import './variables.css'
+import { initializeParse } from '@parse/react';
+import axios from 'axios';
+import Components from './Components/Components';
 
-import Parse from 'parse'
-import {Routes, Route} from 'react-router-dom'
+initializeParse(
+  'YOUR_SERVER_URL',
+  'YOUR_APPLICATION_ID',
+  'YOUR_JAVASCRIPT_KEY'
+);
+
+let isLoggedIn = false;
 
 const App = () => {
+//   const url = "";
+//   const state = {
+//     details : [],
+//     user: "",
+//   };
+
+//   function componentDidMount() {
+
+//     let data ;
+
+//     axios.get('http://localhost:8000/')
+//     .then(res => {
+//         data = res.data;
+//         this.setState({
+//             details : data    
+//         });
+//     })
+//     .catch(err => {})
+//   }
 
     return (
-      <div>
-        <Header/>
-        <Routes>
-          <Route exact path='/' element={<Main/>}/>
-          <Route exact path='/Host' element={<PreHost/>}/>
-          <Route exact path='/Login' element={<Login/>}/>
-          <Route exact path='/Decks' element={<Decks/>}/>
-          <Route exact path='/Account' element={<Account/>}/>
-        </Routes>
-    
-      </div>
-
-    )
+      <Components/>
+    );
 };
 
 export default App;

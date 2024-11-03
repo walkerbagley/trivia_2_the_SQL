@@ -6,16 +6,16 @@ import { useNavigate } from "react-router-dom";
 const Main =  () => {
     const navigate = useNavigate();
     return (
-    <div class="titlepage">
-        <div class="maintitle">Trivia 2: The SQL</div>
-        <div class="buttons">
+    <div className="titlepage">
+        <div className="maintitle">Trivia 2: The SQL</div>
+        <div className="buttons">
             <button
-                class="button-52"
-                onClick={() => navigate('../Main')}>
+                className="button-52"
+                onClick={() => navigate('/Play')}>
                 Join Game
             </button>
             <button
-                class="button-52"
+                className="button-52"
                 onClick={() => navigate('/Host')}>
                 Host Game
             </button>
