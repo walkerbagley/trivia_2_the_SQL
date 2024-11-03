@@ -1,15 +1,20 @@
-import React from 'react'
-import './styles.css'
+import React from 'react';
+import { useParams } from 'react-router-dom';
+import './styles.css';
 
 const DeckDetails =  () => {
-    const play_game = () => {
+  const { id } = useParams();
 
-    }
-    return (
-    <div class="decklist">
-        <h1>Deck List</h1>
+  console.log('hello world', id);
 
+  return (
+    <div className="deckdetails">
+      <h1>Deck #{id}</h1>
+      <h2>Questions</h2>
+      <ol>
+        <li>hello world</li>
+      </ol>
     </div>
   );
 }
-export default Header;
+export default DeckDetails;

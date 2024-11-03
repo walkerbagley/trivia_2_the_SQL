@@ -12,14 +12,14 @@ const Header =  () => {
 
     if (!isLoggedIn) {
         login_button = <button
-                class="button-52"
+                className="button-52"
                 role="button"
                 onClick={() => navigate('/Login')}>
                 Login
         </button>;
     } else {
         login_button = <button
-            class="button-52"
+            className="button-52"
             role="button"
             onClick={() => navigate('/Account')}>
             Account
@@ -27,10 +27,10 @@ const Header =  () => {
     }
 
     return (
-    <nav class="navbar">
-        <div class="title">Trivia 2: The SQL</div>
+    <nav className="navbar">
+        <div className="title">Trivia 2: The SQL</div>
         <button
-            class="button-52"
+            className="button-52"
             role="button"
             onClick={() => navigate('/')}>
             Home Page
@@ -38,7 +38,7 @@ const Header =  () => {
         {login_button}
         
         <button
-            class="button-52"
+            className="button-52"
             role="button"
             onClick={() => navigate('/Decks')}>
             Decks

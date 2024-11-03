@@ -10,14 +10,14 @@ const Login =  () => {
         
     }
     return (
-        <div class="loginpage">
+        <div className="loginpage">
             <AuthRegister/>
-            {/* <form class="form" action={login}>
-                <label class='username' for="username">Username: </label>
-                <input class='username' type="text" id="username" name="username" required/>
-                <label class='password' for="password">Password: </label>
-                <input class='password' type="password" id="password" name="password" required/>
-                <input class='button' type="submit" value="Submit"/>
+            {/* <form className="form" action={login}>
+                <label className='username' for="username">Username: </label>
+                <input className='username' type="text" id="username" name="username" required/>
+                <label className='password' for="password">Password: </label>
+                <input className='password' type="password" id="password" name="password" required/>
+                <input className='button' type="submit" value="Submit"/>
             </form>  */}
         </div>
   );

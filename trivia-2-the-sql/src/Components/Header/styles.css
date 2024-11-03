@@ -32,9 +32,9 @@
     background: #a1db43ff;
     border: 2px solid #573e79ff;
     color: #573e79ff;
-    padding: 5px 10px; /* Padding for buttons */
+    padding: 5px 10px; 
     cursor: pointer;
-    border-radius: 4px; /* Rounded corners */
+    border-radius: 4px; 
     float: right;
   }
   
