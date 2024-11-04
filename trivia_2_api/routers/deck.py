@@ -2,10 +2,8 @@ from fastapi import APIRouter, HTTPException
 from psycopg.rows import class_row
 from uuid import UUID
 
-from trivia_2_fast_api.models.deck import DeckRequest
-
 from ..db import db
-from ..models import Deck
+from ..models import Deck, DeckRequest
 
 router = APIRouter(
     prefix="/deck",

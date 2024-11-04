@@ -2,10 +2,8 @@ from fastapi import APIRouter, HTTPException
 from psycopg.rows import class_row
 from uuid import UUID
 
-from trivia_2_fast_api.models.user import UserRequest
-
 from ..db import db
-from ..models import User
+from ..models import User, UserRequest
 
 router = APIRouter(
     prefix="/user",
@@ -29,13 +27,6 @@ async def get_user(id: UUID) -> User:
             if question is None:
                 raise HTTPException(status_code=404, detail="User not found")
             return question
-
-@router.post("/")
-async def create_user(user: UserRequest) -> None:
-    async with db.connection() as conn:
-        async with conn.cursor() as cur:
-            await cur.execute('''INSERT INTO "Users" (user_name, hashed_password) VALUES (%s, %s)''',
-                              (user.user_name, user.hashed_password))
             
 @router.put("/{id}")
 async def update_user(id: UUID, user: UserRequest) -> None:

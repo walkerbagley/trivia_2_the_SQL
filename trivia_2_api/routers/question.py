@@ -2,10 +2,8 @@ from fastapi import APIRouter, HTTPException
 from psycopg.rows import class_row
 from uuid import UUID
 
-from trivia_2_fast_api.models.question import QuestionRequest
-
 from ..db import db
-from ..models import Question
+from ..models import Question, QuestionRequest
 
 router = APIRouter(
     prefix="/question",
