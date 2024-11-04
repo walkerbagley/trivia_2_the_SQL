@@ -4,7 +4,7 @@ from psycopg.rows import class_row
 from uuid import UUID
 
 from ..db import db
-from ..models import Host, HostRequest
+from ..models import Host, HostRequest, Deck
 
 router = APIRouter(
     prefix="/host",
@@ -54,4 +54,30 @@ async def delete_host(id: UUID) -> None:
     async with db.connection() as conn:
         async with conn.cursor() as cur:
             await cur.execute('''DELETE FROM "Hosts" WHERE id = %s''', (id,))
-        
+
+@router.get("/{host_id}/deck")
+async def get_host_decks(host_id: UUID) -> list[Deck]:
+    async with db.connection() as conn:
+        async with conn.cursor(row_factory=class_row(Deck)) as cur:
+            await cur.execute('''
+                              SELECT d.id, d.name, d.description FROM "Decks" as d 
+                              LEFT OUTER JOIN "HostDecks" as hd ON d.id = hd.deck_id
+                              WHERE hd.host_id = %s''', (host_id,))
+
+            decks = await cur.fetchall()
+
+            return decks
+
+@router.post("/{host_id}/deck/{deck_id}")
+async def add_host_deck(host_id: UUID, deck_id: UUID) -> None:
+    async with db.connection() as conn:
+        async with conn.cursor() as cur:
+            await cur.execute('''INSERT INTO "HostDecks" (host_id, deck_id) VALUES (%s, %s)''',
+                              (host_id, deck_id))
+            return JSONResponse(status_code=201, content=None)
+
+@router.delete("/{host_id}/deck/{deck_id}")
+async def remove_host_deck(host_id: UUID, deck_id: UUID) -> None:
+    async with db.connection() as conn:
+        async with conn.cursor() as cur:
+            await cur.execute('''DELETE FROM "HostDecks" WHERE host_id = %s AND deck_id = %s''', (host_id, deck_id))
