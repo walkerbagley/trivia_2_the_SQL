@@ -1,4 +1,5 @@
 from fastapi import APIRouter, HTTPException
+from fastapi.responses import JSONResponse
 from psycopg.rows import class_row
 from uuid import UUID
 
@@ -32,8 +33,14 @@ async def get_host(id: UUID) -> Host:
 async def create_host(host: HostRequest) -> None:
     async with db.connection() as conn:
         async with conn.cursor() as cur:
-            await cur.execute('''INSERT INTO "Hosts" (host_name, hashed_password) VALUES (%s, %s)''',
+            await cur.execute('''INSERT INTO "Hosts" (host_name, hashed_password) VALUES (%s, %s) RETURNING id''',
                               (host.host_name, host.hashed_password))
+            host_id = (await cur.fetchone()).get("id", None)
+
+            if host_id is None:
+                raise HTTPException(status_code=500, detail="Failed to create host")
+            
+            return JSONResponse(status_code=201, content={"id": str(host_id)})
             
 @router.put("/{id}")
 async def update_host(id: UUID, host: HostRequest) -> None:

@@ -1,4 +1,5 @@
 from fastapi import APIRouter, HTTPException
+from fastapi.responses import JSONResponse
 from psycopg.rows import class_row
 from uuid import UUID
 
@@ -32,8 +33,13 @@ async def get_team(id: UUID) -> Team:
 async def create_team(team: TeamRequest) -> None:
     async with db.connection() as conn:
         async with conn.cursor() as cur:
-            await cur.execute('''INSERT INTO "Teams" (name) VALUES (%s)''',
+            await cur.execute('''INSERT INTO "Teams" (name) VALUES (%s) RETURNING id''',
                               (team.name,))
+            team_id = (await cur.fetchone()).get("id", None)
+            if team_id is None:
+                raise HTTPException(status_code=500, detail="Failed to create team")
+
+            return JSONResponse(status_code=201, content={"id": str(team_id)}) 
             
 @router.put("/{id}")
 async def update_team(id: UUID, team: TeamRequest) -> None:

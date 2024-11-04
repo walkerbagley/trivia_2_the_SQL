@@ -13,6 +13,7 @@ class Question(BaseModel):
     c: Optional[str]
     d: Optional[str]
     category: str
+    attributes: list[str]
 
 class QuestionRequest(BaseModel):
     question: str
@@ -22,3 +23,4 @@ class QuestionRequest(BaseModel):
     c: Optional[str]
     d: Optional[str]
     category: str
+    attributes: list[str] = []

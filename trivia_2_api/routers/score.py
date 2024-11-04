@@ -1,4 +1,5 @@
 from fastapi import APIRouter, HTTPException
+from fastapi.responses import JSONResponse
 from psycopg.rows import class_row
 from uuid import UUID
 
@@ -34,6 +35,8 @@ async def create_score(score: Score) -> None:
         async with conn.cursor() as cur:
             await cur.execute('''INSERT INTO "Scores" (team_id, game_id, score) VALUES (%s, %s, %s)''',
                               (score.team_id, score.game_id, score.score))
+            
+            return JSONResponse(status_code=201)
             
 @router.put("/{game_id}/{team_id}")
 async def update_score(game_id: UUID, team_id:UUID, score: ScoreRequest) -> None:
