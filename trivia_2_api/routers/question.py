@@ -1,6 +1,7 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Query
 from fastapi.responses import JSONResponse
 from psycopg.rows import class_row, dict_row
+from typing import Annotated
 from uuid import UUID
 
 from ..db import db
@@ -13,12 +14,26 @@ router = APIRouter(
 )
 
 @router.get("/")
-async def get_questions() -> list[Question]:
+async def get_questions(attribute: Annotated[list[str] | None, Query()] = None, limit:int = 10) -> list[Question]:
     async with db.connection() as conn:
         async with conn.cursor(row_factory=class_row(Question)) as cur:
-            await cur.execute('''
-                              SELECT id, question, difficulty, a, b, c, d, category, ARRAY(SELECT attribute FROM "QuestionAttributes" WHERE question_id = q.id) as attributes
-                              FROM "Questions as q"''')
+            print(attribute)
+            print(limit)
+            if attribute is None:
+                await cur.execute('''
+                                SELECT id, question, difficulty, a, b, c, d, category, ARRAY(SELECT attribute FROM "QuestionAttributes" WHERE question_id = q.id) as attributes
+                                FROM "Questions" as q
+                                LIMIT %s''', (limit,))
+            else:
+                print(attribute)
+                print(limit)
+                await cur.execute('''
+                                SELECT id, question, difficulty, a, b, c, d, category, ARRAY(SELECT attribute FROM "QuestionAttributes" WHERE question_id = q.id) as attributes
+                                FROM "Questions" as q
+                                WHERE q.id IN (
+                                    SELECT question_id FROM "QuestionAttributes" WHERE attribute = ANY(%s)
+                                )
+                                LIMIT %s''', (attribute,limit,))
             return await cur.fetchall()
 
 @router.get("/{id}")
