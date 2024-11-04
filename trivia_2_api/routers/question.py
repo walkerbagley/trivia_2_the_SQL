@@ -14,26 +14,26 @@ router = APIRouter(
 )
 
 @router.get("/")
-async def get_questions(attribute: Annotated[list[str] | None, Query()] = None, limit:int = 10) -> list[Question]:
+async def get_questions(category: Annotated[str | None, Query()] = None, attribute: Annotated[list[str] | None, Query()] = None, limit:int = 10) -> list[Question]:
     async with db.connection() as conn:
         async with conn.cursor(row_factory=class_row(Question)) as cur:
-            print(attribute)
-            print(limit)
-            if attribute is None:
-                await cur.execute('''
-                                SELECT id, question, difficulty, a, b, c, d, category, ARRAY(SELECT attribute FROM "QuestionAttributes" WHERE question_id = q.id) as attributes
-                                FROM "Questions" as q
-                                LIMIT %s''', (limit,))
-            else:
-                print(attribute)
-                print(limit)
-                await cur.execute('''
-                                SELECT id, question, difficulty, a, b, c, d, category, ARRAY(SELECT attribute FROM "QuestionAttributes" WHERE question_id = q.id) as attributes
-                                FROM "Questions" as q
-                                WHERE q.id IN (
-                                    SELECT question_id FROM "QuestionAttributes" WHERE attribute = ANY(%s)
-                                )
-                                LIMIT %s''', (attribute,limit,))
+            query = '''SELECT id, question, difficulty, a, b, c, d, category, ARRAY(SELECT attribute FROM "QuestionAttributes" WHERE question_id = q.id) as attributes 
+                            FROM "Questions" as q
+                            WHERE TRUE'''
+            arguments = []
+            
+            if category is not None:
+                query += " AND category = %s"
+                arguments.append(category)
+            
+            if attribute is not None:
+                query += " AND q.id IN (SELECT question_id FROM \"QuestionAttributes\" WHERE attribute = ANY(%s))"
+                arguments.append(attribute)
+            
+            query += " LIMIT %s"
+            arguments.append(limit)
+
+            await cur.execute(query, arguments)
             return await cur.fetchall()
 
 @router.get("/{id}")
