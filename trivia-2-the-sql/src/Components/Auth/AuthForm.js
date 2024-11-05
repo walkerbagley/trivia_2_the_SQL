@@ -3,6 +3,18 @@ const AuthForm = ({ user, onChange, onSubmit }) => {
       <div>
         <form onSubmit={onSubmit}>
           <div>
+            <label>Username</label>
+            <br />
+            <input
+              type="text"
+              value={user.username}
+              onChange={onChange}
+              name="username"
+              placehoder="Username"
+              required
+            />
+          </div>
+          {/* <div>
             <label>First Name</label>
             <br />
             <input
@@ -37,7 +49,7 @@ const AuthForm = ({ user, onChange, onSubmit }) => {
               placehoder="Email"
               required
             />
-          </div>
+          </div> */}
           <div>
             <label>Password</label>
             <br />

@@ -1,0 +1,22 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: baseline;
+}
+
+.togglecontainer {
+    display: flex;
+    padding: 2em;
+}
+
+.btn {
+    cursor: pointer;
+    padding: 1em 2em;
+    border-radius: 0.5em;
+}
+
+.active {
+    background-color: white;
+    cursor:auto;
+}
