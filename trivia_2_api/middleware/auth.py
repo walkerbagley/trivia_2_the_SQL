@@ -11,11 +11,15 @@ from ..models import  AuthUser, TokenData
 from ..utils.jwt import ALGORITHM, oauth2_scheme
 
 async def authenticate_user(request: Request, call_next):
+    print(request.method)
+    print(request.url.path)
     if request.url.path == "/auth/login" or request.url.path == "/auth/register" or request.url.path == "/" or request.url.path == "/docs" or request.url.path == "/openapi.json" or request.method == "OPTIONS":
         response = await call_next(request)
         return response
     token = request.headers.get("Authorization", None)
+    print(token)
     if not token:
+        print("No token")
         return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED, content={"error": "Not authenticated"})
     token = token.replace("Bearer ", "")
     
@@ -27,6 +31,7 @@ async def authenticate_user(request: Request, call_next):
         response = await call_next(request)
         return response
     except HTTPException as e:
+        print("HTTPException")
         return JSONResponse(status_code=e.status_code, content={"error": e.detail})
 
 
