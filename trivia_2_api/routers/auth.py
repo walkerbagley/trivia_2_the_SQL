@@ -20,6 +20,14 @@ router = APIRouter(
 async def register(user: RegisterRequest) -> None:
     async with db.connection() as conn:
         async with conn.cursor(row_factory=class_row(RegisterResponse)) as cur:
+            await cur.execute('''SELECT id, user_name, hashed_password FROM "Users" WHERE user_name = %s''', (user.username,))
+            user = await cur.fetchone()
+            if user is not None:
+                raise HTTPException(
+                    status_code=status.HTTP_409_CONFLICT,
+                    detail="Username already exists",
+                )
+            
             await cur.execute('''INSERT INTO "Users" (user_name, hashed_password) VALUES (%s, %s) RETURNING id''',
                               (user.username, hash_password(user.password)))
             return await cur.fetchone()
