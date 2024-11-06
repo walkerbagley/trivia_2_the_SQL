@@ -3,15 +3,18 @@ import { User, createUser } from "./AuthService.js";
 import AuthForm from "./AuthForm.js";
 import "./styles.css";
 import { useNavigate } from "react-router-dom";
-import { useUserSession } from "../../Providers/UserProvider.js";
 import { toast, ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import { useAuthSession } from "../../Providers/AuthProvider.js";
+import { useUserSession } from "../../Providers/UserProvider.js";
 
 
 const AuthRegister = () => {
   const navigate = useNavigate();
   const [newUser, setNewUser] = useState(new User('', ''));
-  const { user, login, register } = useUserSession();
+  const { login, register } = useAuthSession();
+  const { user } = useUserSession();
+  
   // flag
   const [signup, setSignup] = useState(false);
   const [add, setAdd] = useState(false);

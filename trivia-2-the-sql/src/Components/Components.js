@@ -18,8 +18,6 @@ export default function Components() {
     const { user } = useUserSession();
 
     useEffect(() => {}, [user]);
-
-    console.log('user', user);
     
     if (user) {
         return (

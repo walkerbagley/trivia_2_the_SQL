@@ -7,7 +7,6 @@ import { useUserSession } from '../../Providers/UserProvider.js';
 const Account = () => {
   const axios = useAxios();
   const { user } = useUserSession();
-  console.log('user', user);
   const [myteams, setMyteams] = useState([]);
   const [teams, setTeams] = useState([]);
 

@@ -2,12 +2,14 @@ import React from 'react'
 import './styles.css'
 
 import { useNavigate } from "react-router-dom";
-import { useUserSession } from "../../Providers/UserProvider.js";
+import { useAuthSession } from '../../Providers/AuthProvider.js';
+import { useUserSession } from '../../Providers/UserProvider.js';
 
 
 const Header =  () => {
     const navigate = useNavigate();
-    const { user, logout } = useUserSession();
+    const { logout } = useAuthSession();
+    const { user } = useUserSession();
 
     if (!user) {
         return (
