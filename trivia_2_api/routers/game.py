@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import JSONResponse
-from psycopg.rows import class_row
+from psycopg.rows import class_row, dict_row
 from uuid import UUID
 
 from ..db import db
@@ -32,7 +32,7 @@ async def get_game(id: UUID) -> Game:
 @router.post("/")
 async def create_game(game: GameRequest) -> None:
     async with db.connection() as conn:
-        async with conn.cursor() as cur:
+        async with conn.cursor(row_factory=dict_row) as cur:
             await cur.execute('''INSERT INTO "Games" (deck_id, host_id, start_time, end_time) VALUES (%s, %s, %s, %s) RETURNING id''',
                               (game.deck_id, game.host_id, game.start_time, game.end_time))
             game_id = (await cur.fetchone()).get("id", None)
