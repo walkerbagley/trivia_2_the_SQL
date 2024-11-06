@@ -3,7 +3,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from .middleware import authenticate_user
-from .routers import auth, deck, game, host, question, score, team, user
+from .routers import auth, deck, game, question, score, team, user
 from .db import db
 
 @asynccontextmanager
@@ -24,7 +24,6 @@ app.add_middleware(
 app.include_router(auth.router)
 app.include_router(deck.router)
 app.include_router(game.router)
-app.include_router(host.router)
 app.include_router(question.router)
 app.include_router(score.router)
 app.include_router(team.router)
