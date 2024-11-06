@@ -9,6 +9,7 @@ import Account from './Account/Account.js'
 import AuthForm from './Auth/AuthForm.js';
 import AuthRegister from './Auth/AuthRegister.js';
 import DeckDetails from './Decks/DeckDetails/DeckDetails.js';
+import CreateDeck from './CreateDeck/CreateDeck.js';
 import './styles.css';
 
 export default function Components() {
@@ -22,6 +23,7 @@ export default function Components() {
             <Route exact path='/login' element={<Login/>}/>
             <Route exact path='/decks' element={<Decks/>}/>
             <Route path="/decks/:id" element={<DeckDetails />} />
+            <Route exact path='/create' element={<CreateDeck/>}/>
             <Route exact path='/account' element={<Account/>}/>
             {/* <Route path="/auth" element={<Auth />} /> */}
             <Route path="/register" element={<AuthRegister />} />
