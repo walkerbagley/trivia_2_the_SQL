@@ -1,7 +1,7 @@
 // import Parse from "parse";
 import axios from "axios";
 
-const api = 'http://127.0.0.1:8000/auth/'
+const api = 'http://127.0.0.1:8002/auth/'
 
 export class User {
     constructor(username, password) {

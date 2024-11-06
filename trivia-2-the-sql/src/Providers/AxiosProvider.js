@@ -3,7 +3,7 @@ import { useAuthSession } from './AuthProvider';
 import axios from 'axios';
 
 const defaultAxiosInstance = axios.create({
-  baseURL: 'http://127.0.0.1:8000', 
+  baseURL: 'http://127.0.0.1:8002', 
   headers: {
     'Content-Type': 'application/json',
   },
@@ -18,7 +18,7 @@ export const AxiosProvider = ({ children }) => {
   
   const axiosInstance = useMemo(() => {
     return axios.create({
-      baseURL:  'http://127.0.0.1:8000', 
+      baseURL:  'http://127.0.0.1:8002', 
       headers: {
         'Content-Type': 'application/json',
       },

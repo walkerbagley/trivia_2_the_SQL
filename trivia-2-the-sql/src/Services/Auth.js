@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+url_start = 'http://127.0.0.1:8002'
+
 export const login = () => {
   let data = JSON.stringify({
     "username": "zachb",
@@ -9,7 +11,7 @@ export const login = () => {
   let config = {
     method: 'post',
     maxBodyLength: Infinity,
-    url: 'http://127.0.0.1:8000/auth/login',
+    url: url_start +'/auth/login',
     headers: { 
       'Content-Type': 'application/json', 
       'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ6YWNoYiIsImV4cCI6MTczMDkxODQzN30.BDwAf4ptU6ubWOSkLiKpQT_w_-Mj4GnXn_S1Kc2S_bE'
@@ -35,7 +37,7 @@ export const register = () => {
     let config = {
     method: 'post',
     maxBodyLength: Infinity,
-    url: 'http://127.0.0.1:8000/auth/register',
+    url: url_start +'/auth/register',
     headers: { 
         'Content-Type': 'application/json', 
         'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ6YWNoYiIsImV4cCI6MTczMDkxODQzN30.BDwAf4ptU6ubWOSkLiKpQT_w_-Mj4GnXn_S1Kc2S_bE'

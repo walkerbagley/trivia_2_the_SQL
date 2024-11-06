@@ -2,9 +2,12 @@ import React, {useEffect, useState} from 'react';
 // import { useParams } from 'react-router-dom';
 import './styles.css';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { getQuestions } from '../../../Services/Decks';
+import { getDeckQuestions } from '../../../Services/Decks';
+import { useAxios } from '../../../Providers/AxiosProvider.js'
+
 
 const DeckDetails =  () => {
+  const axios = useAxios(); 
   const navigate = useNavigate();
   const location = useLocation(); 
   const { deck } = location.state || { deck: 'default value' };
@@ -15,7 +18,7 @@ const DeckDetails =  () => {
     useEffect(() => {
       const fetchDecks = async () => {
         try {
-          const qs = await getQuestions();
+          const qs = await getDeckQuestions(axios, deck.id);
           setQuestions(qs);
         } catch (error) {
           console.error("Failed to fetch questions:", error);
@@ -65,11 +68,6 @@ const DeckDetails =  () => {
           ))
           : <></>
         }
-        <li>
-          <div className='question'>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-            </div>
-        </li>
       </ol>
     </div>
   );

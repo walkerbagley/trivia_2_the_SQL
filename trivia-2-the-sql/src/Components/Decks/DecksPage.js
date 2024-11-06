@@ -3,8 +3,11 @@ import './styles.css'
 import Deck from './Deck/Deck.js'
 import { Link, useNavigate } from 'react-router-dom'
 import { getAllDecks } from '../../Services/Decks.js'
+import { useAxios } from '../../Providers/AxiosProvider.js'
+
 
 const Decks =  () => {
+    const axios = useAxios();
     const navigate = useNavigate();
 
     const goToDeckDetails = (deck) => {
@@ -16,7 +19,7 @@ const Decks =  () => {
     useEffect(() => {
       const fetchDecks = async () => {
         try {
-          const ds = await getAllDecks();
+          const ds = await getAllDecks(axios);
           setAllDecks(ds);
         } catch (error) {
           console.error("Failed to fetch decks:", error);
