@@ -10,19 +10,29 @@ export class User {
 }
 
 export const createUser = (user) => {
-    const options = {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Credentials': true
-        },
-        body: {'username': user.username, 'password': user.password},
+    const axios = require('axios');
+    let data = JSON.stringify({
+    "username": user.username,
+    "password": user.password
+    });
+
+    let config = {
+    method: 'post',
+    maxBodyLength: Infinity,
+    url: api + 'register',
+    headers: { 
+        'Content-Type': 'application/json', 
+        'Authorization': '••••••'
+    },
+    data : data
     };
-    fetch(api + 'register', options).then((response) => {
-        console.log(response.json())
-        if (response.ok) {
-            return response.json()
-        }
+
+    axios.request(config)
+    .then((response) => {
+    console.log(JSON.stringify(response.data));
+    })
+    .catch((error) => {
+    console.log(error);
     });
 };
 export const loginUser = () => { };

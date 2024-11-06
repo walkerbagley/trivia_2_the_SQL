@@ -31,9 +31,9 @@ const AuthRegister = () => {
 
   const onChangeHandler = (e) => {
     e.preventDefault();
-    console.log(e.target);
+    // console.log(e.target);
     const { name, value: newValue } = e.target; //object destructuring?
-    console.log(newValue);
+    // console.log(newValue);
     setNewUser({ ...newUser, [name]: newValue }); //spread operator to append attributes to obj
   };
 
