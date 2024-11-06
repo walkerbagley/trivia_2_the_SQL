@@ -19,8 +19,9 @@ const AuthRegister = () => {
         
       }
       if (!signup) {
-        const response = loginUser(newUser);
-        console.log(response);
+        loginUser(newUser).then((response) => {
+          setJwt(response.data.token);
+        });
       }
       setAdd(false);
     }
