@@ -11,7 +11,7 @@ from ..models import  AuthUser, TokenData
 from ..utils.jwt import ALGORITHM, oauth2_scheme
 
 async def authenticate_user(request: Request, call_next):
-    if request.url.path == "/auth/login" or request.url.path == "/auth/register" or request.url.path == "/" or request.url.path == "/docs" or request.url.path == "/openapi.json":
+    if request.url.path == "/auth/login" or request.url.path == "/auth/register" or request.url.path == "/" or request.url.path == "/docs" or request.url.path == "/openapi.json" or request.method == "OPTIONS":
         response = await call_next(request)
         return response
     token = request.headers.get("Authorization", None)
