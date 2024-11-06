@@ -3,8 +3,9 @@ from fastapi.responses import JSONResponse
 from psycopg.rows import class_row
 from uuid import UUID
 
+
 from ..db import db
-from ..models import Deck, User, UserRequest
+from ..models import Deck, User, UserRequest, UserResponse
 
 router = APIRouter(
     prefix="/user",
@@ -15,15 +16,15 @@ router = APIRouter(
 @router.get("/")
 async def get_user() -> list[User]:
     async with db.connection() as conn:
-        async with conn.cursor(row_factory=class_row(User)) as cur:
-            await cur.execute('''SELECT id, user_name, hashed_password FROM "Users"''')
+        async with conn.cursor(row_factory=class_row(UserResponse)) as cur:
+            await cur.execute('''SELECT id, user_name FROM "Users"''')
             return await cur.fetchall()
 
 @router.get("/{id}")
 async def get_user(id: UUID) -> User:
     async with db.connection() as conn:
-        async with conn.cursor(row_factory=class_row(User)) as cur:
-            await cur.execute('''SELECT id, user_name, hashed_password FROM "Users" WHERE id = %s''', (id,))
+        async with conn.cursor(row_factory=class_row(UserResponse)) as cur:
+            await cur.execute('''SELECT id, user_name FROM "Users" WHERE id = %s''', (id,))
             question = await cur.fetchone() 
             if question is None:
                 raise HTTPException(status_code=404, detail="User not found")

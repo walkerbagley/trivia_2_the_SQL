@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from uuid import UUID
 
 class User(BaseModel):
@@ -9,3 +9,7 @@ class User(BaseModel):
 class UserRequest(BaseModel):
     user_name: str
     hashed_password: str
+
+class UserResponse(BaseModel):
+    id: UUID
+    user_name: str
