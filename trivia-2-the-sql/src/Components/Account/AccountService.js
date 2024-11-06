@@ -32,7 +32,7 @@ export const addMember = async (axios, teamID, userID) => {
 
 export const removeMember = async (axios, teamID, userID) => {
     let config = {
-        method: 'del',
+        method: 'delete',
         url: '/team/' + teamID + '/member/' + userID
       };
       
@@ -41,6 +41,27 @@ export const removeMember = async (axios, teamID, userID) => {
         return response.data;
     } catch (error) {
         console.error("Failed to add user to team:", error);
+        throw error;
+    }
+}
+
+export const createTeam = async (axios, teamName, userID) => {
+    let data = JSON.stringify({
+        name: teamName,
+        member_ids: [userID]
+    });
+
+    let config = {
+        method: 'post',
+        url: '/team/',
+        data: data
+    };
+      
+    try {
+        const response = await axios.request(config);
+        return response.data;
+    } catch (error) {
+        console.error("Failed to create team:", error);
         throw error;
     }
 }
