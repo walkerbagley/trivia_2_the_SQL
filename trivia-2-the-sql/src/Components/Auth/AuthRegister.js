@@ -2,8 +2,11 @@ import React, { useEffect, useState } from "react";
 import { User, createUser, loginUser } from "./AuthService.js";
 import AuthForm from "./AuthForm.js";
 import "./styles.css";
+import { useAuthSession } from "../../Providers/AuthProvider.js";
+
 const AuthRegister = () => {
   const [newUser, setNewUser] = useState(new User('', ''));
+  const { token, setJwt, clearJwt } = useAuthSession();
   // flag
   const [signup, setSignup] = useState(true);
   const [add, setAdd] = useState(false);
