@@ -12,10 +12,15 @@ import DeckDetails from './Decks/DeckDetails/DeckDetails.js';
 import CreateDeck from './CreateDeck/CreateDeck.js';
 import './styles.css';
 import { useUserSession } from "../Providers/UserProvider.js";
+import { useEffect } from "react";
 
 export default function Components() {
     const { user } = useUserSession();
 
+    useEffect(() => {}, [user]);
+
+    console.log('user', user);
+    
     if (user) {
         return (
             <Router>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState, createContext } from "react";
 import { useAuthSession } from "./AuthProvider";
 import { useAxios } from "./AxiosProvider";
@@ -18,7 +18,16 @@ export function useUserSession() {
 export function UserProvider({ children }) {
     const axios = useAxios();
     const [user, setUser] = useState(null);
-    const { setJwt, clearJwt } = useAuthSession();
+    const { token, setJwt, clearJwt } = useAuthSession();
+
+    useEffect(() => {
+        if (token) {
+            setUser(jwtDecode(token).sub);
+        } else {
+            setUser(null);
+        }
+    }, [token]);
+
 
     const login = ({username, password}) => {
         return axios.post("/auth/login", { username, password })
