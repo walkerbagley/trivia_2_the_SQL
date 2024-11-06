@@ -26,7 +26,7 @@ async def register(user: RegisterRequest) -> None:
 
 @router.post("/login")
 async def login_for_access_token(
-    request: Annotated[OAuth2PasswordRequestForm, Depends()],
+    request: RegisterRequest,
 ) -> Token:
     async with db.connection() as conn:
         async with conn.cursor(row_factory=class_row(AuthUser)) as cur:
