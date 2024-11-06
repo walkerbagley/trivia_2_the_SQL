@@ -38,6 +38,8 @@ async def create_team(team: TeamRequest) -> None:
             team_id = (await cur.fetchone()).get("id", None)
             if team_id is None:
                 raise HTTPException(status_code=500, detail="Failed to create team")
+            
+            await cur.executemany('''INSERT INTO "TeamMembers" (team_id, user_id) VALUES (%s, %s)''', ((team_id, user_id) for user_id in team.member_ids))
 
             return JSONResponse(status_code=201, content={"id": str(team_id)}) 
             
