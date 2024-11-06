@@ -44,21 +44,20 @@ export const getDeck = async (id) => {
 
 export const createDeck = (name, description) => {
   let data = JSON.stringify({
-    "name": "test_deck 2",
-    "description": "this will be deleted"
+    "name": name,
+    "description": description
   });
+
 
   let config = {
     method: 'post',
     maxBodyLength: Infinity,
     url: 'http://127.0.0.1:8000/deck',
     headers: { 
-      'Content-Type': 'application/json', 
-      'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ6YWNoYiIsImV4cCI6MTczMDkxODQzN30.BDwAf4ptU6ubWOSkLiKpQT_w_-Mj4GnXn_S1Kc2S_bE'
+      'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ6YWNoYiIsImV4cCI6MTczMDkxODQzN30.BDwAf4ptU6ubWOSkLiKpQT_w_-Mj4GnXn_S1Kc2S_bE',
     },
-    data : data
+    data: data
   };
-
   axios.request(config)
   .then((response) => {
     console.log(JSON.stringify(response.data));
@@ -137,7 +136,7 @@ export const getQuestions = async () => {
     let config = {
       method: 'get',
       maxBodyLength: Infinity,
-      url: 'http://127.0.0.1:8000/deck/73a3f5dc-3fad-44d3-bf24-000d419ab326/question',
+      url: 'http://127.0.0.1:8000/question',
       headers: { 
         'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ6YWNoYiIsImV4cCI6MTczMDkxODQzN30.BDwAf4ptU6ubWOSkLiKpQT_w_-Mj4GnXn_S1Kc2S_bE'
       },
@@ -171,4 +170,32 @@ export const removeQuestion = () => {
     .catch((error) => {
       console.log(error);
     });
+}
+
+export const getSortedQuestions = async (cat, diff) => {
+
+  let data = JSON.stringify({
+    "category": cat,
+    "difficulty": diff
+  });
+    
+  let config = {
+    method: 'get',
+    maxBodyLength: Infinity,
+    url: 'http://127.0.0.1:8000/question',
+    headers: { 
+      'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ6YWNoYiIsImV4cCI6MTczMDkxODQzN30.BDwAf4ptU6ubWOSkLiKpQT_w_-Mj4GnXn_S1Kc2S_bE',
+      'Content-Type': 'application/json', 
+    },
+  };
+
+
+  try {
+    const response = await axios.request(config);
+    console.log("in getQuestions", JSON.stringify(response.data));
+    return response.data;
+  } catch (error) {
+    console.error("Failed to fetch decks:", error);
+    throw error;  // Propagate the error so it can be handled by the caller
+  }
 }
