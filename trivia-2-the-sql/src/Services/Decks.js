@@ -151,8 +151,7 @@ export const addQuestion = () => {
   });
 }
 
-export const getQuestions = () => {
-    let data = '';
+export const getQuestions = async () => {
     
     let config = {
       method: 'get',
@@ -161,16 +160,17 @@ export const getQuestions = () => {
       headers: { 
         'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ6YWNoYiIsImV4cCI6MTczMDkxODQzN30.BDwAf4ptU6ubWOSkLiKpQT_w_-Mj4GnXn_S1Kc2S_bE'
       },
-      data : data
     };
-    
-    axios.request(config)
-    .then((response) => {
-      console.log(JSON.stringify(response.data));
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+
+
+    try {
+      const response = await axios.request(config);
+      console.log("in getQuestions", JSON.stringify(response.data));
+      return response.data;
+    } catch (error) {
+      console.error("Failed to fetch decks:", error);
+      throw error;  // Propagate the error so it can be handled by the caller
+    }
 }
 
 export const removeQuestion = () => {
