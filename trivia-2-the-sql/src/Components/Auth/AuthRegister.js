@@ -11,21 +11,15 @@ const AuthRegister = () => {
   useEffect(() => {
     if (newUser && add) {
       if (signup) {
-        createUser(newUser).then((userCreated) => {
-          if (userCreated) {
-            alert(`${userCreated.get("username")}, registration successful!`);
-          }
-          setAdd(false);
-        });
+        const response = createUser(newUser);
+        console.log(response);
+        
       }
       if (!signup) {
-        loginUser(newUser).then((user) => {
-          if (user) {
-            alert(`${user.get("username")}, successful login!`);
-          }
-          setAdd(false);
-        });
+        const response = loginUser(newUser);
+        console.log(response);
       }
+      setAdd(false);
     }
   }, [newUser, add, signup]);
 

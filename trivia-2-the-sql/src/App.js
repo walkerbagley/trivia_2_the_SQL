@@ -1,13 +1,13 @@
 import './variables.css'
-import { initializeParse } from '@parse/react';
+// import { initializeParse } from '@parse/react';
 import axios from 'axios';
 import Components from './Components/Components';
 
-initializeParse(
-  'YOUR_SERVER_URL',
-  'YOUR_APPLICATION_ID',
-  'YOUR_JAVASCRIPT_KEY'
-);
+// initializeParse(
+//   'YOUR_SERVER_URL',
+//   'YOUR_APPLICATION_ID',
+//   'YOUR_JAVASCRIPT_KEY'
+// );
 
 let isLoggedIn = false;
 
