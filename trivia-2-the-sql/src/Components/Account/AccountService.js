@@ -1,16 +1,46 @@
 const api = 'http://127.0.0.1:8000/'
 
-export const getTeams = (axios) => {
+export const getTeams = async (axios) => {
     let config = {
         method: 'get',
         url: '/team/'
-        // 'Authentication': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ3YmFnbGV5IiwiZXhwIjoxNzMxMDQ3MDQ4fQ.m18gTFfvEnoKtfS7yh4kO5ugj6UEyI43nS0oyvQ254o'
     };
 
-    axios.get('/team/').then((response) => {
-        console.log(JSON.stringify(response.data));
-        return response;
-    }).catch((error) => {
-        console.log(error);
-    });
+    try {
+        const response = await axios.request(config);
+        return response.data;
+    } catch (error) {
+        console.error("Failed to fetch teams:", error);
+        throw error;
+    }
+}
+
+export const addMember = async (axios, teamID, userID) => {
+    let config = {
+        method: 'post',
+        url: '/team/' + teamID + '/member/' + userID
+      };
+      
+    try {
+        const response = await axios.request(config);
+        return response.data;
+    } catch (error) {
+        console.error("Failed to add user to team:", error);
+        throw error;
+    }
+}
+
+export const removeMember = async (axios, teamID, userID) => {
+    let config = {
+        method: 'del',
+        url: '/team/' + teamID + '/member/' + userID
+      };
+      
+    try {
+        const response = await axios.request(config);
+        return response.data;
+    } catch (error) {
+        console.error("Failed to add user to team:", error);
+        throw error;
+    }
 }
