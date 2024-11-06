@@ -1,21 +1,15 @@
 import React from 'react'
 import './styles.css'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react';
-import { getDeckQuestions, createDeck, updateDeck, getSortedQuestions } from '../../Services/Decks.js';
+import { createDeck } from '../../Services/Decks.js';
 import { useAxios } from '../../Providers/AxiosProvider.js'
 
 const CreateDeck = () => {
-    //let questionlist = [1,2,3,4,5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
     const axios = useAxios(); 
     const navigate = useNavigate();
     const [page, setPage] = useState(1);
-  
-    // Load data
-    // useEffect(() => {
-    //   getQuestions();
-    //   .then(data => setData(oldData => [...oldData, ...data]));
-    // }, [page]); 
+
   
     // Handle scroll
     useEffect(() => {
@@ -41,23 +35,12 @@ const CreateDeck = () => {
     const [deckDesc, setDeckDesc] = useState("")
     const [questionCat, setQuestionCat] = useState("")
     const [questionNum, setQuestionNum] = useState("")
-    const [allQuestions, setQuestions] = useState([]);
-
-    const fetchDeckQuestions = async (deck_id) => {
-      try {
-        const qs = await getDeckQuestions(axios, deck_id);
-        setQuestions(qs)
-      } catch (error) {
-        console.error("Failed to fetch decks:", error);
-      }
-    }
 
     const createDeckFunc = async (deckName, deckDesc, questionCat, questionNum) => {
       try {
         const ds = await createDeck(axios, deckName, deckDesc, questionCat, questionNum);
         console.log('ds:', ds);
         navigate(`/decks/${ds.id}`, {state: {deckId:ds.id}});
-        fetchDeckQuestions(ds.id);
       } catch (error) {
         console.error("Failed to fetch decks:", error);
       }
@@ -103,20 +86,6 @@ const CreateDeck = () => {
               </form>
             </div>
             <button type="submit" className="create_button" onClick={() => createDeckFunc(deckName, deckDesc, questionCat, questionNum)}>Create</button>
-
-
-
-
-            <div id='questionlist' style={{ height: '300px', overflow: 'scroll' }}>
-              <div className="grid-container">
-                {allQuestions ?
-                allQuestions.map((question) => (
-                  <li>{question.question} </li>
-              ))
-              : <></>}
-              
-              </div>
-            </div>
         </div>
       );
     };

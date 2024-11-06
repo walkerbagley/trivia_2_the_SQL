@@ -138,7 +138,6 @@ export const getQuestions = async (axiosClient) => {
 
     try {
       const response = await axiosClient.request(config);
-      console.log("in getQuestions", JSON.stringify(response.data));
       return response.data;
     } catch (error) {
       console.error("Failed to fetch decks:", error);
@@ -157,7 +156,6 @@ export const getDeckQuestions = async (axiosClient, deck_id) => {
 
   try {
     const response = await axiosClient.request(config);
-    console.log("in getQuestions", JSON.stringify(response.data));
     return response.data;
   } catch (error) {
     console.error("Failed to fetch decks:", error);
@@ -199,8 +197,7 @@ export const getSortedQuestions = async (cat, diff, axiosClient) => {
 
 
   try {
-    const response = await axiosClient.request(config);
-    console.log("in getQuestions", JSON.stringify(response.data));
+    const response = await axiosClient.post(config, data);
     return response.data;
   } catch (error) {
     console.error("Failed to fetch decks:", error);
