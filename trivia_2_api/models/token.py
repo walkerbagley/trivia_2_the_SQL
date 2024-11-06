@@ -1,9 +1,10 @@
 from pydantic import BaseModel
 from typing import Union
+from uuid import UUID
 
 class Token(BaseModel):
     token: str
     token_type: str
 
 class TokenData(BaseModel):
-    username: Union[str, None] = None
+    id: Union[UUID, None] = None

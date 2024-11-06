@@ -38,15 +38,15 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]) -> Aut
     )
     try:
         payload = jwt.decode(token.encode('utf-8'), get_settings().jwt_secret, algorithms=[ALGORITHM])
-        username: str = payload.get("sub")
-        if username is None:
+        id: str = payload.get("sub")
+        if id is None:
             raise credentials_exception
-        token_data = TokenData(username=username)
+        token_data = TokenData(id=id)
     except InvalidTokenError as e:
         raise credentials_exception
     async with db.connection() as conn:
         async with conn.cursor(row_factory=class_row(AuthUser)) as cur:
-            await cur.execute('''SELECT id, user_name, hashed_password FROM "Users" WHERE user_name = %s''', (username,))
+            await cur.execute('''SELECT id, user_name, hashed_password FROM "Users" WHERE id = %s''', (id,))
             user = await cur.fetchone()
             if not user:
                 raise credentials_exception         
