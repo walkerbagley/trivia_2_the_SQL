@@ -1,23 +1,29 @@
 import React, {useEffect, useState} from 'react';
 // import { useParams } from 'react-router-dom';
 import './styles.css';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { getDeckQuestions } from '../../../Services/Decks';
+import { useNavigate, useLocation, useParams } from 'react-router-dom';
+import { getDeckQuestions, getDeck } from '../../../Services/Decks';
 import { useAxios } from '../../../Providers/AxiosProvider.js'
 
 
 const DeckDetails =  () => {
   const axios = useAxios(); 
   const navigate = useNavigate();
-  const location = useLocation(); 
-  const { deck } = location.state || { deck: 'default value' };
+  const params = useParams();
+  // const location = useLocation(); 
+
+  // const { deckId } = location.state || { deck: 'default value' };
   // const { id } = useParams();
 
   const [questions, setQuestions] = useState([]);
+  const [deck, setDeck] = useState({});
 
     useEffect(() => {
-      const fetchDecks = async () => {
+      const fetchDeck = async () => {
         try {
+          const deck = await getDeck(axios, params.id);
+          setDeck(deck);
+
           const qs = await getDeckQuestions(axios, deck.id);
           setQuestions(qs);
         } catch (error) {
@@ -25,7 +31,7 @@ const DeckDetails =  () => {
         }
       };
 
-      fetchDecks();
+      fetchDeck();
     }, []);
 
   const goBack = () => {

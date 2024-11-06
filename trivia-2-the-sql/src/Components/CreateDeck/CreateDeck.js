@@ -1,6 +1,6 @@
 import React from 'react'
 import './styles.css'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useEffect, useState } from 'react';
 import { getDeckQuestions, createDeck, updateDeck, getSortedQuestions } from '../../Services/Decks.js';
 import { useAxios } from '../../Providers/AxiosProvider.js'
@@ -8,6 +8,7 @@ import { useAxios } from '../../Providers/AxiosProvider.js'
 const CreateDeck = () => {
     //let questionlist = [1,2,3,4,5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
     const axios = useAxios(); 
+    const navigate = useNavigate();
     const [page, setPage] = useState(1);
   
     // Load data
@@ -54,6 +55,8 @@ const CreateDeck = () => {
     const createDeckFunc = async (deckName, deckDesc, questionCat, questionNum) => {
       try {
         const ds = await createDeck(axios, deckName, deckDesc, questionCat, questionNum);
+        console.log('ds:', ds);
+        navigate(`/decks/${ds.id}`, {state: {deckId:ds.id}});
         fetchDeckQuestions(ds.id);
       } catch (error) {
         console.error("Failed to fetch decks:", error);

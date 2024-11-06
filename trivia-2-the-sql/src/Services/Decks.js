@@ -1,17 +1,14 @@
 // import useAxios from '../Providers/AxiosProvider'
 // const axios = useAxios();
-import axios from "axios";
+//import axios from "axios";
 
-const url_start = 'http://127.0.0.1:8002'
+const url_start = 'http://127.0.0.1:8000'
 
 export const getAllDecks = async (axiosClient) => { 
   let config = {
     method: 'get',
     maxBodyLength: Infinity,
-    url: url_start + '/deck',
-    headers: { 
-      'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ6YWNoYiIsImV4cCI6MTczMDkxODQzN30.BDwAf4ptU6ubWOSkLiKpQT_w_-Mj4GnXn_S1Kc2S_bE'
-    }
+    url: url_start + '/deck'
   };
 
   try {
@@ -29,14 +26,10 @@ export const getDeck = async (axiosClient, id) => {
   let config = {
     method: 'get',
     maxBodyLength: Infinity,
-    url: url_start + '/deck/73a3f5dc-3fad-44d3-bf24-000d419ab326',
-    headers: { 
-      'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ6YWNoYiIsImV4cCI6MTczMDkxODQzN30.BDwAf4ptU6ubWOSkLiKpQT_w_-Mj4GnXn_S1Kc2S_bE'
-    }
+    url: '/deck/' + id
   };
   try {
-    const response = await axios.request(config)
-    console.log("getdeckbyid ", response.data)
+    const response = await axiosClient.request(config)
     return response.data
   }catch (error) {
     console.error("Failed to fetch deck:", error);
@@ -56,10 +49,7 @@ export const createDeck = async (axiosClient, name, description, category, num_q
   let config = {
     method: 'post',
     maxBodyLength: Infinity,
-    url: url_start + '/deck',
-    // headers: { 
-    //   'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ6YWNoYiIsImV4cCI6MTczMDkxODQzN30.BDwAf4ptU6ubWOSkLiKpQT_w_-Mj4GnXn_S1Kc2S_bE',
-    // },
+    url: '/deck',
     data: data
   };
 
@@ -80,7 +70,7 @@ export const createDeck = async (axiosClient, name, description, category, num_q
   // });
 }
 
-export const updateDeck = (name, description) => {
+export const updateDeck = (axiosClient, id, name, description) => {
   let data = JSON.stringify({
     "name": "test_deck 3",
     "description": "this will be deleted"
@@ -89,15 +79,14 @@ export const updateDeck = (name, description) => {
   let config = {
     method: 'put',
     maxBodyLength: Infinity,
-    url: url_start + '/deck/17960949-f5be-4079-940a-f04d6e1b3669',
+    url: url_start + '/deck/' + id,
     headers: { 
       'Content-Type': 'application/json', 
-      'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ6YWNoYiIsImV4cCI6MTczMDkxODQzN30.BDwAf4ptU6ubWOSkLiKpQT_w_-Mj4GnXn_S1Kc2S_bE'
     },
     data : data
   };
 
-  axios.request(config)
+  axiosClient.request(config)
   .then((response) => {
     console.log(JSON.stringify(response.data));
   })
@@ -106,17 +95,14 @@ export const updateDeck = (name, description) => {
   });
 }
 
-export const deleteDeck = () => {
+export const deleteDeck = (axiosClient, id) => {
   let config = {
     method: 'delete',
     maxBodyLength: Infinity,
-    url: url_start + '/deck/17960949-f5be-4079-940a-f04d6e1b3669',
-    headers: { 
-      'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ6YWNoYiIsImV4cCI6MTczMDkxODQzN30.BDwAf4ptU6ubWOSkLiKpQT_w_-Mj4GnXn_S1Kc2S_bE'
-    }
+    url: '/deck/' + id
   };
 
-  axios.request(config)
+  axiosClient.request(config)
   .then((response) => {
     console.log(JSON.stringify(response.data));
   })
@@ -125,17 +111,14 @@ export const deleteDeck = () => {
   });
 }
 
-export const addQuestion = () => {
+export const addQuestion = (axiosClient, deckId, questionId) => {
   let config = {
     method: 'post',
     maxBodyLength: Infinity,
-    url: url_start + '/deck/73a3f5dc-3fad-44d3-bf24-000d419ab326/question/0078a7ac-46ea-4244-9bb9-6c0e5f2457bc',
-    headers: { 
-      'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ6YWNoYiIsImV4cCI6MTczMDkxODQzN30.BDwAf4ptU6ubWOSkLiKpQT_w_-Mj4GnXn_S1Kc2S_bE'
-    }
+    url: '/deck/' + deckId + '/question/' + questionId
   };
 
-  axios.request(config)
+  axiosClient.request(config)
   .then((response) => {
     console.log(JSON.stringify(response.data));
   })
@@ -182,17 +165,14 @@ export const getDeckQuestions = async (axiosClient, deck_id) => {
   }
 }
 
-export const removeQuestion = () => {
+export const removeQuestion = (axiosClient, deckId, questionId) => {
     let config = {
       method: 'delete',
       maxBodyLength: Infinity,
-      url: url_start + '/deck/73a3f5dc-3fad-44d3-bf24-000d419ab326/question/0078a7ac-46ea-4244-9bb9-6c0e5f2457bc',
-      headers: { 
-        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ6YWNoYiIsImV4cCI6MTczMDkxODQzN30.BDwAf4ptU6ubWOSkLiKpQT_w_-Mj4GnXn_S1Kc2S_bE'
-      }
+      url: url_start + '/deck/' + deckId + '/question/' + questionId
     };
     
-    axios.request(config)
+    axiosClient.request(config)
     .then((response) => {
       console.log(JSON.stringify(response.data));
     })
@@ -213,7 +193,6 @@ export const getSortedQuestions = async (cat, diff, axiosClient) => {
     maxBodyLength: Infinity,
     url: url_start + '/question',
     headers: { 
-      'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ6YWNoYiIsImV4cCI6MTczMDkxODQzN30.BDwAf4ptU6ubWOSkLiKpQT_w_-Mj4GnXn_S1Kc2S_bE',
       'Content-Type': 'application/json', 
     },
   };

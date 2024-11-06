@@ -26,7 +26,6 @@ export const AxiosProvider = ({ children }) => {
 
   axiosInstance.interceptors.request.use(
     (config) => {
-      console.log('token in interceptor', token);
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
       } else {

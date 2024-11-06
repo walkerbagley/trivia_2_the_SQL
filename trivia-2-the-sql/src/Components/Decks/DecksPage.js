@@ -11,7 +11,7 @@ const Decks =  () => {
     const navigate = useNavigate();
 
     const goToDeckDetails = (deck) => {
-        navigate(`/decks/${deck.id}`,{state: {deck:deck}});
+        navigate(`/decks/${deck.id}`,{state: {deck:deck.id}});
     };
 
     const [allDecks, setAllDecks] = useState([]);
