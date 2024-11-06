@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException, Query
 from fastapi.responses import JSONResponse
 from psycopg.rows import class_row, dict_row
-from typing import Annotated
+from typing import Annotated, Union
 from uuid import UUID
 
 from ..db import db
@@ -14,7 +14,7 @@ router = APIRouter(
 )
 
 @router.get("/")
-async def get_questions(category: Annotated[str | None, Query()] = None, attribute: Annotated[list[str] | None, Query()] = None, limit:int = 10) -> list[Question]:
+async def get_questions(category: Annotated[Union[str, None], Query()] = None, attribute: Annotated[Union[list[str], None], Query()] = None, limit:int = 10) -> list[Question]:
     async with db.connection() as conn:
         async with conn.cursor(row_factory=class_row(Question)) as cur:
             query = '''SELECT id, question, difficulty, a, b, c, d, category, ARRAY(SELECT attribute FROM "QuestionAttributes" WHERE question_id = q.id) as attributes 
