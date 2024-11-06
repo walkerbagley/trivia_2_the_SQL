@@ -1,6 +1,6 @@
 import './styles.css';
 import { getTeams } from "./AccountService.js";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useAxios } from '../../Providers/AxiosProvider';
 
 const Account = () => {

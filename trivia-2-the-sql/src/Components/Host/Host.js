@@ -10,6 +10,10 @@ const PreHost =  () => {
     function getRandomDeck(category) {
 
     }
+
+    function getDecks() {
+        
+    }
     return (
     <div className="hostpage">
         <h1>Your Game ID: {getGameID()}</h1>
