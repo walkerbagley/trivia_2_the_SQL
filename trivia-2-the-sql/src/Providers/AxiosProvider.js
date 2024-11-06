@@ -14,6 +14,7 @@ const AxiosContext = createContext(defaultAxiosInstance);
 export const AxiosProvider = ({ children }) => {
   
   const { token, setJwt, clearJwt } = useAuthSession();
+  console.log('token in provider', token);
   
   const axiosInstance = useMemo(() => {
     return axios.create({
@@ -28,6 +29,7 @@ export const AxiosProvider = ({ children }) => {
   useEffect(() => {
     const requestInterceptor = axiosInstance.interceptors.request.use(
       (config) => {
+        console.log('token in interceptor', token);
         if (token) {
           config.headers.Authorization = `Bearer ${token}`;
         } else {

@@ -1,0 +1,67 @@
+.createpage {
+    color: var(--main-text-color);
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column; /* Add this to stack h1 above grid-container */
+    align-items: center;
+    background-color: var(--main-background-color);
+    font-family: var(--main-font);
+  }
+
+.createpage .grid-container {
+    display: grid;
+    grid-template-columns: auto;
+}
+
+
+.createpage .desc_info {
+    justify-content: center;
+    padding: 10px;
+    color: #573e79ff;
+
+}
+
+.deckname_div {
+    display: flex;
+    top: 10%;
+    padding: 10px;
+}
+
+.deckdesc_div {
+    display: flex;
+    top: 50%;
+    padding: 10px;
+}
+
+.createpage .desc_info .create_button {
+    cursor: pointer;
+    font-weight: 700;
+    transition: all 0.2s;
+    padding: 10px 20px;
+    border-radius: 100px;
+    background: #cfef00;
+    border: 1px solid transparent;
+    display: flex;
+    align-items: center;
+    font-size: 15px;
+    margin-left: 15px;
+}
+    
+.createpage .desc_info .create_button:hover {
+        background: #c4e201;
+      }
+      
+      .createpage .desc_info .create_button > svg {
+        width: 34px;
+        margin-left: 10px;
+        transition: transform 0.3s ease-in-out;
+      }
+      
+      .createpage .desc_info .create_button:hover svg {
+        transform: translateX(-5px);
+      }
+      
+      .createpage .desc_info .create_button:active {
+        transform: scale(0.95);
+      }
