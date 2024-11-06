@@ -2,6 +2,9 @@ import './variables.css'
 // import { initializeParse } from '@parse/react';
 import axios from 'axios';
 import Components from './Components/Components';
+import { AuthProvider } from './Providers/AuthProvider';
+import { AxiosProvider } from './Providers/AxiosProvider';
+import { UserProvider } from './Providers/UserProvider';
 
 // initializeParse(
 //   'YOUR_SERVER_URL',
@@ -33,7 +36,13 @@ const App = () => {
 //   }
 
     return (
-      <Components/>
+      <AuthProvider>
+        <AxiosProvider>
+          <UserProvider>
+            <Components/>
+          </UserProvider>
+        </AxiosProvider>
+      </AuthProvider>
     );
 };
 

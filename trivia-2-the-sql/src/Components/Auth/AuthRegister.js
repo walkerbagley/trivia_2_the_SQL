@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { User, createUser, loginUser } from "./AuthService.js";
+import { User, createUser } from "./AuthService.js";
 import AuthForm from "./AuthForm.js";
 import "./styles.css";
-import { useAuthSession } from "../../Providers/AuthProvider.js";
-import { redirect, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useUserSession } from "../../Providers/UserProvider.js";
 
 const AuthRegister = () => {
   const navigate = useNavigate();
   const [newUser, setNewUser] = useState(new User('', ''));
-  const { token, setJwt, clearJwt } = useAuthSession();
+  const { user, login, logout } = useUserSession();
   // flag
   const [signup, setSignup] = useState(false);
   const [add, setAdd] = useState(false);
@@ -20,21 +20,18 @@ const AuthRegister = () => {
         console.log(response);
       }
       if (!signup) {
-        loginUser(newUser).then((response) => {
-          setJwt(response.data.token);
-          // navigate("/account");
-          // console.log(response.data.token);
-        });
+        const response = login(newUser);
+        console.log(response);
       }
       setAdd(false);
     }
   }, [newUser, add, signup]);
 
   useEffect(() => {
-    if (token) {
+    if (user) {
       navigate('/account');
     }
-  }, [token]);
+  }, [user]);
 
   const onChangeHandler = (e) => {
     e.preventDefault();
@@ -50,16 +47,18 @@ const AuthRegister = () => {
   };
 
   return (
-    <div className="container">
-      <div className="togglecontainer">
-        <div onClick={() => setSignup(false)} className={`btn ${signup ? '' : 'active'}`}>Login</div>
-        <div onClick={() => setSignup(true)} className={`btn ${signup ? 'active' : ''}`}>Register</div>
+    <div className = "page">
+      <div className="container">
+        <div className="togglecontainer">
+          <div onClick={() => setSignup(false)} className={`btn ${signup ? '' : 'active'}`}>Login</div>
+          <div onClick={() => setSignup(true)} className={`btn ${signup ? 'active' : ''}`}>Register</div>
+        </div>
+        <AuthForm
+          user={newUser}
+          onChange={onChangeHandler}
+          onSubmit={onSubmitHandler}
+        />
       </div>
-      <AuthForm
-        user={newUser}
-        onChange={onChangeHandler}
-        onSubmit={onSubmitHandler}
-      />
     </div>
   );
 };

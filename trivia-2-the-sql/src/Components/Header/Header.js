@@ -2,48 +2,49 @@ import React from 'react'
 import './styles.css'
 
 import { useNavigate } from "react-router-dom";
+import { useUserSession } from "../../Providers/UserProvider.js";
 
 
 const Header =  () => {
     const navigate = useNavigate();
+    const { user, logout } = useUserSession();
 
-    let login_button;
-    let isLoggedIn = false;
-
-    if (!isLoggedIn) {
-        login_button = <button
-                className="button-52"
-                role="button"
-                onClick={() => navigate('/Login')}>
-                Login
-        </button>;
+    if (!user) {
+        return (
+            <nav className="navbar">
+                <div className="title">Trivia 2: The SQL</div>
+            </nav>
+          );
     } else {
-        login_button = <button
-            className="button-52"
-            role="button"
-            onClick={() => navigate('/Account')}>
-            Account
-        </button>;
+        return (
+            <nav className="navbar">
+                <div className="title">Trivia 2: The SQL</div>
+                <button
+                    className="button-52"
+                    role="button"
+                    onClick={() => navigate('/')}>
+                    Home Page
+                </button>
+                <button
+                    className="button-52"
+                    role="button"
+                    onClick={() => navigate('/Decks')}>
+                    Decks
+                </button>
+                <button
+                    className="button-52"
+                    role="button"
+                    onClick={() => navigate('/Account')}>
+                    Account
+                </button>
+                <button
+                    className="button-52"
+                    role="button"
+                    onClick={() => logout()}>
+                    Logout
+                </button>;
+            </nav>
+          );
     }
-
-    return (
-    <nav className="navbar">
-        <div className="title">Trivia 2: The SQL</div>
-        <button
-            className="button-52"
-            role="button"
-            onClick={() => navigate('/')}>
-            Home Page
-        </button>
-        {login_button}
-        
-        <button
-            className="button-52"
-            role="button"
-            onClick={() => navigate('/Decks')}>
-            Decks
-        </button>
-    </nav>
-  );
 }
 export default Header;
