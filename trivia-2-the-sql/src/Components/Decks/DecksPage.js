@@ -9,11 +9,13 @@ const Decks =  () => {
     return (
     <div className="deckspage">
       <h1>Deck List</h1>
+      <Link to={'/create'} className='no-underline'><button>Create Deck</button></Link>
       <div className="grid-container">
         {decklist.map((id) => (
             <Link to={`/decks/${id}`} className='no-underline'><Deck/></Link>
           ))}
       </div>
+
       
     </div>
   );
