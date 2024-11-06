@@ -48,8 +48,8 @@ async def get_user_decks(user_id: UUID) -> list[Deck]:
         async with conn.cursor(row_factory=class_row(Deck)) as cur:
             await cur.execute('''
                               SELECT d.id, d.name, d.description FROM "Decks" as d 
-                              LEFT OUTER JOIN "UserDecks" as hd ON d.id = hd.deck_id
-                              WHERE hd.host_id = %s''', (user_id,))
+                              LEFT OUTER JOIN "UserDecks" as ud ON d.id = ud.deck_id
+                              WHERE ud.user_id = %s''', (user_id,))
 
             decks = await cur.fetchall()
 
@@ -59,7 +59,7 @@ async def get_user_decks(user_id: UUID) -> list[Deck]:
 async def add_user_deck(user_id: UUID, deck_id: UUID) -> None:
     async with db.connection() as conn:
         async with conn.cursor() as cur:
-            await cur.execute('''INSERT INTO "UserDecks" (host_id, deck_id) VALUES (%s, %s)''',
+            await cur.execute('''INSERT INTO "UserDecks" (user_id, deck_id) VALUES (%s, %s)''',
                               (user_id, deck_id))
             return JSONResponse(status_code=201, content=None)
 
@@ -67,5 +67,5 @@ async def add_user_deck(user_id: UUID, deck_id: UUID) -> None:
 async def remove_user_deck(user_id: UUID, deck_id: UUID) -> None:
     async with db.connection() as conn:
         async with conn.cursor() as cur:
-            await cur.execute('''DELETE FROM "UserDecks" WHERE host_id = %s AND deck_id = %s''', (user_id, deck_id))
+            await cur.execute('''DELETE FROM "UserDecks" WHERE user_id = %s AND deck_id = %s''', (user_id, deck_id))
         
