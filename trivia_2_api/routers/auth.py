@@ -19,7 +19,7 @@ async def register(request: RegisterRequest) -> None:
     print('request', request)
     async with db.connection() as conn:
             async with conn.cursor(row_factory=class_row(RegisterResponse)) as cur:
-                await cur.execute('''SELECT id, user_name, hashed_password FROM "Users" WHERE user_name = %s''', (request.username,))
+                await cur.execute('''SELECT id, user_name FROM "Users" WHERE user_name = %s''', (request.username,))
                 user = await cur.fetchone()
                 print('user in func ', user)
                 if user is not None:

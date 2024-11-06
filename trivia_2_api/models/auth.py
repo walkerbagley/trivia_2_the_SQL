@@ -15,6 +15,7 @@ class RegisterRequest(BaseModel):
 
 class RegisterResponse(BaseModel):
     id: UUID
+    user_name: str
 
 class AuthUser(BaseModel):
     id: UUID

@@ -31,7 +31,7 @@ export function UserProvider({ children }) {
         } else {
             setUser(null);
         }
-    }, [token]);
+    }, [token, axios, logout]);
 
     return (
         <UserContext.Provider value={{ user }}>

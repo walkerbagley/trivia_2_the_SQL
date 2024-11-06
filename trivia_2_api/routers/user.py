@@ -14,14 +14,14 @@ router = APIRouter(
 )
 
 @router.get("/")
-async def get_user() -> list[User]:
+async def get_user() -> list[UserResponse]:
     async with db.connection() as conn:
         async with conn.cursor(row_factory=class_row(UserResponse)) as cur:
             await cur.execute('''SELECT id, user_name FROM "Users"''')
             return await cur.fetchall()
 
 @router.get("/{id}")
-async def get_user(id: UUID) -> User:
+async def get_user(id: UUID) -> UserResponse:
     async with db.connection() as conn:
         async with conn.cursor(row_factory=class_row(UserResponse)) as cur:
             await cur.execute('''SELECT id, user_name FROM "Users" WHERE id = %s''', (id,))
