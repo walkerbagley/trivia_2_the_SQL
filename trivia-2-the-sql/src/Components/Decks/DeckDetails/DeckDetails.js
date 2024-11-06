@@ -1,11 +1,14 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
+// import { useParams } from 'react-router-dom';
 import './styles.css';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const DeckDetails =  () => {
   const navigate = useNavigate();
-  const { id } = useParams();
+  const location = useLocation(); 
+  const { deck } = location.state || { deck: 'default value' };
+  console.log(deck);
+  // const { id } = useParams();
 
   const goBack = () => {
     navigate("/decks");
@@ -31,8 +34,9 @@ const DeckDetails =  () => {
         </svg>
             <span>Go Back</span>
       </button>
-
-      <h1>Deck #{id}</h1>
+      <h1>{deck.name}</h1>
+      <h5>Deck #{deck.id}</h5>
+      <h3>{deck.description}</h3>
       <h2>Questions</h2>
       <ol>
         <li>

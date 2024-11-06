@@ -1,10 +1,17 @@
 import React, {useEffect, useState} from 'react'
 import './styles.css'
 import Deck from './Deck/Deck.js'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { getAllDecks } from '../../Services/Decks.js'
 
 const Decks =  () => {
+    const navigate = useNavigate();
+
+    const goToDeckDetails = (deck) => {
+        navigate(`/decks/${deck.id}`,{state: {deck:deck}});
+        console.log('auto nav')
+    };
+
     const [allDecks, setAllDecks] = useState([]);
 
     useEffect(() => {
@@ -28,7 +35,7 @@ const Decks =  () => {
       <div className="grid-container">
         {allDecks ? 
         allDecks.map((deck) => (
-            <Link to={`/decks/${deck.id}`} className='no-underline'><Deck deck={deck}/></Link>
+            <button onClick={goToDeckDetails(deck)} className='no-underline'><Deck deck={deck}/></button>
           ))
         : <></>
         }

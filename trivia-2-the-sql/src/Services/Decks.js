@@ -2,26 +2,7 @@
 // const axios = useAxios();
 import axios from "axios";
 
-// {"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJwYXQiLCJleHAiOjE3MzEwNDIyNTN9.IADSm27QgYJsNFHstD1Jsc_3RdJoDioSoLdpz794qZA","token_type":"bearer"}
-// export const getAllDecks = () => {
-//   let config = {
-//     method: 'get',
-//     maxBodyLength: Infinity,
-//     url: 'http://127.0.0.1:8000/deck',
-//     headers: { 
-//       'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ6YWNoYiIsImV4cCI6MTczMDkxODQzN30.BDwAf4ptU6ubWOSkLiKpQT_w_-Mj4GnXn_S1Kc2S_bE'
-//     }
-//   };
-//   axios.request(config)
-//   .then((response) => {
-//     console.log("in getd", JSON.stringify(response.data));
-//     return response.data;
-//   })
-//   .catch((error) => {
-//     console.log(error);
-//   });
-// };
-export const getAllDecks = async () => { //hello
+export const getAllDecks = async () => { 
   let config = {
     method: 'get',
     maxBodyLength: Infinity,
@@ -42,7 +23,7 @@ export const getAllDecks = async () => { //hello
 };
 
 
-export const getDeck = (id) => {
+export const getDeck = async (id) => {
   let config = {
     method: 'get',
     maxBodyLength: Infinity,
@@ -51,15 +32,15 @@ export const getDeck = (id) => {
       'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ6YWNoYiIsImV4cCI6MTczMDkxODQzN30.BDwAf4ptU6ubWOSkLiKpQT_w_-Mj4GnXn_S1Kc2S_bE'
     }
   };
-
-  axios.request(config)
-  .then((response) => {
-    console.log(JSON.stringify(response.data));
-  })
-  .catch((error) => {
-    console.log(error);
-  });
-}
+  try {
+    const response = await axios.request(config)
+    console.log("getdeckbyid ", response.data)
+    return response.data
+  }catch (error) {
+    console.error("Failed to fetch deck:", error);
+    throw error; 
+  }
+};
 
 export const createDeck = (name, description) => {
   let data = JSON.stringify({
