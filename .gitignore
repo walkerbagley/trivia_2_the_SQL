@@ -1,4 +1,6 @@
 # Byte-compiled / optimized / DLL files
+.gitignore
+
 __pycache__/
 *.py[cod]
 *$py.class
@@ -16,6 +18,7 @@ eggs/
 .eggs/
 lib/
 lib64/
+node_modules/
 parts/
 sdist/
 var/
