@@ -4,10 +4,22 @@ import Deck from './Deck/Deck.js'
 import { Link } from 'react-router-dom'
 import { getAllDecks } from '../../Services/Decks.js'
 
-let decklist = [1,2,3,4,5]
-
 const Decks =  () => {
-    const allDecks = getAllDecks();
+    const [allDecks, setAllDecks] = useState([]);
+
+    useEffect(() => {
+      const fetchDecks = async () => {
+        try {
+          const ds = await getAllDecks();
+          setAllDecks(ds);
+        } catch (error) {
+          console.error("Failed to fetch decks:", error);
+        }
+      };
+
+      fetchDecks();
+    }, []);
+
 
     return (
     <div className="deckspage">
