@@ -3,12 +3,14 @@ import { User, createUser, loginUser } from "./AuthService.js";
 import AuthForm from "./AuthForm.js";
 import "./styles.css";
 import { useAuthSession } from "../../Providers/AuthProvider.js";
+import { redirect, useNavigate } from "react-router-dom";
 
 const AuthRegister = () => {
+  const navigate = useNavigate();
   const [newUser, setNewUser] = useState(new User('', ''));
   const { token, setJwt, clearJwt } = useAuthSession();
   // flag
-  const [signup, setSignup] = useState(true);
+  const [signup, setSignup] = useState(false);
   const [add, setAdd] = useState(false);
   
   useEffect(() => {
@@ -16,16 +18,23 @@ const AuthRegister = () => {
       if (signup) {
         const response = createUser(newUser);
         console.log(response);
-        
       }
       if (!signup) {
         loginUser(newUser).then((response) => {
           setJwt(response.data.token);
+          // navigate("/account");
+          // console.log(response.data.token);
         });
       }
       setAdd(false);
     }
   }, [newUser, add, signup]);
+
+  useEffect(() => {
+    if (token) {
+      navigate('/account');
+    }
+  }, [token]);
 
   const onChangeHandler = (e) => {
     e.preventDefault();

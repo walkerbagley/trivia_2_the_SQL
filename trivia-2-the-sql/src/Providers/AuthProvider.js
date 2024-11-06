@@ -1,5 +1,6 @@
 import React from "react";
 import { useState, useEffect, createContext } from "react";
+import { redirect, useNavigate } from "react-router-dom";
 
 const AuthContext = createContext(null, null, null);
 
@@ -21,8 +22,10 @@ export function AuthProvider({ children }) {
     }
   }, []);
 
+  // const navigate = useNavigate();
   const setJwt = (token) => {
-        setToken(token);
+    setToken(token);
+    // navigate('/account');
     };
 
   const clearJwt = () => {
