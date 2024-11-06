@@ -9,7 +9,6 @@ const Decks =  () => {
 
     const goToDeckDetails = (deck) => {
         navigate(`/decks/${deck.id}`,{state: {deck:deck}});
-        console.log('auto nav')
     };
 
     const [allDecks, setAllDecks] = useState([]);
@@ -35,7 +34,7 @@ const Decks =  () => {
       <div className="grid-container">
         {allDecks ? 
         allDecks.map((deck) => (
-            <button onClick={goToDeckDetails(deck)} className='no-underline'><Deck deck={deck}/></button>
+            <button onClick={() => goToDeckDetails(deck)} className='no-underline'><Deck deck={deck}/></button>
           ))
         : <></>
         }

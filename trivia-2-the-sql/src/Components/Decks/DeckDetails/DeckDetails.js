@@ -1,14 +1,29 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 // import { useParams } from 'react-router-dom';
 import './styles.css';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { getQuestions } from '../../../Services/Decks';
 
 const DeckDetails =  () => {
   const navigate = useNavigate();
   const location = useLocation(); 
   const { deck } = location.state || { deck: 'default value' };
-  console.log(deck);
   // const { id } = useParams();
+
+  const [questions, setQuestions] = useState([]);
+
+    useEffect(() => {
+      const fetchDecks = async () => {
+        try {
+          const qs = await getQuestions();
+          setQuestions(qs);
+        } catch (error) {
+          console.error("Failed to fetch questions:", error);
+        }
+      };
+
+      fetchDecks();
+    }, []);
 
   const goBack = () => {
     navigate("/decks");
@@ -39,14 +54,20 @@ const DeckDetails =  () => {
       <h3>{deck.description}</h3>
       <h2>Questions</h2>
       <ol>
+        {
+          questions ? 
+          questions.map((question) => (
+            <li>
+              <div className='question'>
+                {question?.question}
+              </div>
+            </li>
+          ))
+          : <></>
+        }
         <li>
           <div className='question'>
           Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-            </div>
-        </li>
-        <li>
-          <div className='question'>
-            hello world
             </div>
         </li>
       </ol>
