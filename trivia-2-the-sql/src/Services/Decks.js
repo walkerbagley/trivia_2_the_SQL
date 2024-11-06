@@ -1,15 +1,16 @@
 import axios from 'axios';
 
+// {"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJwYXQiLCJleHAiOjE3MzEwNDIyNTN9.IADSm27QgYJsNFHstD1Jsc_3RdJoDioSoLdpz794qZA","token_type":"bearer"}
 export const getAllDecks = () => {
   let config = {
     method: 'get',
     maxBodyLength: Infinity,
     url: 'http://127.0.0.1:8000/deck',
     headers: { 
-      'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ6YWNoYiIsImV4cCI6MTczMDkxODQzN30.BDwAf4ptU6ubWOSkLiKpQT_w_-Mj4GnXn_S1Kc2S_bE'
+      'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJwYXQiLCJleHAiOjE3MzEwNDIyNTN9.IADSm27QgYJsNFHstD1Jsc_3RdJoDioSoLdpz794qZA'
     }
   };
-
+  console.log("config", config);
   axios.request(config)
   .then((response) => {
     console.log(JSON.stringify(response.data));

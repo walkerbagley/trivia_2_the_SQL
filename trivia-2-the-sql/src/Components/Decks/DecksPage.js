@@ -2,10 +2,12 @@ import React from 'react'
 import './styles.css'
 import Deck from './Deck/Deck.js'
 import { Link } from 'react-router-dom'
+import { getAllDecks } from '../../Services/Decks.js'
 
 let decklist = [1,2,3,4,5]
 
 const Decks =  () => {
+    const allDecks = getAllDecks();
     return (
     <div className="deckspage">
       <h1>Deck List</h1>

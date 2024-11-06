@@ -1,7 +1,8 @@
 import React from 'react'
 import './styles.css'
-
 import { useNavigate } from "react-router-dom";
+import { getAllDecks } from '../../Services/Decks';
+
 
 const Main =  () => {
     const navigate = useNavigate();
@@ -18,6 +19,11 @@ const Main =  () => {
                 className="button-52"
                 onClick={() => navigate('/Host')}>
                 Host Game
+            </button>
+            <button
+                className="button-52"
+                onClick={() => getAllDecks()}>
+                Test
             </button>
         </div>
     </div>
