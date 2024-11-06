@@ -1,13 +1,11 @@
 import React from 'react'
 import './styles.css'
 
-const Deck =  (deckID) => {
-    let deckName = "deck"
-    let description = "description"
+const Deck =  (deck) => {
     return (
       <div className="deckbox grid-item">
-        <h1 className="title">{deckName}</h1>
-        <h3 className="description">{description}</h3>
+        <h1 className="title">{deck.deck['name']}</h1>
+        <h3 className="description">{deck.deck['description']}</h3>
       </div>
   );
 }

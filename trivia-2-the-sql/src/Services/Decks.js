@@ -1,24 +1,46 @@
-import axios from 'axios';
+// import useAxios from '../Providers/AxiosProvider'
+// const axios = useAxios();
+import axios from "axios";
 
 // {"token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJwYXQiLCJleHAiOjE3MzEwNDIyNTN9.IADSm27QgYJsNFHstD1Jsc_3RdJoDioSoLdpz794qZA","token_type":"bearer"}
-export const getAllDecks = () => {
+// export const getAllDecks = () => {
+//   let config = {
+//     method: 'get',
+//     maxBodyLength: Infinity,
+//     url: 'http://127.0.0.1:8000/deck',
+//     headers: { 
+//       'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ6YWNoYiIsImV4cCI6MTczMDkxODQzN30.BDwAf4ptU6ubWOSkLiKpQT_w_-Mj4GnXn_S1Kc2S_bE'
+//     }
+//   };
+//   axios.request(config)
+//   .then((response) => {
+//     console.log("in getd", JSON.stringify(response.data));
+//     return response.data;
+//   })
+//   .catch((error) => {
+//     console.log(error);
+//   });
+// };
+export const getAllDecks = async () => {
   let config = {
     method: 'get',
     maxBodyLength: Infinity,
     url: 'http://127.0.0.1:8000/deck',
     headers: { 
-      'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJwYXQiLCJleHAiOjE3MzEwNDIyNTN9.IADSm27QgYJsNFHstD1Jsc_3RdJoDioSoLdpz794qZA'
+      'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ6YWNoYiIsImV4cCI6MTczMDkxODQzN30.BDwAf4ptU6ubWOSkLiKpQT_w_-Mj4GnXn_S1Kc2S_bE'
     }
   };
-  console.log("config", config);
-  axios.request(config)
-  .then((response) => {
-    console.log(JSON.stringify(response.data));
-  })
-  .catch((error) => {
-    console.log(error);
-  });
+
+  try {
+    const response = await axios.request(config);
+    console.log("in getAllDecks", JSON.stringify(response.data));
+    return response.data;
+  } catch (error) {
+    console.error("Failed to fetch decks:", error);
+    throw error;  // Propagate the error so it can be handled by the caller
+  }
 };
+
 
 export const getDeck = (id) => {
   let config = {

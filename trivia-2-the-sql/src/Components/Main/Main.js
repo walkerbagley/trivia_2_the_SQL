@@ -2,6 +2,8 @@ import React from 'react'
 import './styles.css'
 import { useNavigate } from "react-router-dom";
 import { getAllDecks } from '../../Services/Decks';
+import { login } from '../../Services/Auth';
+import { register } from '../../Services/Auth';
 
 
 const Main =  () => {
