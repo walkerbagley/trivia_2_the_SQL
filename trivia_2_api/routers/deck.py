@@ -3,6 +3,8 @@ from fastapi.responses import JSONResponse
 from psycopg.rows import class_row, dict_row
 from uuid import UUID
 
+from trivia_2_api.routers.question import get_questions
+
 from ..db import db
 from ..models import Deck, DeckRequest, Question
 
@@ -38,6 +40,11 @@ async def create_deck(deck: DeckRequest) -> None:
             deck_id = (await cur.fetchone()).get("id", None)
             if deck_id is None:
                 raise HTTPException(status_code=500, detail="Failed to create deck")
+            
+            questions = await get_questions(category=deck.category, limit=deck.num_questions)
+
+            await cur.executemany('''INSERT INTO "DeckQuestions" (deck_id, question_id) VALUES (%s, %s)''', [(deck_id, q.id) for q in questions])
+            
             return JSONResponse(status_code=201, content={"id": str(deck_id)})
             
 @router.put("/{id}")
