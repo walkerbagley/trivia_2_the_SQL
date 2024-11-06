@@ -38,23 +38,23 @@ export const AxiosProvider = ({ children }) => {
       (error) => Promise.reject(error)
     );
 
-    const responseInterceptor = axiosInstance.interceptors.response.use(
-      (response) => response,
-      (error) => {
-        if (error.response) {
-          console.log(error.config?.url, '\tResponse error:',  error.response.status, error.response.data);
-        } else if (error.request) {
-          console.log(error.config?.url, '\tRequest error:', error.request);
-        } else {
-          console.log(error.config?.url, '\tError:', error.message);
-        }
-        return Promise.reject(error);
-      }
-    );
+    // const responseInterceptor = axiosInstance.interceptors.response.use(
+    //   (response) => response,
+    //   (error) => {
+    //     if (error.response) {
+    //       console.log(error.config?.url, '\tResponse error:',  error.response.status, error.response.data);
+    //     } else if (error.request) {
+    //       console.log(error.config?.url, '\tRequest error:', error.request);
+    //     } else {
+    //       console.log(error.config?.url, '\tError:', error.message);
+    //     }
+    //     return Promise.reject(error);
+    //   }
+    // );
 
     return () => {
       axiosInstance.interceptors.request.eject(requestInterceptor);
-      axiosInstance.interceptors.response.eject(responseInterceptor);
+     // axiosInstance.interceptors.response.eject(responseInterceptor);
     };
   }, [token, axiosInstance]);
 

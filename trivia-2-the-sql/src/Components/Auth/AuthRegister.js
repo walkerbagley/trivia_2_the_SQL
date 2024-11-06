@@ -4,11 +4,14 @@ import AuthForm from "./AuthForm.js";
 import "./styles.css";
 import { useNavigate } from "react-router-dom";
 import { useUserSession } from "../../Providers/UserProvider.js";
+import { toast, ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const AuthRegister = () => {
   const navigate = useNavigate();
   const [newUser, setNewUser] = useState(new User('', ''));
-  const { user, login, logout } = useUserSession();
+  const { user, login, register } = useUserSession();
   // flag
   const [signup, setSignup] = useState(false);
   const [add, setAdd] = useState(false);
@@ -16,12 +19,20 @@ const AuthRegister = () => {
   useEffect(() => {
     if (newUser && add) {
       if (signup) {
-        const response = createUser(newUser);
-        console.log(response);
+        register(newUser).catch((error) => {
+          if (error.status === 409) {
+            toast.error("Username already exists");
+          } else {
+            console.log(error);
+            toast.error("Failed to register");
+          }          
+        });
       }
       if (!signup) {
-        const response = login(newUser);
-        console.log(response);
+        login(newUser).catch((error) => { 
+          console.log(error);
+          toast.error("Failed to login");
+        });
       }
       setAdd(false);
     }
@@ -53,6 +64,7 @@ const AuthRegister = () => {
           <div onClick={() => setSignup(false)} className={`btn ${signup ? '' : 'active'}`}>Login</div>
           <div onClick={() => setSignup(true)} className={`btn ${signup ? 'active' : ''}`}>Register</div>
         </div>
+        <ToastContainer />
         <AuthForm
           user={newUser}
           onChange={onChangeHandler}
