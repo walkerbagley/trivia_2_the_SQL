@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useEffect, useMemo } from 'react';
 import { useAuthSession } from './AuthProvider';
+import axios from 'axios';
 
 const defaultAxiosInstance = axios.create({
   baseURL: 'http://127.0.0.1:8000', 
