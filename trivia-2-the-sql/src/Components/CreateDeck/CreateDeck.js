@@ -1,33 +1,13 @@
 import React from 'react'
 import './styles.css'
 import { useNavigate } from 'react-router-dom'
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { createDeck } from '../../Services/Decks.js';
 import { useAxios } from '../../Providers/AxiosProvider.js'
 
 const CreateDeck = () => {
     const axios = useAxios(); 
     const navigate = useNavigate();
-    const [page, setPage] = useState(1);
-
-  
-    // Handle scroll
-    useEffect(() => {
-      function handleScroll(event) {
-        const { scrollTop, clientHeight, scrollHeight } = event.target;
-  
-        if (scrollHeight - scrollTop === clientHeight) {
-          setPage(oldPage => oldPage + 1);
-        }
-      }
-  
-      const element = document.getElementById('questionlist');
-      element.addEventListener('scroll', handleScroll);
-  
-      return () => {
-        element.removeEventListener('scroll', handleScroll);
-      };
-    }, []);
 
     
 
