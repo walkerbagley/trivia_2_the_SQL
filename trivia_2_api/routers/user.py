@@ -48,7 +48,7 @@ async def get_user_decks(user_id: UUID) -> list[Deck]:
     async with db.connection() as conn:
         async with conn.cursor(row_factory=class_row(Deck)) as cur:
             await cur.execute('''
-                              SELECT d.id, d.name, d.description FROM "Decks" as d 
+                              SELECT d.id, d.name, d.description, d.owner_id FROM "Decks" as d 
                               LEFT OUTER JOIN "UserDecks" as ud ON d.id = ud.deck_id
                               WHERE ud.user_id = %s''', (user_id,))
 

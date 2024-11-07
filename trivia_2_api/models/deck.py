@@ -6,6 +6,7 @@ class Deck(BaseModel):
     id: UUID
     name: str
     description: str
+    owner_id: UUID
 
 class DeckRequest(BaseModel):
     name: str

@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import JSONResponse
 from psycopg.rows import class_row, dict_row
 from uuid import UUID
@@ -18,25 +18,29 @@ router = APIRouter(
 async def get_deck() -> list[Deck]:
     async with db.connection() as conn:
         async with conn.cursor(row_factory=class_row(Deck)) as cur:
-            await cur.execute('''SELECT id, name, description FROM "Decks"''')
+            await cur.execute('''SELECT id, name, description, owner_id FROM "Decks"''')
             return await cur.fetchall()
 
 @router.get("/{id}")
 async def get_deck(id: UUID) -> Deck:
     async with db.connection() as conn:
         async with conn.cursor(row_factory=class_row(Deck)) as cur:
-            await cur.execute('''SELECT id, name, description FROM "Decks" WHERE id = %s''', (id,))
+            await cur.execute('''SELECT id, name, description, owner_id FROM "Decks" WHERE id = %s''', (id,))
             question = await cur.fetchone() 
             if question is None:
                 raise HTTPException(status_code=404, detail="Deck not found")
             return question
 
 @router.post("/")
-async def create_deck(deck: DeckRequest) -> None:
+async def create_deck(request:Request, deck: DeckRequest) -> None:
+    user = dict(request.scope["headers"]).get(b"X-Authenticated-User", None)
+    if user is None:
+        raise HTTPException(status_code=401, detail="Not authenticated")
+    
     async with db.connection() as conn:
         async with conn.cursor(row_factory=dict_row) as cur:
-            await cur.execute('''INSERT INTO "Decks" (name, description) VALUES (%s, %s) RETURNING id''',
-                              (deck.name, deck.description))
+            await cur.execute('''INSERT INTO "Decks" (name, description, owner_id) VALUES (%s, %s, %s) RETURNING id''',
+                              (deck.name, deck.description, UUID(user.decode('utf-8'))))
             deck_id = (await cur.fetchone()).get("id", None)
             if deck_id is None:
                 raise HTTPException(status_code=500, detail="Failed to create deck")

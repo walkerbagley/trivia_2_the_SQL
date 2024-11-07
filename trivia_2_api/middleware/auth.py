@@ -22,7 +22,7 @@ async def authenticate_user(request: Request, call_next):
     try:
         user = await get_current_user(token=token)
         headers = dict(request.scope["headers"])
-        headers[b"X-Authenticated-User"] = user.id.bytes
+        headers[b"X-Authenticated-User"] = str(user.id).encode('utf-8')
         request.scope["headers"] = [(k,v) for k,v in headers.items()]
         response = await call_next(request)
         return response
