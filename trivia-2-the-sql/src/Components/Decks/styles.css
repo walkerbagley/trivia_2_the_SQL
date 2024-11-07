@@ -1,7 +1,7 @@
 .deckspage {
   color: var(--main-text-color);
   width: 100%;
-  height: 100vh;
+  height: 100%;
   display: flex;
   flex-direction: column; /* Add this to stack h1 above grid-container */
   align-items: center;
