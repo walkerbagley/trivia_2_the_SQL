@@ -1,5 +1,5 @@
 import './styles.css';
-import { getTeams, addMember, removeMember, createTeam } from "./AccountService.js";
+import { getTeams, addMember, removeMember, createTeam, updateTeam } from "./AccountService.js";
 import React, { useEffect, useState } from "react";
 import { useAxios } from '../../Providers/AxiosProvider';
 import { useUserSession } from '../../Providers/UserProvider.js';
@@ -8,6 +8,8 @@ const Account = () => {
   const axios = useAxios();
   const { user } = useUserSession();
   const [teamName, setTeamName] = useState("");
+  const [edit, setEdit] = useState("");
+  const [newName, setNewName] = useState("");
   const [myteams, setMyteams] = useState([]);
   const [teams, setTeams] = useState([]);
   const [updateTeams, setUpdateTeams] = useState(true);
@@ -69,6 +71,16 @@ const Account = () => {
       console.error("Failed to remove user from team:", error);
     }
   }
+  const renameTeam = async (teamID, teamName) => {
+    try {
+      const r = await updateTeam(axios, teamID, teamName);
+      setEdit("");
+      setNewName("");
+      setUpdateTeams(true);
+    } catch (error) {
+      console.error("Failed to rename team:", error);
+    }
+  }
 
   return (
     <div className="accountpage">
@@ -93,9 +105,33 @@ const Account = () => {
       {myteams?.map((team) => {
         return (
           <div key={team.id} className='teamCard'>
-              <h3 className='h3'>{team.name}</h3>
+            <h3 className='h3'>{team.name}</h3>
+            <form className={`form ${edit == team.id ? '' : 'hide'}`} onSubmit={(e) => {
+              e.preventDefault();
+              renameTeam(team.id, newName);
+            }}>
+              <input className='textfield' type='text' name='newname' placeholder='New Name' onChange={(e) => {
+                e.preventDefault();
+                setNewName(e.target.value);
+              }} required></input>
+              <button type='submit' className='button' onSubmit={(e) => {
+                e.preventDefault();
+                renameTeam(team.id, newName);
+              }}>Change Name</button>
+            </form>
               <p className='p'>{team.member_ids.length} member{team.member_ids.length != 1 ? 's' : ''}</p>
-            <button className='button' onClick={() => removeFromTeam(team.id)}>-</button>
+            <div className='btncontainer'>
+              <button className='button' onClick={() => removeFromTeam(team.id)}>-</button>
+              <div className='separator'/>
+              <button className='button' onClick={() => {
+                if (team.id != edit) {
+                  setEdit(team.id);
+                }
+                else {
+                  setEdit("");
+                }
+              }}>Rename</button>
+            </div>
           </div>
         );
       })}

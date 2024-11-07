@@ -65,3 +65,24 @@ export const createTeam = async (axios, teamName, userID) => {
         throw error;
     }
 }
+
+export const updateTeam = async (axios, teamID, newName) => {
+    let data = JSON.stringify({
+        name: newName,
+    });
+
+    let config = {
+        method: 'put',
+        url: '/team/' + teamID,
+        data: data
+    };
+      
+    try {
+        const response = await axios.request(config);
+        console.log(response);
+        return response.data;
+    } catch (error) {
+        console.error("Failed to update team:", error);
+        throw error;
+    }
+}
