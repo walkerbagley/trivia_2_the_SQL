@@ -1,12 +1,11 @@
-from fastapi import APIRouter, HTTPException, Request
+from fastapi import APIRouter, HTTPException, Request, Query
 from fastapi.responses import JSONResponse
 from psycopg.rows import class_row, dict_row
+from typing import Annotated, Union
 from uuid import UUID
 
-from trivia_2_api.routers.question import get_questions
-
 from ..db import db
-from ..models import Deck, DeckRequest, Question
+from ..models import Deck, DeckRequest, DeckRoundRequest, DeckQuestion
 
 router = APIRouter(
     prefix="/deck",
@@ -16,77 +15,101 @@ router = APIRouter(
 
 @router.get("/")
 async def get_deck() -> list[Deck]:
-    async with db.connection() as conn:
-        async with conn.cursor(row_factory=class_row(Deck)) as cur:
-            await cur.execute('''SELECT id, name, description, owner_id FROM "Decks"''')
-            return await cur.fetchall()
+    with db.connection() as conn:
+        with conn.cursor(row_factory=class_row(Deck)) as cur:
+            cur.execute('''SELECT id, name, description, owner_id FROM "Decks"''')
+            return cur.fetchall()
 
 @router.get("/{id}")
 async def get_deck(id: UUID) -> Deck:
-    async with db.connection() as conn:
-        async with conn.cursor(row_factory=class_row(Deck)) as cur:
-            await cur.execute('''SELECT id, name, description, owner_id FROM "Decks" WHERE id = %s''', (id,))
-            question = await cur.fetchone() 
+    with db.connection() as conn:
+        with conn.cursor(row_factory=class_row(Deck)) as cur:
+            cur.execute('''SELECT id, name, description, owner_id FROM "Decks" WHERE id = %s''', (id,))
+            question = cur.fetchone() 
             if question is None:
                 raise HTTPException(status_code=404, detail="Deck not found")
             return question
 
 @router.post("/")
 async def create_deck(request:Request, deck: DeckRequest) -> None:
-    user = dict(request.scope["headers"]).get(b"X-Authenticated-User", None)
-    if user is None:
+    if request.state.user is None:
         raise HTTPException(status_code=401, detail="Not authenticated")
     
-    async with db.connection() as conn:
-        async with conn.cursor(row_factory=dict_row) as cur:
-            await cur.execute('''INSERT INTO "Decks" (name, description, owner_id) VALUES (%s, %s, %s) RETURNING id''',
-                              (deck.name, deck.description, UUID(user.decode('utf-8'))))
-            deck_id = (await cur.fetchone()).get("id", None)
+    with db.connection() as conn:
+        with conn.cursor(row_factory=dict_row) as cur:
+            cur.execute('''INSERT INTO "Decks" (name, description, owner_id) VALUES (%s, %s, %s) RETURNING id''',
+                              (deck.name, deck.description, request.state.user.id))
+            deck_id = (cur.fetchone()).get("id", None)
             if deck_id is None:
                 raise HTTPException(status_code=500, detail="Failed to create deck")
-            
-            questions = await get_questions(category=deck.category, limit=deck.num_questions)
 
-            await cur.executemany('''INSERT INTO "DeckQuestions" (deck_id, question_id) VALUES (%s, %s)''', [(deck_id, q.id) for q in questions])
+    for round in deck.rounds:
+        add_round(deck_id, round)
+    
+        
+    return JSONResponse(status_code=201, content={"id": str(deck_id)})
+
+def add_round(deck_id: UUID, round: DeckRoundRequest) -> None:
+    print("ADDING ROUND", round)
+    with db.connection() as conn:
+        with conn.cursor() as cur:
+            query = '''INSERT INTO "DeckQuestions"(deck_id, question_id, round, question_number) 
+                            SELECT q.*, ROW_NUMBER() OVER() as question_number FROM 
+                            (SELECT %s::uuid, q.id, 
+                            (SELECT COALESCE(max(dq.round), 0) + 1 FROM "DeckQuestions" as dq WHERE dq.deck_id = %s) as round
+                            FROM "Questions" as q
+                            WHERE NOT q.id = ANY(SELECT question_id FROM "DeckQuestions" WHERE deck_id = %s)'''
+            arguments = [deck_id, deck_id, deck_id]
             
-            return JSONResponse(status_code=201, content={"id": str(deck_id)})
+            if round.categories is not None:
+                query += " AND category = ANY(%s)"
+                arguments.append(round.categories)
             
+            if round.attributes is not None:
+                query += ''' AND q.id IN (SELECT question_id FROM "QuestionAttributes" WHERE attribute = ANY(%s))'''
+                arguments.append(round.attributes)
+            
+            query += " ORDER BY RANDOM()"
+
+            query += " LIMIT %s"
+            arguments.append(round.num_questions)
+
+            query += ") as q"
+
+            cur.execute(query, arguments)
+            return None
+        
 @router.put("/{id}")
 async def update_deck(id: UUID, deck: DeckRequest) -> None:
-    async with db.connection() as conn:
-        async with conn.cursor() as cur:
-            await cur.execute('''UPDATE "Decks" SET name = %s, description = %s WHERE id = %s''',
+    with db.connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute('''UPDATE "Decks" SET name = %s, description = %s WHERE id = %s''',
                               (deck.name, deck.description, id))
 
 @router.delete("/{id}")
 async def delete_deck(id: UUID) -> None:
-    async with db.connection() as conn:
-        async with conn.cursor() as cur:
-            await cur.execute('''DELETE FROM "Decks" WHERE id = %s''', (id,))
+    with db.connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute('''DELETE FROM "Decks" WHERE id = %s''', (id,))
 
 @router.get("/{deck_id}/question")
-async def get_deck_questions(deck_id: UUID) -> list[Question]:
-    async with db.connection() as conn:
-        async with conn.cursor(row_factory=class_row(Question)) as cur:
-            await cur.execute('''
-                              SELECT q.id, q.question, q.difficulty, q.a, q.b, q.c, q.d, q.category, ARRAY(SELECT attribute FROM "QuestionAttributes" WHERE question_id = q.id) as attributes
-                              FROM "DeckQuestions" as dq 
-                              LEFT OUTER JOIN "Questions" as q 
-                              ON dq.question_id = q.id
-                              WHERE dq.deck_id = %s''', (deck_id,))
-            return await cur.fetchall()
-
-@router.post("/{deck_id}/question/{question_id}")
-async def add_question(deck_id: UUID, question_id: UUID) -> None:
-    async with db.connection() as conn:
-        async with conn.cursor() as cur:
-            await cur.execute('''INSERT INTO "DeckQuestions" (deck_id, question_id) VALUES (%s, %s)''',
-                              (deck_id, question_id))
-            return JSONResponse(status_code=201, content=None)
-
-@router.delete("/{deck_id}/question/{question_id}")
-async def remove_question(deck_id: UUID, question_id: UUID) -> None:
-    async with db.connection() as conn:
-        async with conn.cursor() as cur:
-            await cur.execute('''DELETE FROM "DeckQuestions" WHERE deck_id = %s AND question_id = %s''', (deck_id, question_id))
+async def get_deck_questions(deck_id: UUID, round: Annotated[Union[int, None], Query()] = None) -> list[DeckQuestion]:
+    with db.connection() as conn:
+        with conn.cursor(row_factory=class_row(DeckQuestion)) as cur:
+            query = '''SELECT q.id, q.question, q.difficulty, q.a, q.b, q.c, q.d, q.category, ARRAY(SELECT attribute FROM "QuestionAttributes" WHERE question_id = q.id) as attributes,
+                        dq.round, dq.question_number
+                        FROM "DeckQuestions" as dq 
+                        LEFT OUTER JOIN "Questions" as q 
+                        ON dq.question_id = q.id
+                        WHERE dq.deck_id = %s
+                        '''
+            params = [deck_id]
+            
+            if round is not None:
+                query += " AND dq.round = %s"
+                params.append(round)
+            
+            query += " ORDER BY dq.round, dq.question_number"
+            cur.execute(query, params)
+            return cur.fetchall()
         

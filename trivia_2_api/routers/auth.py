@@ -17,20 +17,20 @@ router = APIRouter(
 @router.post("/register")
 async def register(request: RegisterRequest) -> None:
     print('request', request)
-    async with db.connection() as conn:
-            async with conn.cursor(row_factory=class_row(RegisterResponse)) as cur:
-                await cur.execute('''SELECT id, user_name FROM "Users" WHERE user_name = %s''', (request.username,))
-                user = await cur.fetchone()
+    with db.connection() as conn:
+            with conn.cursor(row_factory=class_row(RegisterResponse)) as cur:
+                cur.execute('''SELECT id, user_name FROM "Users" WHERE user_name = %s''', (request.username,))
+                user = cur.fetchone()
                 print('user in func ', user)
                 if user is not None:
                     raise HTTPException(
                         status_code=status.HTTP_409_CONFLICT,
                         detail="Username already exists",
                     )
-            async with conn.cursor(row_factory=dict_row) as cur: 
-                await cur.execute('''INSERT INTO "Users" (user_name, hashed_password) VALUES (%s, %s) RETURNING id''',
+            with conn.cursor(row_factory=dict_row) as cur: 
+                cur.execute('''INSERT INTO "Users" (user_name, hashed_password) VALUES (%s, %s) RETURNING id''',
                                 (request.username, hash_password(request.password)))
-                id =  (await cur.fetchone()).get('id')
+                id =  (cur.fetchone()).get('id')
                 access_token_expires = datetime.timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
                 access_token = create_access_token(
                     data={"sub": str(id)}, expires_delta=access_token_expires
@@ -43,10 +43,10 @@ async def register(request: RegisterRequest) -> None:
 async def login_for_access_token(
     request: RegisterRequest,
 ) -> Token:
-    async with db.connection() as conn:
-        async with conn.cursor(row_factory=class_row(AuthUser)) as cur:
-            await cur.execute('''SELECT id, user_name, hashed_password FROM "Users" WHERE user_name = %s''', (request.username,))
-            user = await cur.fetchone() 
+    with db.connection() as conn:
+        with conn.cursor(row_factory=class_row(AuthUser)) as cur:
+            cur.execute('''SELECT id, user_name, hashed_password FROM "Users" WHERE user_name = %s''', (request.username,))
+            user = cur.fetchone() 
             if user is None:
                 raise HTTPException(
                     status_code=status.HTTP_401_UNAUTHORIZED,

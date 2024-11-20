@@ -20,10 +20,7 @@ async def authenticate_user(request: Request, call_next):
     token = token.replace("Bearer ", "")
     
     try:
-        user = await get_current_user(token=token)
-        headers = dict(request.scope["headers"])
-        headers[b"X-Authenticated-User"] = str(user.id).encode('utf-8')
-        request.scope["headers"] = [(k,v) for k,v in headers.items()]
+        request.state.user = await get_current_user(token=token)
         response = await call_next(request)
         return response
     except HTTPException as e:
@@ -44,10 +41,10 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]) -> Aut
         token_data = TokenData(id=id)
     except InvalidTokenError as e:
         raise credentials_exception
-    async with db.connection() as conn:
-        async with conn.cursor(row_factory=class_row(AuthUser)) as cur:
-            await cur.execute('''SELECT id, user_name, hashed_password FROM "Users" WHERE id = %s''', (id,))
-            user = await cur.fetchone()
+    with db.connection() as conn:
+        with conn.cursor(row_factory=class_row(AuthUser)) as cur:
+            cur.execute('''SELECT id, user_name, hashed_password FROM "Users" WHERE id = %s''', (id,))
+            user = cur.fetchone()
             if not user:
                 raise credentials_exception         
             return user

@@ -1,6 +1,6 @@
 from dotenv import load_dotenv
 from os import getenv
-from psycopg_pool import AsyncConnectionPool
+from psycopg_pool import ConnectionPool
 
 
 def get_db_conn_str():
@@ -14,7 +14,7 @@ def get_db_conn_str():
     port={getenv('POSTGRES_PORT')}
     """
 
-db = AsyncConnectionPool(conninfo=get_db_conn_str(), open=False)
+db = ConnectionPool(conninfo=get_db_conn_str(), open=False)
 
 
 

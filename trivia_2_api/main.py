@@ -8,9 +8,9 @@ from .db import db
 
 @asynccontextmanager
 async def lifespan(instance: FastAPI):
-    await db.open()
+    db.open()
     yield
-    await db.close()
+    db.close()
 
 app = FastAPI(lifespan=lifespan)
 app.add_middleware(
