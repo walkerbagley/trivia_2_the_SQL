@@ -9,6 +9,7 @@ class Deck(BaseModel):
     name: str
     description: str
     owner_id: UUID
+    rounds: int
 
 class DeckRoundRequest(BaseModel):
     categories: Optional[list[str]] = None
@@ -21,6 +22,13 @@ class DeckRequest(BaseModel):
     description: str
     rounds: list[DeckRoundRequest]
 
+class DeckUpdateRequest(BaseModel): 
+    name: str
+    description: str
+
 class DeckQuestion(Question):
     round: int
     question_number: int
+
+
+    

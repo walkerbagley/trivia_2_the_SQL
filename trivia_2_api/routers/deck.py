@@ -4,6 +4,8 @@ from psycopg.rows import class_row, dict_row
 from typing import Annotated, Union
 from uuid import UUID
 
+from trivia_2_api.models.deck import DeckUpdateRequest
+
 from ..db import db
 from ..models import Deck, DeckRequest, DeckRoundRequest, DeckQuestion
 
@@ -17,14 +19,21 @@ router = APIRouter(
 async def get_deck() -> list[Deck]:
     with db.connection() as conn:
         with conn.cursor(row_factory=class_row(Deck)) as cur:
-            cur.execute('''SELECT id, name, description, owner_id FROM "Decks"''')
+            cur.execute('''SELECT d.id, d.name, d.description, d.owner_id, count(distinct dq.round) as rounds
+                            FROM "Decks" as d
+                            LEFT OUTER JOIN "DeckQuestions" as dq ON d.id = dq.deck_id
+                            GROUP BY d.id''')
             return cur.fetchall()
 
 @router.get("/{id}")
 async def get_deck(id: UUID) -> Deck:
     with db.connection() as conn:
         with conn.cursor(row_factory=class_row(Deck)) as cur:
-            cur.execute('''SELECT id, name, description, owner_id FROM "Decks" WHERE id = %s''', (id,))
+            cur.execute('''SELECT d.id, d.name, d.description, d.owner_id, count(distinct dq.round) as rounds
+                            FROM "Decks" as d
+                            LEFT OUTER JOIN "DeckQuestions" as dq ON d.id = dq.deck_id
+                            WHERE d.id = %s
+                            GROUP BY d.id''', (id,))
             question = cur.fetchone() 
             if question is None:
                 raise HTTPException(status_code=404, detail="Deck not found")
@@ -80,7 +89,7 @@ def add_round(deck_id: UUID, round: DeckRoundRequest) -> None:
             return None
         
 @router.put("/{id}")
-async def update_deck(id: UUID, deck: DeckRequest) -> None:
+async def update_deck(id: UUID, deck: DeckUpdateRequest) -> None:
     with db.connection() as conn:
         with conn.cursor() as cur:
             cur.execute('''UPDATE "Decks" SET name = %s, description = %s WHERE id = %s''',
