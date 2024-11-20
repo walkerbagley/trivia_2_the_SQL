@@ -129,4 +129,8 @@ async def delete_deck_round(deck_id: UUID, round_number: int) -> None:
             cur.execute('''DELETE FROM "DeckQuestions" WHERE deck_id = %s AND round = %s''', (deck_id, round_number))
 
             cur.execute('''UPDATE "DeckQuestions" SET round = round - 1 WHERE deck_id = %s AND round > %s''', (deck_id, round_number))
-        
+
+@router.post("/{deck_id}/round")
+async def add_deck_round(deck_id: UUID, round: DeckRoundRequest) -> None:
+    add_round(deck_id, round)
+    return None
