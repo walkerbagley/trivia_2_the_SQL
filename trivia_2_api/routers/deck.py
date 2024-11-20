@@ -4,10 +4,8 @@ from psycopg.rows import class_row, dict_row
 from typing import Annotated, Union
 from uuid import UUID
 
-from trivia_2_api.models.deck import DeckUpdateRequest
-
 from ..db import db
-from ..models import Deck, DeckRequest, DeckRoundRequest, DeckQuestion
+from ..models import Deck, DeckRequest, DeckRoundRequest, DeckQuestion, DeckUpdateRequest, Round
 
 router = APIRouter(
     prefix="/deck",
@@ -52,23 +50,41 @@ async def create_deck(request:Request, deck: DeckRequest) -> None:
             if deck_id is None:
                 raise HTTPException(status_code=500, detail="Failed to create deck")
 
-    for round in deck.rounds:
-        add_round(deck_id, round)
+    for index, round in enumerate(deck.rounds):
+        add_round(deck_id, round, round_number=index + 1)
     
         
     return JSONResponse(status_code=201, content={"id": str(deck_id)})
 
-def add_round(deck_id: UUID, round: DeckRoundRequest) -> None:
-    print("ADDING ROUND", round)
+def add_round(deck_id: UUID, round: DeckRoundRequest, round_number:int | None = None) -> None:
     with db.connection() as conn:
-        with conn.cursor() as cur:
-            query = '''INSERT INTO "DeckQuestions"(deck_id, question_id, round, question_number) 
-                            SELECT q.*, ROW_NUMBER() OVER() as question_number FROM 
-                            (SELECT %s::uuid, q.id, 
-                            (SELECT COALESCE(max(dq.round), 0) + 1 FROM "DeckQuestions" as dq WHERE dq.deck_id = %s) as round
+        with conn.cursor(row_factory=dict_row) as cur:
+            if round_number is not None:
+                cur.execute('''
+                        UPDATE "DeckRounds" SET round_number = round_number + 1 WHERE deck_id = %s AND round_number >= %s
+                        ''', (deck_id, round_number)
+                )
+            
+            cur.execute('''
+                        INSERT INTO "DeckRounds" 
+                        (deck_id, round_number, num_questions, categories, attributes) 
+                        VALUES (%s::uuid, COALESCE(%s, (SELECT MAX(round_number) FROM "DeckRounds" WHERE deck_id = %s)) ,%s, COALESCE(%s, '{}'::text[]), COALESCE(%s, '{}'::text[])) RETURNING round_id''',  
+                        (deck_id, round_number, deck_id, round.num_questions, round.categories, round.attributes)
+            )
+
+            round_id = cur.fetchone().get("round_id", None)
+            if round_number is None:
+                raise HTTPException(status_code=500, detail="Failed to add round")
+
+            query = '''INSERT INTO "RoundQuestions"(round_id, question_id, question_number) 
+                            SELECT %s::uuid as round_id, 
+                            q.id as question_id, 
+                            ROW_NUMBER() OVER() as question_number
+                            FROM 
+                            (SELECT q.id
                             FROM "Questions" as q
-                            WHERE NOT q.id = ANY(SELECT question_id FROM "DeckQuestions" WHERE deck_id = %s)'''
-            arguments = [deck_id, deck_id, deck_id]
+                            WHERE NOT q.id = ANY(SELECT rq.question_id FROM "DeckRounds" as dr INNER JOIN "RoundQuestions" as rq ON dr.round_id = rq.round_id WHERE dr.deck_id = %s)'''
+            arguments = [round_id, deck_id]
             
             if round.categories is not None:
                 query += " AND category = ANY(%s)"
@@ -106,31 +122,39 @@ async def get_deck_questions(deck_id: UUID, round: Annotated[Union[int, None], Q
     with db.connection() as conn:
         with conn.cursor(row_factory=class_row(DeckQuestion)) as cur:
             query = '''SELECT q.id, q.question, q.difficulty, q.a, q.b, q.c, q.d, q.category, ARRAY(SELECT attribute FROM "QuestionAttributes" WHERE question_id = q.id) as attributes,
-                        dq.round, dq.question_number
-                        FROM "DeckQuestions" as dq 
-                        LEFT OUTER JOIN "Questions" as q 
-                        ON dq.question_id = q.id
-                        WHERE dq.deck_id = %s
+                        dr.round_number, rq.question_number
+                        FROM "DeckRounds" as dr
+                        LEFT OUTER JOIN "RoundQuestions" as rq ON dr.round_id = rq.round_id
+                        LEFT OUTER JOIN "Questions" as q ON rq.question_id = q.id
+                        WHERE dr.deck_id = %s
                         '''
             params = [deck_id]
             
             if round is not None:
-                query += " AND dq.round = %s"
+                query += " AND dr.round_number = %s"
                 params.append(round)
             
-            query += " ORDER BY dq.round, dq.question_number"
+            query += " ORDER BY dr.round_number, rq.question_number"
             cur.execute(query, params)
             return cur.fetchall()
 
-@router.delete("/{deck_id}/round/{round_number}")
-async def delete_deck_round(deck_id: UUID, round_number: int) -> None:
+@router.get("/{deck_id}/round")
+async def get_deck_rounds(deck_id: UUID) -> list[Round]:
+    with db.connection() as conn:
+        with conn.cursor(row_factory=class_row(Round)) as cur:
+            cur.execute('''SELECT round_id as id, round_number, num_questions, categories, attributes FROM "DeckRounds" WHERE deck_id = %s ORDER BY round_number''', (deck_id,))
+            return cur.fetchall()
+
+@router.delete("/round/{round_id}")
+async def delete_deck_round(round_id: UUID) -> None:
     with db.connection() as conn:
         with conn.cursor() as cur:
-            cur.execute('''DELETE FROM "DeckQuestions" WHERE deck_id = %s AND round = %s''', (deck_id, round_number))
+            cur.execute('''UPDATE "DeckRounds" SET round_number = round_number - 1 WHERE round_number > (SELECT round_number FROM "DeckRounds" WHERE round_id = %s)''', (round_id,))
+            cur.execute('''DELETE FROM "DeckRounds" WHERE round_id = %s''', (round_id,))
 
-            cur.execute('''UPDATE "DeckQuestions" SET round = round - 1 WHERE deck_id = %s AND round > %s''', (deck_id, round_number))
+            
 
 @router.post("/{deck_id}/round")
-async def add_deck_round(deck_id: UUID, round: DeckRoundRequest) -> None:
-    add_round(deck_id, round)
+async def add_deck_round(deck_id: UUID, round: DeckRoundRequest, round_number: Annotated[Union[int, None], Query()] = None) -> None:
+    add_round(deck_id, round, round_number)
     return None
