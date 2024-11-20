@@ -121,4 +121,12 @@ async def get_deck_questions(deck_id: UUID, round: Annotated[Union[int, None], Q
             query += " ORDER BY dq.round, dq.question_number"
             cur.execute(query, params)
             return cur.fetchall()
+
+@router.delete("/{deck_id}/round/{round_number}")
+async def delete_deck_round(deck_id: UUID, round_number: int) -> None:
+    with db.connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute('''DELETE FROM "DeckQuestions" WHERE deck_id = %s AND round = %s''', (deck_id, round_number))
+
+            cur.execute('''UPDATE "DeckQuestions" SET round = round - 1 WHERE deck_id = %s AND round > %s''', (deck_id, round_number))
         
