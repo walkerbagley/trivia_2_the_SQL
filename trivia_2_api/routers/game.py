@@ -62,6 +62,17 @@ async def join_game(request:Request, game: JoinGameRequest, game_id:UUID) -> Non
             if game.join_code != results.get("join_code", None):
                 raise HTTPException(status_code=400, detail="Invalid join code")
             
+            cur.execute('''
+                        SELECT count(*) as count
+                        FROM "GamePlayers" as gp 
+                        INNER JOIN "Games" as g 
+                        ON gp.game_id = g.id
+                        WHERE player_id = %s AND (g.status = 'open' or g.status = 'in_progress')
+                        ''', (request.state.user.id, ))
+            count = cur.fetchone().get("count", None)
+            if count > 0:
+                raise HTTPException(status_code=400, detail="Player already in game")
+            
             cur.execute('''INSERT INTO "GamePlayers" (game_id, player_id, team_id) VALUES (%s, %s, %s) ON CONFLICT DO NOTHING''', (results.get("id", None), request.state.user.id, game.team_id))
             
 
@@ -70,7 +81,7 @@ async def join_game(request:Request, game: JoinGameRequest, game_id:UUID) -> Non
 async def start_game(game_id: UUID) -> None:
     with db.connection() as conn:
         with conn.cursor() as cur:
-            cur.execute('''UPDATE "Games" SET status = 'started' WHERE id = %s''', (game_id,))
+            cur.execute('''UPDATE "Games" SET status = 'in_progress' WHERE id = %s''', (game_id,))
 
 @router.delete("/{id}")
 async def delete_game(id: UUID) -> None:
