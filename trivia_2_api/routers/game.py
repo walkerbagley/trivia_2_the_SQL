@@ -54,11 +54,14 @@ async def create_game(request: Request, game: GameRequest) -> None:
 async def join_game(request:Request, game: JoinGameRequest, game_id:UUID) -> None:
     with db.connection() as conn:
         with conn.cursor(row_factory=dict_row) as cur:
-            cur.execute('''SELECT id, status, join_code FROM "Games" WHERE id = %s''', (game_id, ))
+            cur.execute('''SELECT id, host_id, status, join_code FROM "Games" WHERE id = %s''', (game_id, ))
 
             results = cur.fetchone()
             if results is None:
                 raise HTTPException(status_code=404, detail="Game not found")
+            
+            if results.get("host_id", None) == request.state.user.id:
+                raise HTTPException(status_code=400, detail="Host cannot join game")
             
             if results.get("status", None) != "open":
                 raise HTTPException(status_code=400, detail="Game is not open")
@@ -124,16 +127,22 @@ async def answer_question(request:Request, game_id: UUID, answer: AnswerRequest)
                             INNER JOIN "RoundQuestions" as rq ON dr.round_id = rq.round_id
                             INNER JOIN "Questions" as q ON rq.question_id = q.id
                             WHERE g.id = %s and dr.round_number = %s and rq.question_number = %s''', (game_id, answer.round_number, answer.question_number))
-            first_answer = cur.fetchone().get("first_answer", None)
-            if first_answer is None:
+            results = cur.fetchone()
+            if results is None:
                 raise HTTPException(status_code=404, detail="Question not found")
             
-            answer_letter = answer_choices[(answer_choices.index(answer.answer) + (first_answer - 1)) % len(answer_choices)]
+            first_answer = results.get("first_answer", None)
+            if first_answer is None:
+                raise HTTPException(status_code=500, detail="Failed to get question")
+            
+            answer_letter = answer_choices[(answer_choices.index(answer.answer) - (first_answer - 1)) % len(answer_choices)]
 
             cur.execute('''
                         INSERT INTO "Answers" 
                         (game_id, team_id, round_number, question_number, answer)
                         SELECT %s, gp.team_id, %s, %s, %s
                         FROM "GamePlayers" as gp
-                        WHERE gp.player_id = %s''', (game_id, answer.round_number, answer.question_number, answer_letter, request.state.user.id))
+                        WHERE gp.player_id = %s
+                        ON CONFLICT (game_id, team_id, round_number, question_number) DO UPDATE SET answer = EXCLUDED.answer''', (game_id, answer.round_number, answer.question_number,  answer_letter, request.state.user.id))
+
             
