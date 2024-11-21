@@ -23,3 +23,8 @@ class GameRequest(BaseModel):
 class JoinGameRequest(BaseModel):
     join_code: str
     team_id: UUID
+
+class AnswerRequest(BaseModel):
+    round_number: int
+    question_number: int
+    answer: str

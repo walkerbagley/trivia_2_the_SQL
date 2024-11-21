@@ -7,8 +7,12 @@ from psycopg.rows import class_row, dict_row
 from random import choices
 from uuid import UUID
 
+from trivia_2_api.models.game import AnswerRequest
+
 from ..db import db
 from ..models import Game, GameRequest, JoinGameRequest
+
+answer_choices = ['a', 'b', 'c', 'd']
 
 router = APIRouter(
     prefix="/game",
@@ -100,4 +104,36 @@ async def get_team_names(game_id: UUID) -> list[str]:
                         ON gp.team_id = t.id
                         WHERE game_id = %s''', (game_id,))
             return [row.get("name") for row in cur.fetchall()]
+
+@router.post("/{game_id}/answer")
+async def answer_question(request:Request, game_id: UUID, answer: AnswerRequest) -> None:
+    with db.connection() as conn:
+        with conn.cursor(row_factory=dict_row) as cur:
+            cur.execute('''SELECT current_round, current_question FROM "Games" WHERE id = %s''', (game_id,))
+            results = cur.fetchone()
+            if results is None:
+                raise HTTPException(status_code=404, detail="Game not found")
+            
+            if results.get("current_round", None) != answer.round_number or results.get("current_question", None) != answer.question_number:
+                raise HTTPException(status_code=400, detail="Invalid round or question number")
+            
+            cur.execute(''' SELECT q.first_answer 
+                            FROM "Games" as g
+                            INNER JOIN "Decks" as d ON g.deck_id = d.id
+                            INNER JOIN "DeckRounds" as dr ON d.id = dr.deck_id
+                            INNER JOIN "RoundQuestions" as rq ON dr.round_id = rq.round_id
+                            INNER JOIN "Questions" as q ON rq.question_id = q.id
+                            WHERE g.id = %s and dr.round_number = %s and rq.question_number = %s''', (game_id, answer.round_number, answer.question_number))
+            first_answer = cur.fetchone().get("first_answer", None)
+            if first_answer is None:
+                raise HTTPException(status_code=404, detail="Question not found")
+            
+            answer_letter = answer_choices[(answer_choices.index(answer.answer) + (first_answer - 1)) % len(answer_choices)]
+
+            cur.execute('''
+                        INSERT INTO "Answers" 
+                        (game_id, team_id, round_number, question_number, answer)
+                        SELECT %s, gp.team_id, %s, %s, %s
+                        FROM "GamePlayers" as gp
+                        WHERE gp.player_id = %s''', (game_id, answer.round_number, answer.question_number, answer_letter, request.state.user.id))
             

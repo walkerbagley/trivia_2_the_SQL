@@ -1,7 +1,9 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import JSONResponse
 from psycopg.rows import class_row
 from uuid import UUID
+
+from trivia_2_api.models.user import GameStatus, UserStatus
 
 
 from ..db import db
@@ -69,4 +71,6 @@ async def remove_user_deck(user_id: UUID, deck_id: UUID) -> None:
     with db.connection() as conn:
         with conn.cursor() as cur:
             cur.execute('''DELETE FROM "UserDecks" WHERE user_id = %s AND deck_id = %s''', (user_id, deck_id))
+
+
         
