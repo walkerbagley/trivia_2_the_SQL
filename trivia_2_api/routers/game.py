@@ -144,5 +144,45 @@ async def answer_question(request:Request, game_id: UUID, answer: AnswerRequest)
                         FROM "GamePlayers" as gp
                         WHERE gp.player_id = %s
                         ON CONFLICT (game_id, team_id, round_number, question_number) DO UPDATE SET answer = EXCLUDED.answer''', (game_id, answer.round_number, answer.question_number,  answer_letter, request.state.user.id))
+            
+
+@router.post("/{game_id}/next")
+async def next_question(request: Request, game_id: UUID) -> None:
+    with db.connection() as conn:
+        with conn.cursor(row_factory=dict_row) as cur:
+            cur.execute(''' 
+                        SELECT g.host_id, g.current_round, g.current_question, dr.num_questions
+                        FROM "Games" as g
+                        INNER JOIN "Decks" as d ON g.deck_id = d.id
+                        INNER JOIN "DeckRounds" as dr ON d.id = dr.deck_id
+                        WHERE g.id = %s and dr.round_number = g.current_round''', (game_id,))
+            game = cur.fetchone()
+
+            if game is None:
+                raise HTTPException(status_code=404, detail="Game not found")
+            
+            if game.get("host_id", None) != request.state.user.id:
+                raise HTTPException(status_code=401, detail="Only host can move to next question")
+            
+            if game.get("current_question", None) < game.get("num_questions", None):
+                cur.execute('''UPDATE "Games" SET current_question = current_question + 1 WHERE id = %s''', (game_id,))
+                return
+            
+            else:
+                cur.execute(''' SELECT count(*) as rounds FROM "DeckRounds" as dr WHERE dr.deck_id = (SELECT g.deck_id FROM "Games" as g WHERE g.id = %s)''', (game_id,))
+
+                results = cur.fetchone()
+                if results is None:
+                    raise HTTPException(status_code=404, detail="Game not found")
+                
+                if results.get("rounds", None) > game.get("current_round", None):
+                    cur.execute('''UPDATE "Games" SET current_round = current_round + 1, current_question = 1 WHERE id = %s''', (game_id,))
+                    return
+                
+                else:
+                    cur.execute('''UPDATE "Games" SET status = 'complete', end_time = %s WHERE id = %s''', (datetime.now(), game_id))
+                    return
+
+
 
             
