@@ -8,7 +8,7 @@ from random import choices
 from uuid import UUID
 
 from ..db import db
-from ..models import Game, GameRequest
+from ..models import Game, GameRequest, JoinGameRequest
 
 router = APIRouter(
     prefix="/game",
@@ -47,11 +47,25 @@ async def create_game(request: Request, game: GameRequest) -> None:
             return JSONResponse(status_code=201, content={"id": str(game_id)})
 
 @router.post("/{game_id}/join")
-async def join_game(game_id: UUID, join_code: str) -> None:
+async def join_game(request:Request, game: JoinGameRequest, game_id:UUID) -> None:
     with db.connection() as conn:
-        with conn.cursor() as cur:
-            cur.execute('''UPDATE "Games" SET status = 'joined' WHERE id = %s AND join_code = %s''', (game_id, join_code))
-                        
+        with conn.cursor(row_factory=dict_row) as cur:
+            cur.execute('''SELECT id, status, join_code FROM "Games" WHERE id = %s''', (game_id, ))
+
+            results = cur.fetchone()
+            if results is None:
+                raise HTTPException(status_code=404, detail="Game not found")
+            
+            if results.get("status", None) != "open":
+                raise HTTPException(status_code=400, detail="Game is not open")
+            
+            if game.join_code != results.get("join_code", None):
+                raise HTTPException(status_code=400, detail="Invalid join code")
+            
+            cur.execute('''INSERT INTO "GamePlayers" (game_id, player_id, team_id) VALUES (%s, %s, %s) ON CONFLICT DO NOTHING''', (results.get("id", None), request.state.user.id, game.team_id))
+            
+
+
 @router.post("/{game_id}/start")
 async def start_game(game_id: UUID) -> None:
     with db.connection() as conn:

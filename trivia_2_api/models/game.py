@@ -17,3 +17,7 @@ class Game(BaseModel):
 class GameRequest(BaseModel):
     deck_id: UUID
     start_time: datetime
+
+class JoinGameRequest(BaseModel):
+    join_code: str
+    team_id: UUID
