@@ -20,14 +20,14 @@ router = APIRouter(
 async def get_game() -> list[Game]:
     with db.connection() as conn:
         with conn.cursor(row_factory=class_row(Game)) as cur:
-            cur.execute('''SELECT id, deck_id, host_id, join_code, start_time, end_time FROM "Games"''')
+            cur.execute('''SELECT id, deck_id, host_id, join_code, status, current_round, current_question, start_time, end_time FROM "Games"''')
             return cur.fetchall()
 
 @router.get("/{id}")
 async def get_game(id: UUID) -> Game:
     with db.connection() as conn:
         with conn.cursor(row_factory=class_row(Game)) as cur:
-            cur.execute('''SELECT id, deck_id, host_id, join_code, start_time, end_time FROM "Games" WHERE id = %s''', (id,))
+            cur.execute('''SELECT id, deck_id, host_id, join_code, status, current_round, current_question, start_time, end_time FROM "Games" WHERE id = %s''', (id,))
             question = cur.fetchone() 
             if question is None:
                 raise HTTPException(status_code=404, detail="Game not found")
@@ -45,13 +45,18 @@ async def create_game(request: Request, game: GameRequest) -> None:
                 raise HTTPException(status_code=500, detail="Failed to create game")
             
             return JSONResponse(status_code=201, content={"id": str(game_id)})
-            
-@router.put("/{id}")
-async def update_game(id: UUID, game: GameRequest) -> None:
+
+@router.post("/{game_id}/join")
+async def join_game(game_id: UUID, join_code: str) -> None:
     with db.connection() as conn:
         with conn.cursor() as cur:
-            cur.execute('''UPDATE "Games" SET deck_id = %s, host_id = %s, join_code = %s, start_time = %s, end_time = %s WHERE id = %s''',
-                              (game.deck_id, game.host_id, game.join_code, game.start_time, game.end_time, id))
+            cur.execute('''UPDATE "Games" SET status = 'joined' WHERE id = %s AND join_code = %s''', (game_id, join_code))
+                        
+@router.post("/{game_id}/start")
+async def start_game(game_id: UUID) -> None:
+    with db.connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute('''UPDATE "Games" SET status = 'started' WHERE id = %s''', (game_id,))
 
 @router.delete("/{id}")
 async def delete_game(id: UUID) -> None:

@@ -21,9 +21,9 @@ router = APIRouter(
 async def get_deck() -> list[Deck]:
     with db.connection() as conn:
         with conn.cursor(row_factory=class_row(Deck)) as cur:
-            cur.execute('''SELECT d.id, d.name, d.description, d.owner_id, count(distinct dq.round) as rounds
+            cur.execute('''SELECT d.id, d.name, d.description, d.owner_id, count(distinct dr.round_id) as rounds
                             FROM "Decks" as d
-                            LEFT OUTER JOIN "DeckQuestions" as dq ON d.id = dq.deck_id
+                            LEFT OUTER JOIN "DeckRounds" as dr ON d.id = dr.deck_id
                             GROUP BY d.id''')
             return cur.fetchall()
 
@@ -31,9 +31,9 @@ async def get_deck() -> list[Deck]:
 async def get_deck(id: UUID) -> Deck:
     with db.connection() as conn:
         with conn.cursor(row_factory=class_row(Deck)) as cur:
-            cur.execute('''SELECT d.id, d.name, d.description, d.owner_id, count(distinct dq.round) as rounds
+            cur.execute('''SELECT d.id, d.name, d.description, d.owner_id, count(distinct dr.round_id) as rounds
                             FROM "Decks" as d
-                            LEFT OUTER JOIN "DeckQuestions" as dq ON d.id = dq.deck_id
+                            LEFT OUTER JOIN "DeckRounds" as dr ON d.id = dr.deck_id
                             WHERE d.id = %s
                             GROUP BY d.id''', (id,))
             question = cur.fetchone() 
