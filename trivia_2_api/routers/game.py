@@ -77,4 +77,16 @@ async def delete_game(id: UUID) -> None:
     with db.connection() as conn:
         with conn.cursor() as cur:
             cur.execute('''DELETE FROM "Games" WHERE id = %s''', (id,))
-        
+
+@router.get("/{game_id}/team")
+async def get_team_names(game_id: UUID) -> list[str]:
+    with db.connection() as conn:
+        with conn.cursor(row_factory=dict_row) as cur:
+            cur.execute('''
+                        SELECT t.name 
+                        FROM "GamePlayers" as gp
+                        INNER JOIN "Teams" as t
+                        ON gp.team_id = t.id
+                        WHERE game_id = %s''', (game_id,))
+            return [row.get("name") for row in cur.fetchall()]
+            
