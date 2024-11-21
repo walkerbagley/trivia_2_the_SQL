@@ -1,6 +1,6 @@
-from shlex import join
 import string
 
+from datetime import datetime  
 from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import JSONResponse
 from psycopg.rows import class_row, dict_row
@@ -20,14 +20,14 @@ router = APIRouter(
 async def get_game() -> list[Game]:
     with db.connection() as conn:
         with conn.cursor(row_factory=class_row(Game)) as cur:
-            cur.execute('''SELECT id, deck_id, host_id, join_code, status, current_round, current_question, start_time, end_time FROM "Games"''')
+            cur.execute('''SELECT id, deck_id, host_id, join_code, question_time_sec, status, current_round, current_question, start_time, end_time FROM "Games"''')
             return cur.fetchall()
 
 @router.get("/{id}")
 async def get_game(id: UUID) -> Game:
     with db.connection() as conn:
         with conn.cursor(row_factory=class_row(Game)) as cur:
-            cur.execute('''SELECT id, deck_id, host_id, join_code, status, current_round, current_question, start_time, end_time FROM "Games" WHERE id = %s''', (id,))
+            cur.execute('''SELECT id, deck_id, host_id, join_code, question_time_sec, status, current_round, current_question, start_time, end_time FROM "Games" WHERE id = %s''', (id,))
             question = cur.fetchone() 
             if question is None:
                 raise HTTPException(status_code=404, detail="Game not found")
@@ -38,8 +38,8 @@ async def create_game(request: Request, game: GameRequest) -> None:
     with db.connection() as conn:
         with conn.cursor(row_factory=dict_row) as cur:
             join_code = ''.join(choices(string.ascii_uppercase + string.digits, k=6))
-            cur.execute('''INSERT INTO "Games" (deck_id, host_id, start_time, join_code) VALUES (%s, %s, %s, %s) RETURNING id''',
-                              (game.deck_id, request.state.user.id, game.start_time, join_code))
+            cur.execute('''INSERT INTO "Games" (deck_id, host_id, start_time, join_code, question_time_sec) VALUES (%s, %s, %s, %s, %s) RETURNING id''',
+                              (game.deck_id, request.state.user.id, datetime.now(), join_code, game.question_time_sec))
             game_id = (cur.fetchone()).get("id", None)
             if game_id is None:
                 raise HTTPException(status_code=500, detail="Failed to create game")

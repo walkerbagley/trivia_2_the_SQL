@@ -3,6 +3,8 @@ from pydantic import BaseModel
 from typing import Optional
 from uuid import UUID
 
+from trivia_2_api.models import question
+
 class Game(BaseModel):
     id: UUID
     deck_id: UUID
@@ -16,7 +18,7 @@ class Game(BaseModel):
 
 class GameRequest(BaseModel):
     deck_id: UUID
-    start_time: datetime
+    question_time_sec: Optional[int] = 20
 
 class JoinGameRequest(BaseModel):
     join_code: str
