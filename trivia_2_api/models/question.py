@@ -8,8 +8,8 @@ class Question(BaseModel):
     id: UUID
     question: str
     difficulty: int
-    a: str
-    b: str
+    a: Optional[str]
+    b: Optional[str]
     c: Optional[str]
     d: Optional[str]
     category: str

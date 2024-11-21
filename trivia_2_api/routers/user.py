@@ -45,7 +45,7 @@ async def get_current_user_status(request: Request) -> UserStatus:
                 raise HTTPException(status_code=500, detail="Failed to get game status")
             
             cur.execute('''
-                        SELECT status, current_round, current_question, a.answer as team_answer, q.first_answer
+                        SELECT status, current_round as round_number, current_question as question_number, q.id as question_id, shuffle_answer(a.answer::text, q.first_answer::int) as team_answer
                         FROM "Games" as g
                         INNER JOIN "GamePlayers" as gp ON g.id = gp.game_id and gp.player_id = %s
                         LEFT OUTER JOIN "Answers" as a ON g.id = a.game_id and gp.team_id = a.team_id and a.round_number = g.current_round and a.question_number = g.current_question
@@ -55,14 +55,6 @@ async def get_current_user_status(request: Request) -> UserStatus:
                         LEFT OUTER JOIN "Questions" as q ON rq.question_id = q.id
                         WHERE g.id = %s''', (request.state.user.id, game_id,))
             game_status = cur.fetchone()
-
-            first_answer = game_status.get("first_answer", None)
-            team_answer = game_status.get("team_answer", None)
-            if first_answer is  None:
-                raise HTTPException(status_code=500, detail="Failed to get game status")
-
-            if team_answer is not None:
-                game_status["team_answer"] = answer_choices[(answer_choices.index(team_answer) + (first_answer - 1)) % len(answer_choices)]
 
             return UserStatus(user_status=("hosting" if game.get("host_id", None) == request.state.user.id else "playing"), game_status=game_status)
 

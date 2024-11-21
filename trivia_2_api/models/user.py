@@ -17,8 +17,9 @@ class UserResponse(BaseModel):
 
 class GameStatus(BaseModel):
     status: str
-    current_round: int
-    current_question: int
+    round_number: int
+    question_number: int
+    question_id: Optional[UUID] = None
     team_answer: Optional[str] = None
 
 class UserStatus(BaseModel):

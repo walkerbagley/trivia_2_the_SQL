@@ -17,9 +17,17 @@ router = APIRouter(
 async def get_questions(category: Annotated[Union[list[str], None], Query()] = None, attribute: Annotated[Union[list[str], None], Query()] = None, limit:int = 10) -> list[Question]:
     with db.connection() as conn:
         with conn.cursor(row_factory=class_row(Question)) as cur:
-            query = '''SELECT id, question, difficulty, a, b, c, d, category, ARRAY(SELECT attribute FROM "QuestionAttributes" WHERE question_id = q.id) as attributes 
+            query = '''with answers as (select id as question_id, ARRAY[a,b,c,d] as answer_arr from "Questions")
+
+                            SELECT q.id, question, difficulty, 
+                            a.answer_arr[shuffle_answer_index(1, q.first_answer::int)] as a,
+                            a.answer_arr[shuffle_answer_index(2, q.first_answer::int)] as b,
+                            a.answer_arr[shuffle_answer_index(3, q.first_answer::int)] as c,
+                            a.answer_arr[shuffle_answer_index(4, q.first_answer::int)] as d,
+                            category, ARRAY(SELECT attribute FROM "QuestionAttributes" WHERE question_id = q.id) as attributes 
                             FROM "Questions" as q
-                            WHERE TRUE'''
+                            INNER JOIN answers as a ON a.question_id = q.id
+                            WHERE TRUE '''
             arguments = []
             
             if category is not None:
@@ -41,9 +49,17 @@ async def get_question(id: UUID) -> Question:
     with db.connection() as conn:
         with conn.cursor(row_factory=class_row(Question)) as cur:
             cur.execute('''
-                              SELECT id, question, difficulty, a, b, c, d, category, ARRAY(SELECT attribute FROM "QuestionAttributes" WHERE question_id = q.id) as attributes 
-                              FROM "Questions" as q
-                              WHERE id = %s''', (id,))
+                            with answers as (select id as question_id, ARRAY[a,b,c,d] as answer_arr from "Questions" where id = %s)
+
+                            SELECT q.id, question, difficulty, 
+                            a.answer_arr[shuffle_answer_index(1, q.first_answer::int)] as a,
+                            a.answer_arr[shuffle_answer_index(2, q.first_answer::int)] as b,
+                            a.answer_arr[shuffle_answer_index(3, q.first_answer::int)] as c,
+                            a.answer_arr[shuffle_answer_index(4, q.first_answer::int)] as d,
+                            category, ARRAY(SELECT attribute FROM "QuestionAttributes" WHERE question_id = q.id) as attributes 
+                            FROM "Questions" as q
+                            INNER JOIN answers as a ON a.question_id = q.id
+                            WHERE q.id = %s ''', (id, id))
             question = cur.fetchone() 
             if question is None:
                 raise HTTPException(status_code=404, detail="Question not found")

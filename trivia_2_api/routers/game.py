@@ -7,6 +7,7 @@ from psycopg.rows import class_row, dict_row
 from random import choices
 from uuid import UUID
 
+from trivia_2_api.models import question
 from trivia_2_api.models.game import AnswerRequest
 
 from ..db import db
@@ -120,7 +121,7 @@ async def answer_question(request:Request, game_id: UUID, answer: AnswerRequest)
             if results.get("current_round", None) != answer.round_number or results.get("current_question", None) != answer.question_number:
                 raise HTTPException(status_code=400, detail="Invalid round or question number")
             
-            cur.execute(''' SELECT q.first_answer 
+            cur.execute(''' SELECT q.id, q.first_answer 
                             FROM "Games" as g
                             INNER JOIN "Decks" as d ON g.deck_id = d.id
                             INNER JOIN "DeckRounds" as dr ON d.id = dr.deck_id
@@ -131,19 +132,18 @@ async def answer_question(request:Request, game_id: UUID, answer: AnswerRequest)
             if results is None:
                 raise HTTPException(status_code=404, detail="Question not found")
             
+            question_id = results.get("id", None)
             first_answer = results.get("first_answer", None)
-            if first_answer is None:
+            if first_answer is None or question_id is None:
                 raise HTTPException(status_code=500, detail="Failed to get question")
             
-            answer_letter = answer_choices[(answer_choices.index(answer.answer) - (first_answer - 1)) % len(answer_choices)]
-
             cur.execute('''
                         INSERT INTO "Answers" 
-                        (game_id, team_id, round_number, question_number, answer)
-                        SELECT %s, gp.team_id, %s, %s, %s
+                        (game_id, team_id, round_number, question_number, question_id, answer)
+                        SELECT %s, gp.team_id, %s, %s, %s, unshuffle_answer(%s::text, (SELECT first_answer FROM "Questions" WHERE id = %s)::int)
                         FROM "GamePlayers" as gp
                         WHERE gp.player_id = %s
-                        ON CONFLICT (game_id, team_id, round_number, question_number) DO UPDATE SET answer = EXCLUDED.answer''', (game_id, answer.round_number, answer.question_number,  answer_letter, request.state.user.id))
+                        ON CONFLICT (game_id, team_id, round_number, question_number) DO UPDATE SET answer = EXCLUDED.answer''', (game_id, answer.round_number, answer.question_number, question_id,  answer.answer, question_id, request.state.user.id))
             
 
 @router.post("/{game_id}/next")
@@ -182,6 +182,22 @@ async def next_question(request: Request, game_id: UUID) -> None:
                 else:
                     cur.execute('''UPDATE "Games" SET status = 'complete', end_time = %s WHERE id = %s''', (datetime.now(), game_id))
                     return
+
+@router.get("/{game_id}/score")
+async def get_game_scores(game_id: UUID) -> list[dict]:
+    with db.connection() as conn:
+        with conn.cursor(row_factory=dict_row) as cur:
+            cur.execute(''' 
+                        SELECT t.name, sum(CASE WHEN a.answer = 'a' THEN 1 ELSE 0 END) as score
+                        FROM "GamePlayers" as gp
+                        INNER JOIN "Teams" as t ON gp.team_id = t.id
+                        INNER JOIN "Games" as g ON gp.game_id = g.id
+                        LEFT OUTER JOIN "Answers" as a ON g.id = a.game_id and gp.team_id = a.team_id
+                        INNER JOIN "Questions" as q ON a.question_id = q.id
+                        WHERE g.id = %s
+                        GROUP BY t.id
+                        ''', (game_id,))
+            return cur.fetchall()
 
 
 
