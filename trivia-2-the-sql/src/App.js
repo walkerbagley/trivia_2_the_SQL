@@ -1,10 +1,11 @@
 import './variables.css'
 // import { initializeParse } from '@parse/react';
-import axios from 'axios';
+// import axios from 'axios';
 import Components from './Components/Components';
 import { AuthProvider } from './Providers/AuthProvider';
 import { AxiosProvider } from './Providers/AxiosProvider';
 import { UserProvider } from './Providers/UserProvider';
+import './assets/fonts.css';
 
 // initializeParse(
 //   'YOUR_SERVER_URL',

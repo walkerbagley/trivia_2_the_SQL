@@ -1,3 +1,38 @@
 .page {
     background-color: #60a4a9ff;
 }
+@media (max-width: 1200px) {
+    h1 {
+      font-size: 2.2em; /* Decrease font size on smaller screens */
+    }
+    p {
+      font-size: 1.1em; /* Decrease font size on smaller screens */
+    }
+    h2 {
+      font-size: 1.8em; /* Decrease font size on smaller screens */
+    }
+  }
+  
+@media (max-width: 768px) {
+    h1 {
+      font-size: 2em; 
+    }
+    p {
+      font-size: 1em; 
+    }
+    h2 {
+      font-size: 1.5em; 
+    }
+  }
+  
+@media (max-width: 480px) {
+    h1 {
+      font-size: 1.5em;
+    }
+    p {
+      font-size: 0.9em; 
+    }
+    h2 {
+      font-size: 1.3em; 
+    }
+  }
