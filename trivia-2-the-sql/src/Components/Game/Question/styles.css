@@ -8,6 +8,15 @@
     align-items: center;
     justify-content: center;
     margin: auto;
+    text-align: center;
+}
+
+.question-text {
+    font-size: 3em;
+}
+
+.margin-left {
+    margin-left: 25px;
 }
 
 .grid-container { 

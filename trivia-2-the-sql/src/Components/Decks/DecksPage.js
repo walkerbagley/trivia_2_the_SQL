@@ -37,7 +37,9 @@ const Decks =  () => {
       <div className="grid-container">
         {allDecks ? 
         allDecks.map((deck) => (
+          <div className='grid-item'>
             <button onClick={() => goToDeckDetails(deck)} className='no-underline'><Deck deck={deck}/></button>
+          </div>
           ))
         : <></>
         }

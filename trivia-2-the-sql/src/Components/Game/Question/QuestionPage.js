@@ -6,22 +6,29 @@ const QuestionPage =  () => {
     return (
         <div>
             <div className='center'>
-                <h1>Question</h1>
+                <br />
+                <h1 className='question-text'>Question</h1>
                 <br/>
                 <div className='grid-container'>
                     <div className='grid-item'>
                         <button>A: {}</button>
                     </div>
                     <div className='grid-item'>
-                        <button>A: {}</button>
+                        <button>B: {}</button>
                     </div>
                     <div className='grid-item'>
-                        <button>A: {}</button>
+                        <button>C: {}</button>
                     </div>
                     <div className='grid-item'>
-                        <button>A: {}</button>
+                        <button>D: {}</button>
                     </div>
                 </div>
+                Current Answer: <br/>
+                hello world
+            </div>
+            <hr/>
+            <div className='margin-left'>
+                <h3>Team Score: </h3>
             </div>
         </div>
     );

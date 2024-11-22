@@ -3,7 +3,9 @@ import Header from './Header/Header.js';
 import Main from './Main/Main.js'
 import PreHost from './Host/Host.js'
 import PrePlay from './Play/Play.js'
-import Login from './Login/Login.js'
+// import Login from './Login/Login.js'
+import LoadingPage from "./Game/Loading/LoadingPage.js";
+import QuestionPage from "./Game/Question/QuestionPage.js";
 import Decks from './Decks/DecksPage.js'
 import Account from './Account/Account.js'
 import AuthForm from './Auth/AuthForm.js';
@@ -26,7 +28,8 @@ export default function Components() {
                 <Routes>
                     <Route exact path='/' element={<Main/>}/>
                     <Route exact path='/host' element={<PreHost/>}/>
-                    <Route exact path='/play' element={<PrePlay/>}/>
+                    {/* <Route exact path='/play' element={<PrePlay/>}/> */}
+                    <Route exact path='/play' element={<QuestionPage/>}/>
                     <Route exact path='/decks' element={<Decks/>}/>
                     <Route path="/decks/:id" element={<DeckDetails />} />
                     <Route exact path='/create' element={<CreateDeck/>}/>

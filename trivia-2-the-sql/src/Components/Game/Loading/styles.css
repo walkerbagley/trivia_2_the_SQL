@@ -4,11 +4,37 @@
     color: var(--main-background-color)
 }
 
-.title {
-    font-family: 'Galindo'
+.loading-title {
+    font-family: 'Galindo';
+    font-size: 4em;
+    margin-bottom: 0px;
+}
+
+.loading-subtext {
+    margin-top: 0px;
+    border-bottom: 1px solid;
 }
 
 .center {
     align-items: center;
     justify-content: center;
+    text-align: center;
 }
+
+.grid-container { 
+    display: grid; 
+    grid-template-columns: repeat(4, 1fr); 
+    gap: 10px; 
+    padding: 20px;
+    padding-top: 0px;
+    margin-top: 0px;
+  } 
+    
+  .grid-item { 
+    background-color: white; 
+    border: 1px solid #ccc; 
+    border-radius: 5px; 
+    padding: 20px; 
+    text-align: center; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+  }
