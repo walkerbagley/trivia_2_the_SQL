@@ -12,7 +12,6 @@ const Main =  () => {
         <div className="buttons">
             <button
                 className="button-52"
-                // onClick={() => navigate('/Play')}>
                 onClick={() => navigate('/Play')}>
                 Join Game
             </button>

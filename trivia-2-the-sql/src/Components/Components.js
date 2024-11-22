@@ -28,8 +28,7 @@ export default function Components() {
                 <Routes>
                     <Route exact path='/' element={<Main/>}/>
                     <Route exact path='/host' element={<PreHost/>}/>
-                    {/* <Route exact path='/play' element={<PrePlay/>}/> */}
-                    <Route exact path='/play' element={<QuestionPage/>}/>
+                    <Route exact path='/play' element={<PrePlay/>}/>
                     <Route exact path='/decks' element={<Decks/>}/>
                     <Route path="/decks/:id" element={<DeckDetails />} />
                     <Route exact path='/create' element={<CreateDeck/>}/>
