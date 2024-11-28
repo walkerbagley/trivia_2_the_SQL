@@ -37,12 +37,11 @@ export const getDeck = async (axiosClient, id) => {
   }
 };
 
-export const createDeck = async (axiosClient, name, description, category, num_questions) => {
+export const createDeck = async (axiosClient, name, description, rounds=[]) => {
   let data = JSON.stringify({
     "name": name,
     "description": description,
-    "category": category,
-    "num_questions": num_questions
+    "rounds": rounds,
   });
 
 
@@ -195,6 +194,32 @@ export const getSortedQuestions = async (cat, diff, axiosClient) => {
     },
   };
 
+
+  try {
+    const response = await axiosClient.post(config, data);
+    return response.data;
+  } catch (error) {
+    console.error("Failed to fetch decks:", error);
+    throw error;  // Propagate the error so it can be handled by the caller
+  }
+}
+
+
+export const addRound = async (axiosClient, num_questions=10, categories=[], attributes=[]) => {
+  let data = JSON.stringify( {
+    "categories": categories,
+    "attributes": attributes,
+    "num_questions": num_questions
+  })
+
+  let config = {
+    method: 'post',
+    maxBodyLength: Infinity,
+    url: '/',
+    headers: { 
+      'Content-Type': 'application/json', 
+    },
+  };
 
   try {
     const response = await axiosClient.post(config, data);
