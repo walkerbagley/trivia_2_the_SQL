@@ -1,7 +1,19 @@
 import React from 'react'
 import './styles.css'
+import { useAxios } from '../../Providers/AxiosProvider.js';
+import { useState, useEffect } from 'react';
+import { GameService } from '../../../Services/Game';
 
 const QuestionPage =  () => {
+    const axios = useAxios();
+    const [answer, setAnswer] = useState("");
+    const [roundNumber, setRoundNumber] = useState(0);
+    const [questionNumber, setquestionNumber] = useState(0);
+
+    const answerQuestion = (text) => {
+        setAnswer(text);
+        // GameService.submitAnswer(axios,gameId,{roundNumber,questionNumber,text});
+    };
 
     return (
         <div>
@@ -24,7 +36,7 @@ const QuestionPage =  () => {
                     </div>
                 </div>
                 Current Answer: <br/>
-                hello world
+                {answer}
             </div>
             <hr/>
             <div className='margin-left'>
