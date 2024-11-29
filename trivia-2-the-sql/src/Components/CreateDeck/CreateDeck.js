@@ -4,17 +4,17 @@ import { useNavigate } from 'react-router-dom'
 import { useState } from 'react';
 import { createDeck, addRound } from '../../Services/Decks.js';
 import { useAxios } from '../../Providers/AxiosProvider.js';
-import { Round } from './Round/Round.js';
 
 const CreateDeck = () => {
     const axios = useAxios(); 
     const navigate = useNavigate();
 
-    const [deckName, setDeckName] = useState("")
-    const [deckDesc, setDeckDesc] = useState("")
-    const [questionCat, setQuestionCat] = useState("")
-    const [questionNum, setQuestionNum] = useState("")
-    const [rounds, setRounds] = useState(list[rounds])
+    const [deckName, setDeckName] = useState("");
+    const [deckDesc, setDeckDesc] = useState("");
+    const [questionCat, setQuestionCat] = useState("");
+    const [questionNum, setQuestionNum] = useState("");
+    const [rounds, setRounds] = useState([]);
+    const [addRounds, setAddRounds] = useState([]);
 
 
     const createDeckFunc = async (deckName, deckDesc, rounds) => {
@@ -38,7 +38,7 @@ const CreateDeck = () => {
     };
 
     const generateAddRound = () => {
-      return (
+      const round = (        
         <div>
         <div className='choose_questions'>
         <form>
@@ -63,10 +63,9 @@ const CreateDeck = () => {
           </form>
         </div>
         <button type="submit" className="create_button" onClick={() => addRoundFunc(questionCat, questionNum)}>Add</button>
-        </div>
-        
-      );
-    }
+        </div>);
+      setAddRounds([...addRounds, round]);
+    };
 
     return (
         <div className='createpage'>
@@ -84,6 +83,7 @@ const CreateDeck = () => {
           </div>
             
             <h3>Add rounds:</h3>
+            {addRounds.map((item, i) => (<ul>{item}</ul>))}
             <button type="submit" className="create_button" onClick={() => generateAddRound()}>Add Round</button>
 
             <h3>Create the deck!</h3>

@@ -2,7 +2,8 @@
 // const axios = useAxios();
 //import axios from "axios";
 
-const url_start = 'http://127.0.0.1:8000'
+const url_start = 'http://127.0.0.1:8001'
+
 
 export const getAllDecks = async (axiosClient) => { 
   let config = {
@@ -206,16 +207,16 @@ export const getSortedQuestions = async (cat, diff, axiosClient) => {
 
 
 export const addRound = async (axiosClient, num_questions=10, categories=[], attributes=[]) => {
-  let data = JSON.stringify( {
+  let data = JSON.stringify({
     "categories": categories,
     "attributes": attributes,
     "num_questions": num_questions
-  })
+  });
 
   let config = {
     method: 'post',
     maxBodyLength: Infinity,
-    url: '/',
+    url: url_start + '/',
     headers: { 
       'Content-Type': 'application/json', 
     },
