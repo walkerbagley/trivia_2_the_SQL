@@ -35,7 +35,7 @@ const PrePlay =  () => {
               value={formValues.teamName}
               onChange={handleChange} 
               required
-            >
+            />
           </div>
           <div class="form-field">
             <label for="joinCode">Join Code:</label>
@@ -46,10 +46,11 @@ const PrePlay =  () => {
               value={formValues.joinCode}
               onChange={handleChange} 
               required
-            >
+            />
           </div>
           <button onClick={()=>joinGame()}></button>
           <ToastContainer/>
+      </form>
     </div>
   );
 }
