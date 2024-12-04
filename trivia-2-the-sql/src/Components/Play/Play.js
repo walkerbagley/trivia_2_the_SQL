@@ -7,16 +7,22 @@ import { GameService } from '../../Services/Game';
 
 const PrePlay =  () => {
   const axios = useAxios();
-
+  const navigate = useNavigate();
+  // [gameId, setGameId] = useState("");
   [formValues, setFormValues] = useState({ team_id: '', join_code: '' });
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormValues({ ...formValues, [name]: value });
   };
 
-  function joinGame(gameId) {
+  function joinGame() {
     try {
-      GameService.joinGame(axios, gameId, formValues);
+      GameService.joinGame(axios, formValues).then((data)=>{
+        console.log('Requestion Join Game',data);
+        // setGameId(data[0])
+        useNavigate("/loading/"+formValues.join_code, { state: { gameId : data[0] } })
+      });
     } catch (error){
       toast.error(error);
     }

@@ -12,7 +12,7 @@ const Main =  () => {
         <div className="buttons">
             <button
                 className="button-52"
-                onClick={() => navigate('/Play')}>
+                onClick={() => navigate('/Join')}>
                 Join Game
             </button>
             <button
