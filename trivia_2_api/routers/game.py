@@ -51,11 +51,11 @@ async def create_game(request: Request, game: GameRequest) -> None:
             
             return JSONResponse(status_code=201, content={"id": str(game_id)})
 
-@router.post("/{game_id}/join")
-async def join_game(request:Request, game: JoinGameRequest, game_id:UUID) -> None:
+@router.post("/join")
+async def join_game(request:Request, game: JoinGameRequest) -> None:
     with db.connection() as conn:
         with conn.cursor(row_factory=dict_row) as cur:
-            cur.execute('''SELECT id, host_id, status, join_code FROM "Games" WHERE id = %s''', (game_id, ))
+            cur.execute('''SELECT id, host_id, status, join_code FROM "Games" WHERE join_code = %s and status = 'open' ''', (game.join_code, ))
 
             results = cur.fetchone()
             if results is None:
@@ -63,9 +63,6 @@ async def join_game(request:Request, game: JoinGameRequest, game_id:UUID) -> Non
             
             if results.get("host_id", None) == request.state.user.id:
                 raise HTTPException(status_code=400, detail="Host cannot join game")
-            
-            if results.get("status", None) != "open":
-                raise HTTPException(status_code=400, detail="Game is not open")
             
             if game.join_code != results.get("join_code", None):
                 raise HTTPException(status_code=400, detail="Invalid join code")
