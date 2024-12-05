@@ -3,12 +3,8 @@ from fastapi.responses import JSONResponse
 from psycopg.rows import class_row, dict_row
 from uuid import UUID
 
-from trivia_2_api.models import team
-from trivia_2_api.models.user import GameStatus, UserStatus
-
-
 from ..db import db
-from ..models import Deck, User, UserRequest, UserResponse
+from ..models import Deck, UserRequest, UserResponse, UserStatus
 
 answer_choices = ['a', 'b', 'c', 'd']
 
@@ -86,7 +82,9 @@ async def get_user_decks(user_id: UUID) -> list[Deck]:
     with db.connection() as conn:
         with conn.cursor(row_factory=class_row(Deck)) as cur:
             cur.execute('''
-                              SELECT d.id, d.name, d.description, d.owner_id FROM "Decks" as d 
+                              SELECT d.id, d.name, d.description, d.owner_id,
+                              (SELECT count(*) FROM "DeckRounds" as dr where dr.deck_id = d.id) as rounds 
+                              FROM "Decks" as d 
                               LEFT OUTER JOIN "UserDecks" as ud ON d.id = ud.deck_id
                               WHERE ud.user_id = %s''', (user_id,))
 
