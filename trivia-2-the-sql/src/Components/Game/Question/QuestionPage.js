@@ -19,13 +19,21 @@ const QuestionPage =  () => {
     const [roundNumber, setRoundNumber] = useState(0);
     const [questionNumber, setQuestionNumber] = useState(0);
     
+    let qnum = 0
     const answerQuestion = (text,letter) => {
         setAnswer(text);
+        qnum = (qnum+1)%questions.length;
+        console.log(qnum)
         console.log('Submitting answer:',location.state.gameId,{roundNumber,questionNumber,text})
-        GameService.submitAnswer(axios,location.state.gameId,{roundNumber,questionNumber,letter});
+        // GameService.submitAnswer(axios,location.state.gameId,{roundNumber,questionNumber,letter});
     };
     // Get Status from /User/Status should be called on a time out to get the current question number (1-3s)
     // get question by id from user/status (/question/questionid)
+    const questions = [
+        {text:"what is the most common color of m&m",a:"red",b:"green",c:"brown",d:"yellow"},
+        {text:"who is a forbes 30 under 30",a:"zach",b:"green",c:"brown",d:"yellow"},
+        {text:"who is speed",a:"zach",b:"lightning",c:"brown",d:"yellow"},
+    ]
 
     // get new question or round info
     const getGameStatus = () => {
@@ -43,6 +51,11 @@ const QuestionPage =  () => {
                 });
             } else {
                 console.error("Game Status is null:",data)
+                setQuestion(questions[qnum].text);
+                setA(questions[qnum].a);
+                setB(questions[qnum].b);
+                setC(questions[qnum].c);
+                setD(questions[qnum].d);
             }
         });
     };
@@ -51,7 +64,7 @@ const QuestionPage =  () => {
     useEffect(() => {
         const interval = setInterval(() => {
           getGameStatus();
-        }, 55000);
+        }, 5000);
         return () => clearInterval(interval);
       }, []);
 
