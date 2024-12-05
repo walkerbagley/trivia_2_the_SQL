@@ -16,6 +16,7 @@ class UserResponse(BaseModel):
     user_name: str
 
 class GameStatus(BaseModel):
+    id: UUID
     status: str
     round_number: int
     question_number: int
