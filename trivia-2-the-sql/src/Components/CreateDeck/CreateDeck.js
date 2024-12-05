@@ -2,7 +2,7 @@ import React from 'react'
 import './styles.css'
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react';
-import { createDeck, addRound } from '../../Services/Decks.js';
+import { createDeck } from '../../Services/Decks.js';
 import { useAxios } from '../../Providers/AxiosProvider.js';
 
 const CreateDeck = () => {
@@ -13,7 +13,7 @@ const CreateDeck = () => {
     const [deckDesc, setDeckDesc] = useState("");
     const [questionCat, setQuestionCat] = useState("");
     const [questionNum, setQuestionNum] = useState("");
-    const [rounds, setRounds] = useState([]);
+    const [rounds, setRounds] = useState({});
     const [addRounds, setAddRounds] = useState([]);
 
 
@@ -27,14 +27,8 @@ const CreateDeck = () => {
       }
     };
 
-    const addRoundFunc = async (questionCat, questionNum) => {
-      try {
-        const round = await addRound(axios, questionCat, questionNum);
-        console.log('round:', round);
-        setRounds(rounds.append(round));
-      } catch (error) {
-        console.error("Failed to add round:", error);
-      }
+    const addRoundFunc = (questionCat, questionNum) => {
+      setRounds([...rounds, {"categories": questionCat, "num_questions": questionNum}])
     };
 
     const generateAddRound = () => {
@@ -43,7 +37,7 @@ const CreateDeck = () => {
         <div className='choose_questions'>
         <form>
         <label for="category">Choose a category: </label>
-            <select id="category" name="category" onChange={(e) => setQuestionCat(e.target.value)}>
+            <select id="category" name="category" multiple onChange={(e) => setQuestionCat(e.target.value)}>
               <option value="brain-teasers" >Brain Teasers</option>
               <option value="entertainment">Entertainment</option>
               <option value="world">World</option>
