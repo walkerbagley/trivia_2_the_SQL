@@ -13,7 +13,8 @@ const LoadingPage = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const [fact, setFact] = useState("");
-    console.log("In Loading page, gameid:",location.state,location.state.gameId, location.state.joinCode);
+    const [teams, setTeams] = useState([]);
+    console.log("In Loading page, gameid:",location.state);
 
     // Get Game by id and if stats=='open' then redirect to play/:id
     // send request to /game/getTeams to get players
@@ -757,17 +758,49 @@ const LoadingPage = () => {
         let i = Math.round(Math.random() * (facts.length))
         return facts[i]
     }
-
+    // timeout for fun facts
     useEffect(() => {
         const interval = setInterval(() => {
           setFact(getFact());
         }, 8000);
         return () => clearInterval(interval);
       }, []);
+      
+      // Timeout to see if game has started
+      useEffect(() => {
+          const interval = setInterval(() => {
+            getGameStatus();
+            updateTeams();
+          }, 5000);
+          return () => clearInterval(interval);
+        }, []);
+
+    // check if game has started
+    const getGameStatus = () => {
+        getCurrentUserStatus(axios).then((data) => {
+            console.log(data)
+            if (data.game_status){
+                if (game_status.status === "in_progress"){
+                    console.log('Game Started!');
+                    navigate("/play/"+location.state.joinCode, { state: { gameId : location.state.gameId } });
+                }
+            } else {
+                console.error("Game Status is null from loading page:",data)
+            }
+        });
+    };
+
+    function updateTeams(){
+        GameService.getTeamNames().then((data)=>{
+            console.log("joined teams:",data);
+            setTeams(data);
+        });
+    }
+
 
     function handleStartGame(){
         GameService.startGame(axios,location.state.gameId).then((resp)=>{
-            console.log('Game Started!',resp);
+            console.log('Game Started as Host!',resp);
             navigate("/play/"+location.state.joinCode, { state: { gameId : location.state.gameId } });
         }).catch((error)=>{
             console.error("Failed to start game", error);
@@ -789,12 +822,14 @@ const LoadingPage = () => {
             <p className='center'>Waiting for Players...</p>
             <h2 className='center'>Team List:</h2>
             <div className='grid-container'>
-                <div className='grid-item'>hello world</div>
-                <div className='grid-item'>hello world</div>
-                <div className='grid-item'>hello world</div>
-                <div className='grid-item'>hello world</div>
-                <div className='grid-item'>hello world</div>
-                <div className='grid-item'>hello world</div>
+                {teams ? 
+                teams.map((t) => (
+                <div className='grid-item'>
+                    <h3>{t}</h3>
+                </div>
+                ))
+                : <></>
+                }
             </div>
             <button onClick={()=>handleStartGame()}>Start Game!</button>
         </div>
