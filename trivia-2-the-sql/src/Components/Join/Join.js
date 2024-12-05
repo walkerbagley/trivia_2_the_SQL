@@ -1,19 +1,21 @@
-import React, {useNavigate,useState} from 'react'
+import React, {useState} from 'react'
+import { useNavigate } from 'react-router-dom';
 import './styles.css'
 import { useAxios } from '../../Providers/AxiosProvider.js';
 import { toast, ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
-import { GameService } from '../../Services/Game';
+import { GameService } from '../../Services/Game.js';
 
-const PrePlay =  () => {
+const JoinPage =  () => {
   const axios = useAxios();
   const navigate = useNavigate();
-  // [gameId, setGameId] = useState("");
-  [formValues, setFormValues] = useState({ team_id: '', join_code: '' });
+  // const [gameId, setGameId] = useState("");
+  const [formValues, setFormValues] = useState({ team_id: '', join_code: '' });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormValues({ ...formValues, [name]: value });
+    console.log(formValues);
   };
 
   function joinGame() {
@@ -21,43 +23,48 @@ const PrePlay =  () => {
       GameService.joinGame(axios, formValues).then((data)=>{
         console.log('Requestion Join Game',data);
         // setGameId(data[0])
-        useNavigate("/loading/"+formValues.join_code, { state: { gameId : data[0] } })
+        navigate("/loading/"+formValues.join_code, { state: { gameId : data[0] } })
       });
     } catch (error){
       toast.error(error);
     }
   };
 
+  // function goToGame(){
+  //   if (gameId == 'active'){
+  //   }
+  // }
+  
     return (
-    <div className="playpage">
+    <div className="join-page">
         <h1>Enter GameID</h1>
         <form>
-          <div class="form-field">
-            <label for="teamName">Team ID:</label>
+          <div className="form-field">
+            <label htmlFor="team_id">Team ID:</label>
             <input 
               type="text" 
-              id="teamName" 
-              name="teamName" 
-              value={formValues.teamName}
+              id="team_id" 
+              name="team_id" 
+              value={formValues.team_id}
               onChange={handleChange} 
               required
             />
           </div>
-          <div class="form-field">
-            <label for="joinCode">Join Code:</label>
+          <div className="form-field">
+            <label htmlFor="join_code">Join Code:</label>
             <input 
               type="text" 
-              id="joinCode" 
-              name="joinCode"
-              value={formValues.joinCode}
+              id="join_code" 
+              name="join_code"
+              value={formValues.join_code}
               onChange={handleChange} 
               required
             />
           </div>
-          <button onClick={()=>joinGame()}></button>
+          <button className='join-button' onClick={()=>joinGame()}>Join Game</button>
           <ToastContainer/>
       </form>
     </div>
   );
 }
-export default PrePlay;
+export default JoinPage;

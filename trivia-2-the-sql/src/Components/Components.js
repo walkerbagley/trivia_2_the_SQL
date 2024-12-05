@@ -1,8 +1,8 @@
 import {BrowserRouter as Router, Route, Routes, Navigate} from "react-router-dom";
 import Header from './Header/Header.js';
 import Main from './Main/Main.js'
-import PreHost from './Host/Host.js'
-import PrePlay from './Play/Play.js'
+import HostPage from './Host/Host.js'
+import JoinPage from './Join/Join.js'
 // import Login from './Login/Login.js'
 import LoadingPage from "./Game/Loading/LoadingPage.js";
 import QuestionPage from "./Game/Question/QuestionPage.js";
@@ -27,8 +27,8 @@ export default function Components() {
                 <Header/>
                 <Routes>
                     <Route exact path='/' element={<Main/>}/>
-                    <Route exact path='/host' element={<PreHost/>}/>
-                    <Route exact path='/join' element={<PrePlay/>}/>
+                    <Route exact path='/host' element={<HostPage/>}/>
+                    <Route exact path='/join' element={<JoinPage/>}/>
                     <Route exact path='/loading/:id' element={<LoadingPage/>}/>
                     <Route exact path='/play/:id' element={<QuestionPage/>}/>
                     <Route exact path='/decks' element={<Decks/>}/>

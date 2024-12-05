@@ -1,0 +1,11 @@
+.join-page {
+    background-color: var(--main-background-color);
+    font: var(--main-font);
+    color: var(--main-text-color);
+}
+
+.join-button {
+    width: 100px;
+    height: 50px;
+    margin: 10px;
+}

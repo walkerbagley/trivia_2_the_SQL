@@ -1,10 +1,22 @@
 import React, {useState, useEffect} from 'react'
+import { useLocation, useNavigate } from 'react-router-dom';
+import { GameService } from '../../../Services/Game';
+import { useAxios } from '../../../Providers/AxiosProvider';
+import { toast, ToastContainer } from "react-toastify";
+
 import './styles.css'
 
 // The joinCode is the gameid
 // const LoadingPage = (joinCode) => {
 const LoadingPage = () => {
+    const axios = useAxios();
+    const navigate = useNavigate();
+    const location = useLocation();
     const [fact, setFact] = useState("");
+    console.log("In Loading page, gameid:",location.state,location.state.gameId, location.state.joinCode);
+
+    // Get Game by id and if stats=='open' then redirect to play/:id
+    // send request to /game/getTeams to get players
 
     const facts = [
         'The speed of light is generally rounded down to 186,000 miles per second. In exact terms it is 299,792,458 m/s.',
@@ -753,17 +765,29 @@ const LoadingPage = () => {
         return () => clearInterval(interval);
       }, []);
 
+    function handleStartGame(){
+        GameService.startGame(axios,location.state.gameId).then((resp)=>{
+            console.log('Game Started!',resp);
+            navigate("/play/"+location.state.joinCode, { state: { gameId : location.state.gameId } });
+        }).catch((error)=>{
+            console.error("Failed to start game", error);
+            toast.error('You may not start this game.')
+        });
+    };
+
     return (
         <div>
-            {/* <div>
-                <h3>{joinCode}</h3>
-            </div> */}
+            <ToastContainer />
+            <div>
+                <h3>{location.state.joinCode}</h3>
+            </div>
             <div className='center'>
                 <h1 className='loading-title'>Trivia2</h1>
                 <h5 className='loading-subtext'>the SQL</h5>
                 <p>Did you know: {fact}</p>
             </div>
-            <h2 className='center'>Waiting for Players:</h2>
+            <p className='center'>Waiting for Players...</p>
+            <h2 className='center'>Team List:</h2>
             <div className='grid-container'>
                 <div className='grid-item'>hello world</div>
                 <div className='grid-item'>hello world</div>
@@ -772,6 +796,7 @@ const LoadingPage = () => {
                 <div className='grid-item'>hello world</div>
                 <div className='grid-item'>hello world</div>
             </div>
+            <button onClick={()=>handleStartGame()}>Start Game!</button>
         </div>
     );
 };

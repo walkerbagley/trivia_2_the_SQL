@@ -1,7 +1,7 @@
 import React from 'react'
 import './styles.css'
 
-const Deck =  (deck) => {
+const Deck = (deck) => {
     return (
       <div className="deckbox grid-item">
         <h1 className="title">{deck.deck['name']}</h1>

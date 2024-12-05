@@ -1,5 +1,3 @@
-url_start = 'http://127.0.0.1:8000'
-
 // GameService.js
 const url_start = 'http://127.0.0.1:8000';
 
@@ -75,6 +73,7 @@ export const GameService = {
   },
 
   async startGame(axiosClient, gameId) {
+    console.log(axiosClient, gameId)
     const config = {
       method: 'post',
       maxBodyLength: Infinity,

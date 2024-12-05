@@ -1,54 +1,68 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import './styles.css'
 import Deck from '../Decks/Deck/Deck.js'
-
-
+import {getUserDecks} from '../../Services/User.js'
 import { useUserSession } from '../../Providers/UserProvider';
 import { useAxios } from '../../Providers/AxiosProvider';
+import { getDeck } from '../../Services/Decks.js';
+import { GameService } from '../../Services/Game.js';
 
-const PreHost =  () => {
-    const { user } = useUserSession();
+const HostPage =  () => {
+    const navigate = useNavigate();
     const axios = useAxios();
+    const { user } = useUserSession();
+    const [decks, setDecks] = useState([]);
+    const [joinCode, setJoinCode] = useState("")
 
-    const [decks, setDecks] = React.useState([]);
+    console.log(user)
 
-    function getGameID () {
-        const result = Math.random().toString(36).substring(2,7);
-        return result
-    }
+    useEffect(()=>{
+        setJoinCode(Math.random().toString(36).substring(2,7));
 
-    function getRandomDeck(category) {
+        getDeck(axios,"3997285c-9a02-4a96-a022-0312971d7a5b").then((data)=>{
+                console.log('Deck Pulled: ',data)
+                setDecks([data]);
+            })
+            .catch((error)=>{
+                console.error(error);
+            })
 
-    }
+        // getUserDecks(axios, user.id).then((data)=>{
+        //         console.log('Hosts decks: ',data)
+        //         setDecks(data);
+        //     })
+        //     .catch((error)=>{
+        //         console.error(error);
+        //     })
+    }, [axios, user.id]);
 
-    useEffect(() => {
-        getDecks();
-    }, []);
-
-    function getDecks() {
-        axios.get('/user/' + user + '/deck/').then((response) => {
-            setDecks(response.data);
-        }).catch((error) => {
-            console.log(error);
-        });
-    }
+    function startGame(deckId){
+        GameService.createGame(axios,{deck_id:deckId,question_time_sec:20}).then((gameData)=>{
+            console.log('Game Created!',gameData)
+            navigate("/loading/"+joinCode, { state: { gameId : gameData.id, joinCode : joinCode } })
+        })
+    };
 
     return (
     <div className="hostpage">
-        <h1>Your Game ID: {getGameID()}</h1>
-        <div className="buttons">
-            <h2>Choose Deck: </h2>
+        <h1>Your Join Code: {joinCode}</h1>
+        <h2>Enter Question Time: </h2>
+        <h2>Choose Deck: </h2>
+        <div className="grid-container">
             {decks ? 
-                decks.map((deck) => (
-                    <Deck deck={deck}/>
-                ))
-                : <></>
+            decks.map((d) => (
+            <div className='grid-item'>
+                <button onClick={() => startGame(d.id)} className='no-underline'><Deck deck={d}/></button>
+            </div>
+            ))
+            : <></>
             }
         </div>
     </div>
   );
 }
-export default PreHost;
+export default HostPage;
 
 const Host = () => {
     return (
