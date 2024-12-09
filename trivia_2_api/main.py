@@ -1,6 +1,7 @@
 from contextlib import asynccontextmanager
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 
 from .middleware import authenticate_user
 from .routers import auth, deck, game, question, score, team, user
@@ -34,8 +35,8 @@ async def authenicate_middleware(request, call_next):
     try:
         response = await authenticate_user(request, call_next)
         return response
-    except Exception as e:
-        raise e
+    except HTTPException as e:
+        return JSONResponse(status_code=e.status_code, content={"error": str(e)}, headers={"Access-Control-Allow-Origin": "*"})
 
 
 @app.get("/")

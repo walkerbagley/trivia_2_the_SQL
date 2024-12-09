@@ -18,13 +18,9 @@ async def authenticate_user(request: Request, call_next):
     if not token:
         return JSONResponse(status_code=status.HTTP_401_UNAUTHORIZED, content={"error": "Not authenticated"})
     token = token.replace("Bearer ", "")
-    
-    try:
-        request.state.user = await get_current_user(token=token)
-        response = await call_next(request)
-        return response
-    except HTTPException as e:
-        return JSONResponse(status_code=e.status_code, content={"error": e.detail})
+    request.state.user = await get_current_user(token=token)
+    response = await call_next(request)
+    return response
 
 
 async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]) -> AuthUser:
