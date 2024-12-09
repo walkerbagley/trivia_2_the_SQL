@@ -52,7 +52,7 @@ async def get_current_user_status(request: Request) -> UserStatus:
             
             elif host_id == request.state.user.id:
                 cur.execute('''
-                            SELECT id, status, current_round as round_number, current_question as question_number, q.id as question_id
+                            SELECT g.id, g.status, g.current_round as round_number, g.current_question as question_number, q.id as question_id
                             FROM "Games" as g
                             LEFT OUTER JOIN "Decks" as d ON g.deck_id = d.id
                             LEFT OUTER JOIN "DeckRounds" as dr ON dr.deck_id = d.id and dr.round_number = g.current_round
