@@ -13,7 +13,7 @@ const AxiosContext = createContext(defaultAxiosInstance);
 
 export const AxiosProvider = ({ children }) => {
   
-  const { token } = useAuthSession();
+  const { token, logout } = useAuthSession();
   
   const axiosInstance = useMemo(() => {
     return axios.create({
@@ -33,6 +33,20 @@ export const AxiosProvider = ({ children }) => {
       return config;
     },
     (error) => Promise.reject(error)
+  );
+
+  axiosInstance.interceptors.response.use(
+    (response) => {
+      console.log("response", response)
+      return response;
+    },
+    (error) => {
+      if (error.response.status === 401) {
+        console.log("error", "401");
+        logout();
+      }
+      return Promise.reject(error);
+    }
   );
 
   return (

@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { GameService } from '../../../Services/Game';
 import { useAxios } from '../../../Providers/AxiosProvider';
 import { toast, ToastContainer } from "react-toastify";
+import { getCurrentUserStatus } from '../../../Services/User';
 
 import './styles.css'
 
@@ -780,7 +781,7 @@ const LoadingPage = () => {
         getCurrentUserStatus(axios).then((data) => {
             console.log(data)
             if (data.game_status){
-                if (game_status.status === "in_progress"){
+                if (data.game_status.status === "in_progress"){
                     console.log('Game Started!');
                     navigate("/play/"+location.state.joinCode, { state: { gameId : location.state.gameId } });
                 }
