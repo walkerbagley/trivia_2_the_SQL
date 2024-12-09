@@ -9,17 +9,19 @@ const CreateDeck = () => {
     const axios = useAxios(); 
     const navigate = useNavigate();
 
-    const [deckName, setDeckName] = useState("");
-    const [deckDesc, setDeckDesc] = useState("");
-    const [questionCat, setQuestionCat] = useState("");
-    const [questionNum, setQuestionNum] = useState("");
-    const [rounds, setRounds] = useState({});
+    const [deckName, setDeckName] = useState('');
+    const [deckDesc, setDeckDesc] = useState('');
+    const [questionCat, setQuestionCat] = useState([""]);
+    const [questionNum, setQuestionNum] = useState([""]);
     const [addRounds, setAddRounds] = useState([]);
+    const [rounds, setRounds] = useState([]);
+
+    var num_rounds = 1;
 
 
-    const createDeckFunc = async (deckName, deckDesc, rounds) => {
+    const createDeckFunc = async (deckName, deckDesc, deck_rounds) => {
       try {
-        const ds = await createDeck(axios, deckName, deckDesc, rounds);
+        const ds = await createDeck(axios, deckName, deckDesc, deck_rounds);
         console.log('ds:', ds);
         navigate(`/decks/${ds.id}`, {state: {deckId:ds.id}});
       } catch (error) {
@@ -27,17 +29,19 @@ const CreateDeck = () => {
       }
     };
 
-    const addRoundFunc = (questionCat, questionNum) => {
-      setRounds([...rounds, {"categories": questionCat, "num_questions": questionNum}])
+    const addRoundFunc = (cat, num) => {
+      setRounds((rounds) => [...rounds, {"categories": cat, "num_questions": num}]);
+      console.log(rounds);
+      console.log(questionNum)
     };
 
     const generateAddRound = () => {
       const round = (        
         <div>
-        <div className='choose_questions'>
+        <div className='choose_questions' id={num_rounds}>
         <form>
         <label for="category">Choose a category: </label>
-            <select id="category" name="category" multiple onChange={(e) => setQuestionCat(e.target.value)}>
+            <select id="category" name="category" onChange={(e) => setQuestionCat([...questionCat, e.target.value])}>
               <option value="brain-teasers" >Brain Teasers</option>
               <option value="entertainment">Entertainment</option>
               <option value="world">World</option>
@@ -53,12 +57,13 @@ const CreateDeck = () => {
               <option value="humanities">Humanities</option>
             </select>
             <label for="num">How many questions would you like to add? </label>
-            <input className='num' type="text" id="num" name="num" value={questionNum} onChange={(e) => setQuestionNum(e.target.value)}/>
+            <input className='num' type="text" id="num" name="num" value={questionNum[num_rounds]} onChange={(e) => setQuestionNum([...questionNum, e.target.value])}/>
           </form>
         </div>
-        <button type="submit" className="create_button" onClick={() => addRoundFunc(questionCat, questionNum)}>Add</button>
+        <button type="submit" className="create_button" onClick={() => addRoundFunc(questionCat[num_rounds], questionNum[num_rounds])}>Add</button>
         </div>);
       setAddRounds([...addRounds, round]);
+      num_rounds += 1;
     };
 
     return (

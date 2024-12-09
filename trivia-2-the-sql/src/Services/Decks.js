@@ -38,7 +38,8 @@ export const getDeck = async (axiosClient, id) => {
   }
 };
 
-export const createDeck = async (axiosClient, name, description, rounds={}) => {
+export const createDeck = async (axiosClient, name, description, rounds=[]) => {
+  console.log(rounds)
   let data = JSON.stringify({
     "name": name,
     "description": description,
