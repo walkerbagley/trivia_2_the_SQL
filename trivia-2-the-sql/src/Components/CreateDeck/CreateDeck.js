@@ -11,8 +11,8 @@ const CreateDeck = () => {
 
     const [deckName, setDeckName] = useState('');
     const [deckDesc, setDeckDesc] = useState('');
-    const [questionCat, setQuestionCat] = useState([""]);
-    const [questionNum, setQuestionNum] = useState([""]);
+    const [questionCat, setQuestionCat] = useState([]);
+    const [questionNum, setQuestionNum] = useState();
     const [addRounds, setAddRounds] = useState([]);
     const [rounds, setRounds] = useState([]);
 
@@ -29,19 +29,22 @@ const CreateDeck = () => {
       }
     };
 
-    const addRoundFunc = (cat, num) => {
+    const addRoundFunc = (cat=['entertainment'], num=10) => {
       setRounds((rounds) => [...rounds, {"categories": cat, "num_questions": num}]);
       console.log(rounds);
       console.log(questionNum)
     };
 
     const generateAddRound = () => {
+      setQuestionNum(10)
+      setQuestionCat([])
       const round = (        
         <div>
         <div className='choose_questions' id={num_rounds}>
         <form>
-        <label for="category">Choose a category: </label>
-            <select id="category" name="category" onChange={(e) => setQuestionCat([...questionCat, e.target.value])}>
+        <label for="category">Choose categories: </label>
+          <input type="checkbox" onChange={(e) => setQuestionCat([...questionCat, 'brain teasers'])}/>
+            <select id="category" name="category" multiple onChange={(e) => setQuestionCat([...questionCat, e.target.value])}>
               <option value="brain-teasers" >Brain Teasers</option>
               <option value="entertainment">Entertainment</option>
               <option value="world">World</option>
@@ -57,10 +60,10 @@ const CreateDeck = () => {
               <option value="humanities">Humanities</option>
             </select>
             <label for="num">How many questions would you like to add? </label>
-            <input className='num' type="text" id="num" name="num" value={questionNum[num_rounds]} onChange={(e) => setQuestionNum([...questionNum, e.target.value])}/>
+            <input className='num' type="number" id="num" name="num" value={questionNum} onChange={(e) => setQuestionNum(e.target.value)}/>
           </form>
         </div>
-        <button type="submit" className="create_button" onClick={() => addRoundFunc(questionCat[num_rounds], questionNum[num_rounds])}>Add</button>
+        <button type="submit" className="create_button" onClick={() => addRoundFunc(questionCat, questionNum)}>Add</button>
         </div>);
       setAddRounds([...addRounds, round]);
       num_rounds += 1;
@@ -83,10 +86,10 @@ const CreateDeck = () => {
             
             <h3>Add rounds:</h3>
             {addRounds.map((item, i) => (<ul>{item}</ul>))}
-            <button type="submit" className="create_button" onClick={() => generateAddRound()}>Add Round</button>
+            <button type="button" className="create_button" onClick={() => generateAddRound()}>Add Round</button>
 
             <h3>Create the deck!</h3>
-            <button type="submit" className="create_button" onClick={() => createDeckFunc(deckName, deckDesc, rounds)}>Create</button>
+            <button type="button" className="create_button" onClick={() => createDeckFunc(deckName, deckDesc, rounds)}>Create</button>
 
         </div>
       );

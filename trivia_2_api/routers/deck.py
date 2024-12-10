@@ -54,8 +54,8 @@ async def create_deck(request:Request, deck: DeckRequest) -> None:
             if deck_id is None:
                 raise HTTPException(status_code=500, detail="Failed to create deck")
 
-    for index, round in enumerate(deck.rounds):
-        await add_round(deck_id, round, round_number=index + 1)
+            for index, round in enumerate(deck.rounds):
+                add_round(cur=cur, deck_id=deck_id, round=round, round_number=index + 1)
     
         
     return JSONResponse(status_code=201, content={"id": str(deck_id)})
