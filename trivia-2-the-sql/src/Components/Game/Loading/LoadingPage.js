@@ -810,9 +810,9 @@ const LoadingPage = () => {
     };
 
     return (
-        <div>
+        <div className='loading-page'>
             <ToastContainer />
-            <div>
+            <div className='join-code'>
                 <h3>{location.state.joinCode}</h3>
             </div>
             <div className='center'>
@@ -832,7 +832,7 @@ const LoadingPage = () => {
                 : <></>
                 }
             </div>
-            <button onClick={()=>handleStartGame()}>Start Game!</button>
+            <button className='join-code' onClick={()=>handleStartGame()}>Start Game!</button>
         </div>
     );
 };
