@@ -39,24 +39,24 @@ const QuestionPage =  () => {
     const getGameStatus = () => {
         getCurrentUserStatus(axios).then((data) => {
             console.log(data)
-            if (data.game_status){
-                setRoundNumber(data.game_status.round_number);
-                setQuestionNumber(data.game_status.question_number);
-                getQuestionById(axios, data.game_status.question_id).then((resp) => {
-                    setQuestion(resp.question);
-                    setA(resp.a);
-                    setB(resp.b);
-                    setC(resp.c);
-                    setD(resp.d);
-                });
-            } else {
-                console.error("Game Status is null:",data)
-                setQuestion(questions[qnum].text);
-                setA(questions[qnum].a);
-                setB(questions[qnum].b);
-                setC(questions[qnum].c);
-                setD(questions[qnum].d);
-            }
+            // if (data.game_status){
+            //     setRoundNumber(data.game_status.round_number);
+            //     setQuestionNumber(data.game_status.question_number);
+            //     getQuestionById(axios, data.game_status.question_id).then((resp) => {
+            //         setQuestion(resp.question);
+            //         setA(resp.a);
+            //         setB(resp.b);
+            //         setC(resp.c);
+            //         setD(resp.d);
+            //     });
+            // } else {
+            console.error("Game Status is null:",data)
+            setQuestion(questions[qnum].text);
+            setA(questions[qnum].a);
+            setB(questions[qnum].b);
+            setC(questions[qnum].c);
+            setD(questions[qnum].d);
+            // }
         });
     };
 
@@ -70,32 +70,52 @@ const QuestionPage =  () => {
 
 
     return (
-        <div>
+        <div className='question-page'>
             <div className='center'>
                 <br />
                 <h1 className='question-text'>Question {questionNumber}: {question}</h1>
                 <br/>
-                <div className='grid-container'>
+            </div>
+                <div className='question-grid-container'>
+                        <div className='question-grid-item'>
                     <button onClick={()=>{answerQuestion(a,'a')}}>
-                        <div className='grid-item'>A: {a}</div>
+                            A: {a}
                     </button>
-                    <button onClick={()=>{answerQuestion(b,'b')}}>
-                        <div className='grid-item'>B: {b}</div>
-                    </button>
-                    <button onClick={()=>{answerQuestion(c,'c')}}>
-                        <div className='grid-item'>C: {c}</div>
-                    </button>
-                    <button onClick={()=>{answerQuestion(d,'d')}}>
-                        <div className='grid-item'>D: {d}</div>
-                    </button>
+                            </div>
+                    <div className='question-grid-item'>
+                        <button onClick={()=>{answerQuestion(b,'b')}}>
+                            B: {b}
+                        </button>
+                    </div>
+                    <div className='question-grid-item'>
+                        <button onClick={()=>{answerQuestion(c,'c')}}>
+                            C: {c}
+                        </button>
+                    </div>
+                    <div className='question-grid-item'>
+                        <button onClick={()=>{answerQuestion(d,'d')}}>
+                            D: {d}
+                        </button>
+                    </div>
                 </div>
+            <div className='center'>
                 Current Answer: <br/>
                 {answer}
             </div>
-            <hr/>
             <div className='margin-left'>
-                <h3>Team Score: </h3>
+                <h3>Team Score: 0</h3>
             </div>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
         </div>
     );
 };

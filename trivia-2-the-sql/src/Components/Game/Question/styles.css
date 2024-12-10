@@ -1,7 +1,8 @@
-.playpage {
+.question-page {
     background-color: var(--main-background-color);
     font: var(--main-font);
-    color: var(--main-background-color)
+    color: var(--main-text-color);
+    height: 100%;
 }
 
 .center {
@@ -19,18 +20,38 @@
     margin-left: 25px;
 }
 
-.grid-container { 
+.question-grid-container { 
     display: grid; 
     grid-template-columns: repeat(2, 1fr); 
     gap: 10px; 
     padding: 20px;
   } 
     
-  .grid-item { 
-    background-color: white; 
+  .question-grid-item { 
+    background-color: #ff5c61ff; 
     border: 1px solid #ccc; 
     border-radius: 5px; 
     padding: 20px; 
     text-align: center; 
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+  }
+
+  .question-grid-item button {
+    width: 100%; /* Makes the button fill the entire width of the grid item */
+    height: 100%; /* Makes the button fill the entire height of the grid item */
+    background-color: whitesmoke; /* Primary blue background color */
+    color: black; /* White text color */
+    border: none; /* Removes default button border */
+    border-radius: 8px; /* Adds rounded corners for a modern look */
+    font-size: 1rem; /* Adjusts font size for readability */
+    cursor: pointer; /* Changes cursor to pointer on hover */
+    transition: background-color 0.3s ease; /* Adds a smooth hover effect */
+  }
+  
+  .question-grid-item button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+  }
+  
+  .question-grid-item button:active {
+    background-color: #003f7f; /* Even darker blue when pressed */
   }

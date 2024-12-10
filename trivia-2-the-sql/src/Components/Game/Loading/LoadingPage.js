@@ -768,35 +768,35 @@ const LoadingPage = () => {
       }, []);
       
       // Timeout to see if game has started
-      useEffect(() => {
-          const interval = setInterval(() => {
-            getGameStatus();
-            updateTeams();
-          }, 5000);
-          return () => clearInterval(interval);
-        }, []);
+    //   useEffect(() => {
+    //       const interval = setInterval(() => {
+    //         getGameStatus();
+    //         updateTeams();
+    //       }, 5000);
+    //       return () => clearInterval(interval);
+    //     }, []);
 
-    // check if game has started
-    const getGameStatus = () => {
-        getCurrentUserStatus(axios).then((data) => {
-            console.log(data)
-            if (data.game_status){
-                if (data.game_status.status === "in_progress"){
-                    console.log('Game Started!');
-                    navigate("/play/"+location.state.joinCode, { state: { gameId : location.state.gameId } });
-                }
-            } else {
-                console.error("Game Status is null from loading page:",data)
-            }
-        });
-    };
+    // // check if game has started
+    // const getGameStatus = () => {
+    //     getCurrentUserStatus(axios).then((data) => {
+    //         console.log(data)
+    //         if (data.game_status){
+    //             if (data.game_status.status === "in_progress"){
+    //                 console.log('Game Started!');
+    //                 navigate("/play/"+location.state.joinCode, { state: { gameId : location.state.gameId } });
+    //             }
+    //         } else {
+    //             console.error("Game Status is null from loading page:",data)
+    //         }
+    //     });
+    // };
 
-    function updateTeams(){
-        GameService.getTeamNames().then((data)=>{
-            console.log("joined teams:",data);
-            setTeams(data);
-        });
-    }
+    // function updateTeams(){
+    //     GameService.getTeamNames().then((data)=>{
+    //         console.log("joined teams:",data);
+    //         setTeams(data);
+    //     });
+    // }
 
 
     function handleStartGame(){
