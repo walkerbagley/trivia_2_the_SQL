@@ -20,6 +20,7 @@ const Decks =  () => {
       const fetchDecks = async () => {
         try {
           const ds = await getAllDecks(axios);
+          console.log(ds)
           setAllDecks(ds);
         } catch (error) {
           console.error("Failed to fetch decks:", error);
@@ -28,6 +29,7 @@ const Decks =  () => {
 
       fetchDecks();
     }, []);
+
 
 
     return (

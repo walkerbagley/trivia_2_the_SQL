@@ -9,7 +9,7 @@ export const getAllDecks = async (axiosClient) => {
   let config = {
     method: 'get',
     maxBodyLength: Infinity,
-    url: url_start + '/deck'
+    url: '/deck'
   };
 
   try {
@@ -62,13 +62,6 @@ export const createDeck = async (axiosClient, name, description, rounds=[]) => {
     throw error;
   }
 
-  // axiosClient.request(config)
-  // .then((response) => {
-  //   console.log(JSON.stringify(response.data));
-  // })
-  // .catch((error) => {
-  //   console.log(error);
-  // });
 }
 
 export const updateDeck = (axiosClient, id, name, description) => {
