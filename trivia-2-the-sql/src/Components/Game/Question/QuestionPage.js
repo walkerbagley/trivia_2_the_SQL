@@ -105,17 +105,6 @@ const QuestionPage =  () => {
             <div className='margin-left'>
                 <h3>Team Score: 0</h3>
             </div>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
         </div>
     );
 };
