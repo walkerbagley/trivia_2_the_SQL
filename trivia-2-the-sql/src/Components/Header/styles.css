@@ -1,123 +1,45 @@
 /* Start of header css */
 
 .navbar {
-    background-color: #60a4a9ff; /* color of navbar (blue) */
-    color: #573e79ff;
+    background-color: var(--accent1);
+    color: var(--main-background-color);
     padding: 16px;
     display: flex;
     justify-content: space-between;
-    align-items: top;
-    width: 100%;
+    align-items: baseline;
     font-family:Verdana, Geneva, Tahoma, sans-serif
+}
 
-  }
-  
-  .navbar .title {
-    flex-grow: 1; /*  title takes available space */
-    text-align: left; /* Align title to the left */
-    font-size: 30px;
-  }
-  
-  .navbar .icon {
-    cursor: pointer;
-    font-size: 24px;
-  }
-  
-  .navbar .navigation {
-    display: flex;
-    gap: 10px; /* Space between buttons */
-  }
-  
-  .navbar button {
-    background: #a1db43ff;
-    border: 2px solid #573e79ff;
-    color: #573e79ff;
-    padding: 5px 10px; 
-    cursor: pointer;
-    border-radius: 4px; 
-    float: right;
-    margin-left: 10px;
-  }
-  
-  .navbar button:hover {
-    background-color: rgb(84, 145, 149); /* Darker shade on hover */
-    color: white; /* Text color on hover */
-  }
-  /* End of header css */
-  
-  .button-52 {
-    font-size: 16px;
-    font-weight: 200;
-    letter-spacing: 1px;
-    padding: 13px 20px 13px;
-    outline: 0;
-    border: 1px solid white;
-    cursor: pointer;
-    position: relative;
-    background-color: #a1db43ff;
-    user-select: none;
-    -webkit-user-select: none;
-    touch-action: manipulation;
-    z-index: 100;
-  }
-  
-  .button-52:after {
-    content: "";
-    background-color: #ffbe0aff;
-    width: 100%;
-    z-index: -1;
-    position: absolute;
-    height: 100%;
-    top: 7px;
-    left: 7px;
-    transition: 0.2s;
-  }
-  
-  .button-52:hover:after {
-    top: 0px;
-    left: 0px;
-  }
-  
-  @media (min-width: 768px) {
-    .button-52 {
-      padding: 13px 50px 13px;
-    }
-    .button-89 {
-      padding: 13px 50px 13px;
-    }
-  }
+.navbar h2 {
+  text-align: left; /* Align title to the left */
+  font-size: xx-large;
+}
 
-.button-89 {
-  --b: 2px;   /* border thickness */
-  --s: .45em; /* size of the corner */
-  --color: #373B44;
-  
-  padding: calc(.5em + var(--s)) calc(.9em + var(--s));
-  color: var(--color);
-  --_p: var(--s);
-  background:
-    conic-gradient(from 90deg at var(--b) var(--b),#0000 90deg,var(--color) 0)
-    var(--_p) var(--_p)/calc(100% - var(--b) - 2*var(--_p)) calc(100% - var(--b) - 2*var(--_p));
-  transition: .3s linear, color 0s, background-color 0s;
-  outline: var(--b) solid #0000;
-  outline-offset: .6em;
-  font-size: 16px;
+.navbar .icon {
+  cursor: pointer;
+  font-size: 24px;
+}
 
+.navbuttons {
+  display: flex;
+  gap: 0.5em;
+  height: 50px;
+}
+
+.navbuttons button {
+  font-size: medium;
+  font-weight: 100;
   border: 0;
-
-  user-select: none;
-  -webkit-user-select: none;
-  touch-action: manipulation;
+  color: var(--main-background-color);
+  background-color: transparent;
+  padding: 0.5em 1em; 
+  cursor: pointer;
+  border-radius: 0.5em;
+  margin-left: 1em;
 }
 
-.button-89:hover,
-.button-89:focus-visible{
-  --_p: 0px;
-  outline-color: var(--color);
-  outline-offset: .05em;
-}
-
-.button-89:active {
-  background: var(--color);
-  color: #fff;
+.navbuttons button:hover {
+  background-color: var(--main-background-color);
+  color: var(--accent1);
+  transition: 0.2s ease-in-out;
 }

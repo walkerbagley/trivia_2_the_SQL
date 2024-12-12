@@ -20,31 +20,33 @@ const Header =  () => {
     } else {
         return (
             <nav className="navbar">
-                <div className="title">Trivia 2: The SQL</div>
-                <button
-                    className="button-52"
-                    role="button"
-                    onClick={() => navigate('/')}>
-                    Home Page
-                </button>
-                <button
-                    className="button-52"
-                    role="button"
-                    onClick={() => navigate('/Decks')}>
-                    Decks
-                </button>
-                <button
-                    className="button-52"
-                    role="button"
-                    onClick={() => navigate('/Account')}>
-                    Account
-                </button>
-                <button
-                    className="button-52"
-                    role="button"
-                    onClick={() => logout()}>
-                    Logout
-                </button>;
+                <h2>Trivia 2: The SQL</h2>
+                <div className='navbuttons'>
+                    <button
+                        className="button-52"
+                        role="button"
+                        onClick={() => navigate('/')}>
+                        Home Page
+                    </button>
+                    <button
+                        className="button-52"
+                        role="button"
+                        onClick={() => navigate('/Decks')}>
+                        Decks
+                    </button>
+                    <button
+                        className="button-52"
+                        role="button"
+                        onClick={() => navigate('/Account')}>
+                        Account
+                    </button>
+                    <button
+                        className="button-52"
+                        role="button"
+                        onClick={() => logout()}>
+                        Logout
+                    </button>
+                </div>
             </nav>
           );
     }

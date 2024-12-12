@@ -1,6 +1,8 @@
 :root{
     --main-font: 'Times New Roman';
-    --main-background-color: #a1db43ff;
-    --main-text-color: #573e79ff;
-    --header-color: #60a4a9ff;
+    --main-background-color: #F5EFED;
+    --main-text-color: #0F0A0A;
+    --accent1: #2292A4;
+    --accent2: #BDBF09;
+    --accent3: #D96C06;
 }

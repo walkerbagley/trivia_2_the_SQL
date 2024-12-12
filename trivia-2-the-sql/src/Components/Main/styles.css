@@ -2,10 +2,10 @@
 
 .titlepage {
     color: var(--main-text-color);
-    width: 100%;
-    height: 100vh;
+    min-height: 45vh;
+    padding: 12em 0;
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     align-items: center;
     background-color: var(--main-background-color);
     font-family: var(--main-font)
@@ -13,15 +13,9 @@
 }
 
 .titlepage .maintitle {
-    flex-grow: 1; /*  title takes available space */
     text-align: center; /* Align title to the left */
     font-size: 100px;
     color: var(--main-text-color);
-    top: 50%;
-    width: 100%;
-    position: absolute;
-    align-items: center;
-    margin: auto;
 }
   
   .titlepage .icon {
@@ -36,68 +30,24 @@
   
   .titlepage .buttons {
     display: flex;
-    height: 50px;
-    position: absolute;
-    top: 75%;
-    width: 100%;
+    gap: 1em;
+    margin-top: 3em;
     text-align: center;
-    margin-left: 40%;
-
   }
-  
 
   .titlepage .buttons button {
-    background: #573e79ff;
-    border: 2px solid #60a4a9ff;
-    color: #573e79ff;
-    padding: 5px 10px; /* Padding for buttons */
     cursor: pointer;
-    border-radius: 4px; /* Rounded corners */
-    vertical-align: middle;
-    font-size: 20px;
+    border: 3px solid var(--accent1);
+    background-color: transparent;
+    border-radius: 0.5em;
+    color: var(--accent1);
+    font-size: large;
+    padding: 1em 2em;
   }
-  
+
   .titlepage .buttons button:hover {
-    background-color: rgb(104, 143, 42); /* Darker shade on hover */
-    color: white; /* Text color on hover */
-  }
-  /* End of header css */
-  
-  .button-52 {
-    font-size: 30px;
-    font-weight: 200;
-    letter-spacing: 1px;
-    padding: 13px 20px 13px;
-    outline: 0;
-    border: 1px solid white;
     cursor: pointer;
-    position: relative;
-    background-color: #a1db43ff;
-    user-select: none;
-    -webkit-user-select: none;
-    touch-action: manipulation;
-    z-index: 100;
-  }
-  
-  .button-52:after {
-    content: "";
-    background-color: #ffbe0aff;
-    width: 100%;
-    z-index: -1;
-    position: absolute;
-    height: 100%;
-    top: 7px;
-    left: 7px;
-    transition: 0.2s;
-  }
-  
-  .button-52:hover:after {
-    top: 0px;
-    left: 0px;
-  }
-  
-  @media (min-width: 768px) {
-    .button-52 {
-      padding: 13px 50px 13px;
-    }
+    background-color: var(--accent1);
+    color: var(--main-background-color);
+    transition: 0.2s ease-in-out;
   }
