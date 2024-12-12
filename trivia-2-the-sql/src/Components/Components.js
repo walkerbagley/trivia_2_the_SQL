@@ -11,7 +11,7 @@ import Account from './Account/Account.js'
 import AuthForm from './Auth/AuthForm.js';
 import AuthRegister from './Auth/AuthRegister.js';
 import DeckDetails from './Decks/DeckDetails/DeckDetails.js';
-import CreateDeck from './CreateDeck/CreateDeck.js';
+import CreateDeck from './CreateDeck/CreateDeck.tsx';
 import './styles.css';
 import { useUserSession } from "../Providers/UserProvider.js";
 import { useEffect } from "react";
