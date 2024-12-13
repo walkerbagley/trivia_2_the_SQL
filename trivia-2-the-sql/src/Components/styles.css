@@ -1,6 +1,3 @@
-.page {
-    background-color: #60a4a9ff;
-}
 @media (max-width: 1200px) {
     h1 {
       font-size: 2.2em; /* Decrease font size on smaller screens */

@@ -1,5 +1,3 @@
-
-
 .titlepage {
     color: var(--main-text-color);
     min-height: 45vh;
@@ -8,8 +6,6 @@
     flex-direction: column;
     align-items: center;
     background-color: var(--main-background-color);
-    font-family: var(--main-font)
-
 }
 
 .titlepage .maintitle {
@@ -18,36 +14,36 @@
     color: var(--main-text-color);
 }
   
-  .titlepage .icon {
-    cursor: pointer;
-    font-size: 24px;
-  }
-  
-  .titlepage .navigation {
-    display: flex;
-    gap: 10px; /* Space between buttons */
-  }
-  
-  .titlepage .buttons {
-    display: flex;
-    gap: 1em;
-    margin-top: 3em;
-    text-align: center;
-  }
+.titlepage .icon {
+  cursor: pointer;
+  font-size: 24px;
+}
 
-  .titlepage .buttons button {
-    cursor: pointer;
-    border: 3px solid var(--accent1);
-    background-color: transparent;
-    border-radius: 0.5em;
-    color: var(--accent1);
-    font-size: large;
-    padding: 1em 2em;
-  }
+.titlepage .navigation {
+  display: flex;
+  gap: 10px; /* Space between buttons */
+}
 
-  .titlepage .buttons button:hover {
-    cursor: pointer;
-    background-color: var(--accent1);
-    color: var(--main-background-color);
-    transition: 0.2s ease-in-out;
-  }
+.titlepage .buttons {
+  display: flex;
+  gap: 1em;
+  margin-top: 3em;
+  text-align: center;
+}
+
+.titlepage .buttons button {
+  cursor: pointer;
+  border: 3px solid var(--accent1);
+  background-color: transparent;
+  border-radius: 0.5em;
+  color: var(--accent1);
+  font-size: large;
+  padding: 1em 2em;
+}
+
+.titlepage .buttons button:hover {
+  cursor: pointer;
+  background-color: var(--accent1);
+  color: var(--main-background-color);
+  transition: 0.2s ease-in-out;
+}

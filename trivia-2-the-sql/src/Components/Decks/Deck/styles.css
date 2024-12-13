@@ -1,25 +1,19 @@
 .deckbox {
-  font: var(--main-font);
-  margin: 10px;
   overflow: wrap;
-}
-.deckbox:hover {
-  transform: scale(1.05);
-  transition-duration: 10ms;
-}
-.grid-item { 
-  background-color: white; 
-  border: 2px solid var(--main-text-color);; 
-  border-radius: 5px; 
-  padding: 20px; 
-  text-align: center; 
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+  border-radius: 1em;
+  padding: 1em;
+  text-align: center;
+  width: 100%;
+  cursor: pointer;
+  border: 0;
 }
 .title {
   display: block;
   width: 100%;
-  border-bottom: 1px solid;
+  color: var(--main-background-color);
 }
 .description {
   display: block;
+  color: var(--main-background-color);
+  font-weight: 100;
 }

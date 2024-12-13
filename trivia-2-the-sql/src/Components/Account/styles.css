@@ -7,7 +7,6 @@
     align-items: center;
     justify-content: baseline;
     background-color: var(--main-background-color);
-    font-family:Verdana, Geneva, Tahoma, sans-serif
   }
 
 .teamGrid {
@@ -32,6 +31,8 @@
   border-radius: 1em;
   /* padding: 0.2em 1em; */
   overflow: hidden;
+  box-shadow:  20px 20px 60px #bebebe,
+             -20px -20px 60px #ffffff;
 }
 
 .form {

@@ -1,10 +1,9 @@
 const AuthForm = ({ user, onChange, onSubmit }) => {
     return (
-      <div>
+      <div className="authform">
         <form onSubmit={onSubmit}>
           <div>
             <label>Username</label>
-            <br />
             <input
               type="text"
               value={user.username}
@@ -14,45 +13,8 @@ const AuthForm = ({ user, onChange, onSubmit }) => {
               required
             />
           </div>
-          {/* <div>
-            <label>First Name</label>
-            <br />
-            <input
-              type="text"
-              value={user.firstName}
-              onChange={onChange}
-              name="firstName"
-              placehoder="Fist Name"
-              required
-            />
-          </div>
-          <div>
-            <label>Last Name</label>
-            <br />
-            <input
-              type="text"
-              value={user.lastName}
-              onChange={onChange}
-              name="lastName"
-              placehoder="Last Name"
-              required
-            />
-          </div>
-          <div>
-            <label>Email</label>
-            <br />
-            <input
-              type="email"
-              value={user.email}
-              onChange={onChange}
-              name="email"
-              placehoder="Email"
-              required
-            />
-          </div> */}
           <div>
             <label>Password</label>
-            <br />
             <input
               type="password"
               value={user.password}

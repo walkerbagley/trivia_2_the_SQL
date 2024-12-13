@@ -62,7 +62,7 @@ const DeckDetails =  () => {
       <h5>Deck #{deck.id}</h5>
       <h3>{deck.description}</h3>
       <h2>Questions</h2>
-      <ol>
+      <ol className='questionlist'>
         {
           questions ? 
           questions.map((question) => (

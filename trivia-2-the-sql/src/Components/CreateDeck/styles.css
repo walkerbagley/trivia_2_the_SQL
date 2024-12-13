@@ -7,7 +7,6 @@
     flex-direction: column; /* Add this to stack h1 above grid-container */
     align-items: center;
     background-color: var(--main-background-color);
-    font-family: var(--main-font);
   }
 
 .createpage .grid-container {
