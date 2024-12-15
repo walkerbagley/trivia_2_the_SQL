@@ -85,45 +85,42 @@ const CreateDeck = () => {
         <div className='createpage'>
             <h1>Create a Deck!</h1>
 
-            <form onSubmit={handleSubmit((data) => {
+            <form className='create-deck-form' onSubmit={handleSubmit((data) => {
               console.log(data)
             })}>
               <div>
-              <label className='deckname'>Enter Deck Name: </label>
+              <label className='deckname'>Deck Name</label>
               <input {...register('deckname', {required: 'Your deck needs a name!'})}/>
               <p>{errors.deckname?.message}</p>
               </div>
               <div>
-              <label className='deckdesc'>Enter Deck Description: </label>
+              <label className='deckdesc'>Description</label>
               <input {...register('deckdesc')}/>
               </div>
-              <div>
-              <label className='rounds'>Add Rounds: </label>
-              <div>
+              <div className='rounds-form'>
                 {fields.map((field, index) => {
                   return (
+                    <>
+                      <div className='deck-round-header'>
+                      <h3>Round {index + 1}</h3>
+                      <button type="button" onClick={() => remove(index)}>Remove round</button>
+                    </div>
                     <div className="form-control" key={field.id}>
-                      <label className='rounds_categories'>Choose categories: </label>
+                      <label className='rounds_categories'>Categories</label>
                       <Controller control={control} {...register(`rounds.${index}.categories` as const)} render={({ field: {value, onChange} }) => (
                         <Multiselect  options={category_options} isObject={false} showCheckbox={true} closeOnSelect={false} onSelect={onChange} onRemove={onChange} selectedValues={value}/>
                       )}/>
                       
-                      <label className='rounds_questions'>Choose number of questions: </label>
-                      <input type="number"  {...register(`rounds.${index}.num_questions` as const, { required: 'Please insert the number of questions'})}/>
-                      {
-                        (<button type="button" onClick={() => remove(index)}>Remove round</button>)
-                      }
-                    </div>
+                      <label className='rounds_questions'>Number of questions</label>
+                      <input type="number" min={1} max={100}  {...register(`rounds.${index}.num_questions` as const, { required: 'Please insert the number of questions'})}/>
+                      </div>
+                      </>
                   );
                 })}
-                  <button type="button" onClick={() => append({ categories: [], num_questions: '' })}>Add round</button>
-              </div>
-    
+                  <button className='add-round-btn' type="button" onClick={() => append({ categories: [], num_questions: '' })}>+</button>
               </div>
             </form>
-              
-            <h3>Create the deck!</h3>
-            <button type="button" className="create_button" onClick={() => createDeckFunc()}>Create</button>
+            <button type="button" className="submit-deck-button" onClick={() => createDeckFunc()}>Create</button>
 
         </div>
       );
