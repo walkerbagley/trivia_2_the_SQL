@@ -46,9 +46,9 @@ const HostPage =  () => {
 
     return (
     <div className="hostpage">
-        <h1>Your Join Code: {joinCode}</h1>
-        <h2>Enter Question Time: </h2>
-        <h2>Choose Deck: </h2>
+        <div>Your Join Code: {joinCode}</div>
+        <div>Enter Question Time: </div>
+        <div>Choose Deck: </div>
         <div className="grid-container">
             {decks ? 
             decks.map((d) => (
