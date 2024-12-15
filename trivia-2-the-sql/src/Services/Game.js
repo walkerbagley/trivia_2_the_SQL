@@ -116,7 +116,6 @@ export const GameService = {
 
     try {
       const response = await axiosClient.request(config);
-      console.log("Team names fetched successfully:", response.data);
       return response.data;
     } catch (error) {
       console.error("Error fetching team names:", error);

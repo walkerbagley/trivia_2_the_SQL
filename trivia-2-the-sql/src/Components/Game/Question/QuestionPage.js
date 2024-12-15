@@ -22,41 +22,29 @@ const QuestionPage =  () => {
     let qnum = 0
     const answerQuestion = (text,letter) => {
         setAnswer(text);
-        qnum = (qnum+1)%questions.length;
-        console.log(qnum)
         console.log('Submitting answer:',location.state.gameId,{roundNumber,questionNumber,text})
         // GameService.submitAnswer(axios,location.state.gameId,{roundNumber,questionNumber,letter});
     };
     // Get Status from /User/Status should be called on a time out to get the current question number (1-3s)
     // get question by id from user/status (/question/questionid)
-    const questions = [
-        {text:"what is the most common color of m&m",a:"red",b:"green",c:"brown",d:"yellow"},
-        {text:"who is a forbes 30 under 30",a:"zach",b:"green",c:"brown",d:"yellow"},
-        {text:"who is speed",a:"zach",b:"lightning",c:"brown",d:"yellow"},
-    ]
 
     // get new question or round info
     const getGameStatus = () => {
         getCurrentUserStatus(axios).then((data) => {
-            console.log(data)
-            // if (data.game_status){
-            //     setRoundNumber(data.game_status.round_number);
-            //     setQuestionNumber(data.game_status.question_number);
-            //     getQuestionById(axios, data.game_status.question_id).then((resp) => {
-            //         setQuestion(resp.question);
-            //         setA(resp.a);
-            //         setB(resp.b);
-            //         setC(resp.c);
-            //         setD(resp.d);
-            //     });
-            // } else {
+            if (data.game_status){
+                setRoundNumber(data.game_status.round_number);
+                setQuestionNumber(data.game_status.question_number);
+                
+                getQuestionById(axios, data.game_status.question_id).then((resp) => {
+                    setQuestion(resp.question);
+                    setA(resp.a);
+                    setB(resp.b);
+                    setC(resp.c);
+                    setD(resp.d);
+                });
+            } else {
             console.error("Game Status is null:",data)
-            setQuestion(questions[qnum].text);
-            setA(questions[qnum].a);
-            setB(questions[qnum].b);
-            setC(questions[qnum].c);
-            setD(questions[qnum].d);
-            // }
+            }
         });
     };
 
@@ -78,7 +66,7 @@ const QuestionPage =  () => {
             </div>
                 <div className='question-grid-container'>
                         <div className='question-grid-item'>
-                    <button onClick={()=>{answerQuestion(a,'a')}}>
+                    <button onClick={()=>{answerQuestion(a,'a')}} disabled={false}>
                             A: {a}
                     </button>
                             </div>

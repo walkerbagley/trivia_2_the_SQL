@@ -20,21 +20,13 @@ const HostPage =  () => {
     useEffect(()=>{
         setJoinCode(Math.random().toString(36).substring(2,7));
 
-        getDeck(axios,"3997285c-9a02-4a96-a022-0312971d7a5b").then((data)=>{
-                console.log('Deck Pulled: ',data)
-                setDecks([data]);
+        getUserDecks(axios, user.id).then((data)=>{
+                console.log('Hosts decks: ',data)
+                setDecks(data);
             })
             .catch((error)=>{
                 console.error(error);
             })
-
-        // getUserDecks(axios, user.id).then((data)=>{
-        //         console.log('Hosts decks: ',data)
-        //         setDecks(data);
-        //     })
-        //     .catch((error)=>{
-        //         console.error(error);
-        //     })
     }, [axios, user.id]);
 
     function startGame(deckId){

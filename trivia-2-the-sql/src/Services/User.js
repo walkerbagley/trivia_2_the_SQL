@@ -28,7 +28,6 @@ export const getCurrentUserStatus = async (axiosClient) => {
 
   try {
     const response = await axiosClient.request(config);
-    console.log("in getCurrentUserStatus", JSON.stringify(response.data));
     return response.data;
   } catch (error) {
     console.error("Failed to fetch user status:", error);

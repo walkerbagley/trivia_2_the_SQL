@@ -1,4 +1,4 @@
-const url_start = 'http://127.0.0.1:8001';
+const url_start = 'http://127.0.0.1:8000';
 
 // Get a question by ID
 export const getQuestionById = async (axiosClient, id) => {
@@ -10,7 +10,6 @@ export const getQuestionById = async (axiosClient, id) => {
   
     try {
       const response = await axiosClient.request(config);
-      console.log("in getQuestionById", JSON.stringify(response.data));
       return response.data;
     } catch (error) {
       console.error(`Failed to fetch question with ID ${id}:`, error);
