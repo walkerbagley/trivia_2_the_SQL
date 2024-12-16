@@ -2,9 +2,6 @@
 // const axios = useAxios();
 //import axios from "axios";
 
-const url_start = 'http://127.0.0.1:8000'
-
-
 export const getAllDecks = async (axiosClient) => { 
   let config = {
     method: 'get',
@@ -72,7 +69,7 @@ export const updateDeck = (axiosClient, id, name, description) => {
   let config = {
     method: 'put',
     maxBodyLength: Infinity,
-    url: url_start + '/deck/' + id,
+    url: '/deck/' + id,
     headers: { 
       'Content-Type': 'application/json', 
     },
@@ -125,7 +122,7 @@ export const getQuestions = async (axiosClient) => {
     let config = {
       method: 'get',
       maxBodyLength: Infinity,
-      url: url_start + '/question'
+      url: '/question'
     };
 
 
@@ -143,7 +140,7 @@ export const getDeckQuestions = async (axiosClient, deck_id) => {
   let config = {
     method: 'get',
     maxBodyLength: Infinity,
-    url: url_start + '/deck/' + deck_id + '/question'
+    url: '/deck/' + deck_id + '/question'
   };
 
 
@@ -160,7 +157,7 @@ export const removeQuestion = (axiosClient, deckId, questionId) => {
     let config = {
       method: 'delete',
       maxBodyLength: Infinity,
-      url: url_start + '/deck/' + deckId + '/question/' + questionId
+      url: '/deck/' + deckId + '/question/' + questionId
     };
     
     axiosClient.request(config)
@@ -182,7 +179,7 @@ export const getSortedQuestions = async (cat, diff, axiosClient) => {
   let config = {
     method: 'get',
     maxBodyLength: Infinity,
-    url: url_start + '/question',
+    url: '/question',
     headers: { 
       'Content-Type': 'application/json', 
     },
@@ -209,7 +206,7 @@ export const addRound = async (axiosClient, num_questions=10, categories=[], att
   let config = {
     method: 'post',
     maxBodyLength: Infinity,
-    url: url_start + '/',
+    url: '/',
     headers: { 
       'Content-Type': 'application/json', 
     },

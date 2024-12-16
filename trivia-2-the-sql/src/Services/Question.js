@@ -1,11 +1,10 @@
-const url_start = 'http://127.0.0.1:8000';
 
 // Get a question by ID
 export const getQuestionById = async (axiosClient, id) => {
     const config = {
       method: 'get',
       maxBodyLength: Infinity,
-      url: `${url_start}/question/${id}`,
+      url: `/question/${id}`,
     };
   
     try {
@@ -22,7 +21,7 @@ export const getQuestionById = async (axiosClient, id) => {
     const config = {
       method: 'post',
       maxBodyLength: Infinity,
-      url: `${url_start}/question/`,
+      url: `/question/`,
       data: question,
     };
   
@@ -41,7 +40,7 @@ export const getQuestionById = async (axiosClient, id) => {
     const config = {
       method: 'put',
       maxBodyLength: Infinity,
-      url: `${url_start}/question/${id}`,
+      url: `/question/${id}`,
       data: question,
     };
   
@@ -60,7 +59,7 @@ export const getQuestionById = async (axiosClient, id) => {
     const config = {
       method: 'delete',
       maxBodyLength: Infinity,
-      url: `${url_start}/question/${id}`,
+      url: `/question/${id}`,
     };
   
     try {

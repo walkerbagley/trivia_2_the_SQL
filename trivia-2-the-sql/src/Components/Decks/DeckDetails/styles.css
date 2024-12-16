@@ -59,3 +59,19 @@
   transform: translateX(-0.5em);
 }
   
+
+.add-userdeck-btn {
+  border: 0;
+  padding: 1em;
+  cursor: pointer;
+  box-shadow:  20px 20px 20px #bebebe,
+             -20px -20px 20px #ffffff;
+  background-color: var(--accent3);
+  color: var(--main-background-color);
+  border-radius: 0.5em;
+}
+
+.add-userdeck-btn:hover {
+  background-color: var(--accent3);
+  transition: 0.2s ease-in-out;
+}

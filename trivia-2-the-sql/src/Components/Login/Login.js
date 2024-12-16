@@ -1,5 +1,5 @@
 import React from 'react'
-import './styles.css'
+import '../../../templatemo_584_pod_talk/css/templatemo-pod-talk.css'
 import ReactDOM from 'react-dom/client';
 
 import AuthForm from '../Auth/AuthForm';

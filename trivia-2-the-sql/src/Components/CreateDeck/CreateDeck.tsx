@@ -12,6 +12,7 @@ import { useUserSession } from "../../Providers/UserProvider.js";
 
 
 
+
 type FormValues = {
   deckname: String;
   deckdesc: String;
@@ -22,6 +23,7 @@ type FormValues = {
 };
 
 const CreateDeck = () => {
+  const { user } = useUserSession();
     const {register, 
           control,
           handleSubmit, 
@@ -70,17 +72,17 @@ const CreateDeck = () => {
 
 
     const createDeckFunc = async () => {
-      console.log(getValues('deckname'), getValues('deckdesc'), getValues('rounds'))
+      //console.log(getValues('deckname'), getValues('deckdesc'), getValues('rounds'))
 
       createDeck(axios, deckName, deckDesc, rounds).then((ds) => {
         console.log('deck created:', ds);
-        // console.log(user.id, ds.id);
-        // addUserDeck(axios, user.id, ds.id).then((ud)=>{
-        //   console.log('added to userDecks:', ud)
-        // }).catch((error)=>{
-        //   console.error(error);
-        // });
-        // navigate(`/decks/${ds.id}`, {state: {deckId:ds.id}});
+        console.log(user.id, ds.id);
+        addUserDeck(axios, user.id, ds.id).then((ud)=>{
+           console.log('added to userDecks:', ud)
+        }).catch((error)=>{
+          console.error(error);
+        });
+        navigate(`/decks/${ds.id}`, {state: {deckId:ds.id, filter:true}});
       }).catch((error) => {
         console.error("Failed to create deck:", error);
       })
@@ -109,7 +111,7 @@ const CreateDeck = () => {
                     <>
                       <div className='deck-round-header'>
                       <h3>Round {index + 1}</h3>
-                      <button type="button" onClick={() => remove(index)}>Remove round</button>
+                      {index > 0 && <button type="button" onClick={() => remove(index)}>Remove round</button>}
                     </div>
                     <div className="form-control" key={field.id}>
                       <label className='rounds_categories'>Categories</label>

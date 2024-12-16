@@ -1,12 +1,11 @@
 // GameService.js
-const url_start = 'http://127.0.0.1:8000';
 
 export const GameService = {
   async getAllGames(axiosClient) {
     const config = {
       method: 'get',
       maxBodyLength: Infinity,
-      url: `${url_start}/game`,
+      url: '/game',
     };
 
     try {
@@ -23,7 +22,7 @@ export const GameService = {
     const config = {
       method: 'get',
       maxBodyLength: Infinity,
-      url: `${url_start}/game/${gameId}`,
+      url: `/game/${gameId}`,
     };
 
     try {
@@ -40,7 +39,7 @@ export const GameService = {
     const config = {
       method: 'post',
       maxBodyLength: Infinity,
-      url: `${url_start}/game`,
+      url: `/game`,
       data: gameData,
     };
 
@@ -58,7 +57,7 @@ export const GameService = {
     const config = {
       method: 'post',
       maxBodyLength: Infinity,
-      url: `${url_start}/game/${gameId}/join`,
+      url: `/game/${gameId}/join`,
       data: joinData,
     };
 
@@ -77,7 +76,7 @@ export const GameService = {
     const config = {
       method: 'post',
       maxBodyLength: Infinity,
-      url: `${url_start}/game/${gameId}/start`,
+      url: `/game/${gameId}/start`,
     };
 
     try {
@@ -94,7 +93,7 @@ export const GameService = {
     const config = {
       method: 'delete',
       maxBodyLength: Infinity,
-      url: `${url_start}/game/${gameId}`,
+      url: `/game/${gameId}`,
     };
 
     try {
@@ -111,7 +110,7 @@ export const GameService = {
     const config = {
       method: 'get',
       maxBodyLength: Infinity,
-      url: `${url_start}/game/${gameId}/team`,
+      url: `/game/${gameId}/team`,
     };
 
     try {
@@ -127,7 +126,7 @@ export const GameService = {
     const config = {
       method: 'post',
       maxBodyLength: Infinity,
-      url: `${url_start}/game/${gameId}/answer`,
+      url: `/game/${gameId}/answer`,
       data: answerData,
     };
 
@@ -145,7 +144,7 @@ export const GameService = {
     const config = {
       method: 'post',
       maxBodyLength: Infinity,
-      url: `${url_start}/game/${gameId}/next`,
+      url: `/game/${gameId}/next`,
     };
 
     try {
@@ -162,7 +161,7 @@ export const GameService = {
     const config = {
       method: 'get',
       maxBodyLength: Infinity,
-      url: `${url_start}/game/${gameId}/score`,
+      url: `/game/${gameId}/score`,
     };
 
     try {

@@ -4,17 +4,19 @@ import './styles.css';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import { getDeckQuestions, getDeck } from '../../../Services/Decks';
 import { useAxios } from '../../../Providers/AxiosProvider.js'
+import { useUserSession } from "../../../Providers/UserProvider.js";
+import { addUserDeck, removeUserDeck } from '../../../Services/User.js';
 
 
 const DeckDetails =  () => {
+  const { user } = useUserSession();
   const axios = useAxios(); 
   const navigate = useNavigate();
   const params = useParams();
-  // const location = useLocation(); 
+  const location = useLocation(); 
 
   // const { deckId } = location.state || { deck: 'default value' };
   // const { id } = useParams();
-
   const [questions, setQuestions] = useState([]);
   const [deck, setDeck] = useState({});
 
@@ -34,8 +36,32 @@ const DeckDetails =  () => {
       fetchDeck();
     }, []);
 
+    const addToUserDecks = async () => {
+        addUserDeck(axios, user.id, deck.id).then((ud)=>{
+               console.log('added to userDecks:', ud)
+            }).catch((error)=>{
+              console.error(error);
+        })
+      }
+
+    const removeFromUserDecks = async () => {
+      removeUserDeck(axios, user.id, deck.id).then(()=>{
+        console.log('removed from userDecks')
+     }).catch((error)=>{
+       console.error(error);
+    })
+    }
+
   const goBack = () => {
     navigate("/decks");
+  }
+
+  let addOrRemoveButton;
+  if (!location.state.filter) {
+    addOrRemoveButton = <button className='add-userdeck-btn' onClick={() => addToUserDecks()}>Add to my decks</button>
+  } 
+  else {
+    addOrRemoveButton = <button className='add-userdeck-btn' onClick={() => removeFromUserDecks()}>Remove from my decks</button>
   }
 
   return (
@@ -61,6 +87,7 @@ const DeckDetails =  () => {
       <h1>{deck.name}</h1>
       <h5>Deck #{deck.id}</h5>
       <h3>{deck.description}</h3>
+      {addOrRemoveButton}
       <h2>Questions</h2>
       <ol className='questionlist'>
         {
