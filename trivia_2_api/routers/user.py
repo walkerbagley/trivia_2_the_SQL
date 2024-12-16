@@ -63,7 +63,7 @@ async def get_current_user_status(request: Request) -> UserStatus:
                 return UserStatus(user_status="hosting", game_status=game_status)
             else:
                 cur.execute('''
-                            SELECT id, status, current_round as round_number, current_question as question_number, q.id as question_id, shuffle_answer(a.answer::text, q.first_answer::int) as team_answer
+                            SELECT g.id, g.status, g.current_round as round_number, g.current_question as question_number, q.id as question_id, shuffle_answer(a.answer::text, q.first_answer::int) as team_answer
                             FROM "Games" as g
                             INNER JOIN "GamePlayers" as gp ON g.id = gp.game_id and gp.player_id = %s
                             LEFT OUTER JOIN "Answers" as a ON g.id = a.game_id and gp.team_id = a.team_id and a.round_number = g.current_round and a.question_number = g.current_question

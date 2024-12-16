@@ -2,7 +2,7 @@ import React from 'react'
 import './styles.css'
 import { useAxios } from '../../../Providers/AxiosProvider.js'
 import { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { GameService } from '../../../Services/Game.js';
 import {getCurrentUserStatus} from '../../../Services/User.js'
 import {getQuestionById} from '../../../Services/Question.js'
@@ -10,6 +10,7 @@ import {getQuestionById} from '../../../Services/Question.js'
 const QuestionPage =  () => {
     const axios = useAxios();
     const location = useLocation();
+    const navigate = useNavigate();
     const [answer, setAnswer] = useState("");
     const [question, setQuestion] = useState("");
     const [isHost, setIsHost] = useState(null);
@@ -40,7 +41,10 @@ const QuestionPage =  () => {
             if (isHost === null){
                 setIsHost( (data.user_status == 'hosting') ? true : false )
             }
-            if (data.game_status){
+            if (data.game_status === 'complete' || data.game_status===null){
+                navigate("/score/"+location.state.joinCode, { state: { gameId : location.state.gameId } });
+            }
+            else if (data.game_status){
 
                 setRoundNumber(data.game_status.round_number);
                 if (questionNumber!=data.game_status.question_number){

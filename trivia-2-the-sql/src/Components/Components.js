@@ -6,6 +6,7 @@ import JoinPage from './Join/Join.js'
 // import Login from './Login/Login.js'
 import LoadingPage from "./Game/Loading/LoadingPage.js";
 import QuestionPage from "./Game/Question/QuestionPage.js";
+import ScorePage from "./Game/Scores/ScorePage.js";
 import Decks from './Decks/DecksPage.js'
 import Account from './Account/Account.js'
 import AuthForm from './Auth/AuthForm.js';
@@ -31,6 +32,7 @@ export default function Components() {
                     <Route exact path='/join' element={<JoinPage/>}/>
                     <Route exact path='/loading/:id' element={<LoadingPage/>}/>
                     <Route exact path='/play/:id' element={<QuestionPage/>}/>
+                    <Route exact path='/score/:id' element={<ScorePage/>}/>
                     <Route exact path='/decks' element={<Decks/>}/>
                     <Route path="/decks/:id" element={<DeckDetails />} />
                     <Route exact path='/create' element={<CreateDeck/>}/>

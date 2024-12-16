@@ -12,7 +12,7 @@
 # Assigned
 
 ### Dagny
-- [ ] Add way to edit decks from the deck details page. Add an edit button that allows you to select questions to reroll from that category (select the first three questions that they should be deleted and rerolled from the question pool). This could also be allowed during deck creation but doesn't have to be. 
+- [ ] reroll questions. This could also be allowed during deck creation but doesn't have to be. 
 
 ### Patrick
 - [ ] Add team scores to game page
@@ -31,6 +31,8 @@
 
 
 # Shelved
+- [ ] Ability to join active games rather than just loading games
+- [ ] Add way to edit decks from the deck details page. Add an edit button that allows you to select questions to reroll from that category (select the first three questions that they should be deleted and rerolled from the question pool).
 
 # Completed
 - [x] Creating a deck should add it to the UserDecks table

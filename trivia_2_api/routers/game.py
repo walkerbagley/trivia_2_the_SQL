@@ -62,9 +62,11 @@ async def join_game(request:Request, game: JoinGameRequest) -> None:
                 raise HTTPException(status_code=404, detail="Game not found")
             
             if results.get("host_id", None) == request.state.user.id:
+                print('is host account')
                 raise HTTPException(status_code=400, detail="Host cannot join game")
             
             if game.join_code != results.get("join_code", None):
+                print('invalid join code')
                 raise HTTPException(status_code=400, detail="Invalid join code")
             
             cur.execute('''
@@ -76,6 +78,7 @@ async def join_game(request:Request, game: JoinGameRequest) -> None:
                         ''', (request.state.user.id, ))
             count = cur.fetchone().get("count", None)
             if count > 0:
+                print('player is already in the game')
                 raise HTTPException(status_code=400, detail="Player already in game")
             
             cur.execute('''INSERT INTO "GamePlayers" (game_id, player_id, team_id) VALUES (%s, %s, %s) ON CONFLICT DO NOTHING''', (results.get("id", None), request.state.user.id, game.team_id))

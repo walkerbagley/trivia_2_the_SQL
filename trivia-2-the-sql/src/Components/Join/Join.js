@@ -37,6 +37,7 @@ const JoinPage =  () => {
       };
 
       fetchTeams()
+      // setTeamId("56eb4197-4a7a-418b-b5f2-da2bb892699a2");
     }, []);
 
   const handleChange = (e) => {
@@ -46,18 +47,17 @@ const JoinPage =  () => {
 
   function joinGame() {
     console.log(teamId, joinCode);
-    try {
-      if (teamId==="" || joinCode===""){
-        toast.info("Please select a team and enter a join code!")
-        return;
-      }
-      GameService.joinGame(axios, {"join_code":joinCode, "team_id":teamId}).then((data)=>{
-        console.log('Requestion Join Game',data);
-        navigate("/loading/"+joinCode, { state: { gameId : data[0], joinCode : joinCode, teamId:teamId } })
-      });
-    } catch (error){
-      toast.error(error);
+    if (teamId==="" || joinCode===""){
+      toast.info("Please select a team and enter a join code!")
+      return;
     }
+    GameService.joinGame(axios, {"join_code":joinCode, "team_id":teamId}).then((data)=>{
+      console.log('Requestion Join Game',data);
+      // navigate("/loading/"+joinCode, { state: { gameId : data[0], joinCode : joinCode, teamId:teamId } })
+    }).error((error)=>{
+      console.error(error);
+      toast.error(error);
+    });
   };
 
   // function goToGame(){

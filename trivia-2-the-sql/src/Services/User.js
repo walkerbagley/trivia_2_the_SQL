@@ -37,6 +37,7 @@ export const getCurrentUserStatus = async (axiosClient) => {
 
 // Get a user by ID
 export const getUserById = async (axiosClient, id) => {
+  console.log('get user by id call')
   const config = {
     method: 'get',
     maxBodyLength: Infinity,
