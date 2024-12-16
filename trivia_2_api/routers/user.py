@@ -33,6 +33,7 @@ async def get_current_user_status(request: Request) -> UserStatus:
                         LEFT OUTER JOIN "GamePlayers" as gp ON g.id = gp.game_id
                         WHERE (gp.player_id = %s OR g.host_id = %s)
                         AND (g.status = 'open' OR g.status = 'in_progress')
+                        AND gp.is_active = true
                         ORDER BY g.start_time desc
                         LIMIT 1
                         ''', (request.state.user.id,request.state.user.id,))
@@ -63,7 +64,16 @@ async def get_current_user_status(request: Request) -> UserStatus:
                 return UserStatus(user_status="hosting", game_status=game_status)
             else:
                 cur.execute('''
+<<<<<<< HEAD
                             SELECT g.id, g.status, g.current_round as round_number, g.current_question as question_number, q.id as question_id, shuffle_answer(a.answer::text, q.first_answer::int) as team_answer
+=======
+                            SELECT id, status, current_round as round_number, current_question as question_number, q.id as question_id, 
+                            CASE WHEN (q.a = 'False' and q.b = 'True') or (q.a = 'True' and q.b = 'False')
+                                THEN a.answer::text
+                            ELSE
+                                shuffle_answer(a.answer::text, q.first_answer::int)
+                            END as team_answer
+>>>>>>> 4925c8db9b50ef50bddb5b65cfb414c87bdca96e
                             FROM "Games" as g
                             INNER JOIN "GamePlayers" as gp ON g.id = gp.game_id and gp.player_id = %s
                             LEFT OUTER JOIN "Answers" as a ON g.id = a.game_id and gp.team_id = a.team_id and a.round_number = g.current_round and a.question_number = g.current_question

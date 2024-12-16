@@ -60,8 +60,8 @@ const Decks =  () => {
     return (
     <div className="deckspage">
       <div className='filter-decks-buttons'>
-        <button onClick={()=>{setFilter(true)}} style={{backgroundColor: filter ? "var(--accent1)" : "var(--main-background-color)", color: 'black'}}>My Decks</button>
-        <button onClick={()=>{setFilter(false)}} style={{backgroundColor: filter ? "var(--main-background-color)" : "var(--accent1)", color: 'black'}}>All Decks</button>
+        <button onClick={()=>{setFilter(true)}} style={{backgroundColor: filter ? "var(--accent1)" : "var(--main-background-color)", color: filter ? "var(--main-background-color)" : "var(--accent1)"}}>My Decks</button>
+        <button onClick={()=>{setFilter(false)}} style={{backgroundColor: filter ? "var(--main-background-color)" : "var(--accent1)", color: filter ? "var(--accent1)" : "var(--main-background-color)"}}>All Decks</button>
       </div>
       <h1>Deck List</h1>
       <Link to={'/create'} className='no-underline'><button>Create Deck</button></Link>
