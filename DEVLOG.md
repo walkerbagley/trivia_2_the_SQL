@@ -7,12 +7,11 @@
 - [ ] Selected team should be highlighted on joinPage
 
 ### Bugs
-- [ ] decks page does not immediately load decks until you click on a button
 
 # Assigned
 
 ### Dagny
-- [ ] reroll questions. This could also be allowed during deck creation but doesn't have to be. 
+
 
 ### Patrick
 - [ ] Add team scores to game page
@@ -27,7 +26,7 @@
 
 ### Zach
 - [ ] T/F questions should have their answers only populate to A and B answer options (not D or C) and should be in order
-- [x] Create Game should return game join code as well
+
 
 
 # Shelved
@@ -42,3 +41,6 @@
     - not need bc axios does it
 - [x] disable answer buttons if the answer option is null
 - [x] Enable filtering to just view your decks on the decks page
+- [x] reroll questions. This could also be allowed during deck creation but doesn't have to be. 
+- [x] Create Game should return game join code as well
+- [x] decks page does not immediately load decks until you click on a button

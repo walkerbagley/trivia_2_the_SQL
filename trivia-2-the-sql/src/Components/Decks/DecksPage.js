@@ -6,6 +6,7 @@ import { getAllDecks } from '../../Services/Decks.js'
 import { useAxios } from '../../Providers/AxiosProvider.js'
 import { useUserSession } from "../../Providers/UserProvider.js";
 import { getUserDecks } from '../../Services/User.js'
+import { all } from 'axios'
 
 
 
@@ -15,46 +16,41 @@ const Decks =  () => {
     const navigate = useNavigate();
     const [allDecks, setAllDecks] = useState([]);
     const [userDecks, setUserDecks] = useState([]);
-    const [decks, setDecks] = useState([]);
     const [filter, setFilter] = useState(false);
+    const [decks, setDecks] = useState([]);
 
     const goToDeckDetails = (deck) => {
       navigate(`/decks/${deck.id}`,{state: {deck:deck.id, filter:filter}});
   };
 
+  const fetchDecks = async () => {
+    getAllDecks(axios).then((value) => {
+      setAllDecks(value)
+    }).catch((error) => {
+      console.log("failed to get all decks", error)
+    }) 
+  };
+
+  const fetchUserDecks = async () => {
+    getUserDecks(axios, user.id).then((value) => {
+      setUserDecks(value)
+    }).catch((error) => {
+      console.log("failed to get user decks", error)
+    }) 
+  };
+
     useEffect(() => {
-      const fetchDecks = async () => {
-        try {
-          const ds = await getAllDecks(axios);
-          setAllDecks(ds);
-        } catch (error) {
-          console.error("Failed to fetch decks:", error);
-        }
-      };
-
-      const fetchUserDecks = async () => {
-        try {
-          const ds = await getUserDecks(axios, user.id);
-          setUserDecks(ds);
-        } catch (error) {
-          console.error("Failed to fetch decks:", error);
-        }
-      };
-
-      fetchDecks();
-      fetchUserDecks();
-
+      fetchDecks()
+      fetchUserDecks()
     }, []);
 
     useEffect(() => {
       if (filter) {
-        //setDecks(allDecks.filter(deck => deck.owner_id === user.id));
-        setDecks(userDecks);
+        setDecks(userDecks)
       } else {
-        setDecks(allDecks);
+        setDecks(allDecks)
       }
-      
-    }, [filter])
+    }, [filter, allDecks, userDecks]);
 
 
     return (

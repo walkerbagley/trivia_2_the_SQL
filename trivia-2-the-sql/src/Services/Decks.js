@@ -9,6 +9,7 @@ export const getAllDecks = async (axiosClient) => {
     url: '/deck'
   };
 
+  //axiosClient.request(config)
   try {
     const response = await axiosClient.request(config);
     return response.data;
