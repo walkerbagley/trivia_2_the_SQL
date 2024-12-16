@@ -81,7 +81,7 @@ async def join_game(request:Request, game: JoinGameRequest) -> None:
                 print('player is already in the game')
                 raise HTTPException(status_code=400, detail="Player already in game")
             
-            cur.execute('''INSERT INTO "GamePlayers" (game_id, player_id, team_id, is_active) VALUES (%s, %s, %s, %s) ON CONFLICT DO NOTHING''', (results.get("id", None), request.state.user.id, game.team_id, False))
+            cur.execute('''INSERT INTO "GamePlayers" (game_id, player_id, team_id, is_active) VALUES (%s, %s, %s, %s) ON CONFLICT DO NOTHING''', (results.get("id", None), request.state.user.id, game.team_id, True))
             
             return JSONResponse(status_code=201, content={"game_id": str(results.get("id", None))})
 
