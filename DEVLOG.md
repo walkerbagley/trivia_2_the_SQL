@@ -11,7 +11,7 @@
 # Assigned
 
 ### Dagny
-
+- [ ] score page
 
 ### Patrick
 - [ ] Add team scores to game page

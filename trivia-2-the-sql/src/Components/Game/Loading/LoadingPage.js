@@ -802,7 +802,7 @@ const LoadingPage = () => {
     function handleStartGame(){
         GameService.startGame(axios,location.state.gameId).then((resp)=>{
             console.log('Game Started as Host!',resp);
-            navigate("/play/"+location.state.joinCode, { state: { gameId : location.state.gameId } });
+            navigate("/play/"+location.state.joinCode, { state: { gameId : location.state.gameId, joinCode: location.state.joinCode } });
         }).catch((error)=>{
             console.error("Failed to start game", error);
             toast.error('You may not start this game.')
