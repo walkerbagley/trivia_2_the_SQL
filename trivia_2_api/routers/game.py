@@ -49,7 +49,7 @@ async def create_game(request: Request, game: GameRequest) -> None:
             if game_id is None:
                 raise HTTPException(status_code=500, detail="Failed to create game")
             
-            return JSONResponse(status_code=201, content={"id": str(game_id)})
+            return JSONResponse(status_code=201, content={"id": str(game_id), "join_code": str(join_code)})
 
 @router.post("/join")
 async def join_game(request:Request, game: JoinGameRequest) -> None:

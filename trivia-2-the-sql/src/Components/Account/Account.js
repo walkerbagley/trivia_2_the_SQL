@@ -119,7 +119,7 @@ const Account = () => {
                 renameTeam(team.id, newName);
               }}>Change Name</button>
             </form>
-              <p className='p'>{team.member_ids.length} member{team.member_ids.length != 1 ? 's' : ''}</p>
+            <p className='p'>{team.member_ids.length} member{team.member_ids.length != 1 ? 's' : ''}</p>
             <div className='btncontainer'>
               <button className='button' onClick={() => removeFromTeam(team.id)}>-</button>
               <div className='separator'/>
