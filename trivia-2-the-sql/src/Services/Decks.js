@@ -153,6 +153,24 @@ export const getDeckQuestions = async (axiosClient, deck_id) => {
   }
 }
 
+export const getDeckRounds = async (axiosClient, deck_id) => {
+    
+  let config = {
+    method: 'get',
+    maxBodyLength: Infinity,
+    url: '/deck/' + deck_id + '/round'
+  };
+
+
+  try {
+    const response = await axiosClient.request(config);
+    return response.data;
+  } catch (error) {
+    console.error("Failed to fetch rounds:", error);
+    throw error;  // Propagate the error so it can be handled by the caller
+  }
+}
+
 export const removeQuestion = (axiosClient, deckId, questionId) => {
     let config = {
       method: 'delete',
@@ -219,4 +237,21 @@ export const addRound = async (axiosClient, num_questions=10, categories=[], att
     console.error("Failed to fetch decks:", error);
     throw error;  // Propagate the error so it can be handled by the caller
   }
+}
+
+export const updateRound = async (axiosClient, round_id, categories, num_questions) => {
+  let data = JSON.stringify({
+    "categories": categories,
+    "attributes": [],
+    "num_questions": num_questions
+  });
+
+  let config = {
+    method: 'put',
+    maxBodyLength: Infinity,
+    url: '/deck' + '/round/' + round_id,
+    data: data
+  };
+
+  return axiosClient.request(config)
 }

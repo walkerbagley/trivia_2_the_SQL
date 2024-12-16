@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 // import { useParams } from 'react-router-dom';
 import './styles.css';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
-import { getDeckQuestions, getDeck } from '../../../Services/Decks';
+import { getDeckQuestions, getDeck, getDeckRounds, updateRound } from '../../../Services/Decks';
 import { useAxios } from '../../../Providers/AxiosProvider.js'
 import { useUserSession } from "../../../Providers/UserProvider.js";
 import { addUserDeck, removeUserDeck } from '../../../Services/User.js';
@@ -18,24 +18,31 @@ const DeckDetails =  () => {
   // const { deckId } = location.state || { deck: 'default value' };
   // const { id } = useParams();
   const [questions, setQuestions] = useState([]);
+  const [rounds, setRounds] = useState({})
   const [deck, setDeck] = useState({});
+  let num_rounds;
+
+  const fetchDeck = async () => {
+    try {
+      const deck = await getDeck(axios, params.id);
+      setDeck(deck);
+
+      const qs = await getDeckQuestions(axios, deck.id);
+      setQuestions(qs);
+
+      const rs = await getDeckRounds(axios, deck.id);
+      num_rounds = deck.rounds
+      setRounds(rs)
+    } catch (error) {
+      console.error("Failed to fetch questions:", error);
+    }
+  };
 
     useEffect(() => {
-      const fetchDeck = async () => {
-        try {
-          const deck = await getDeck(axios, params.id);
-          setDeck(deck);
-
-          const qs = await getDeckQuestions(axios, deck.id);
-          setQuestions(qs);
-        } catch (error) {
-          console.error("Failed to fetch questions:", error);
-        }
-      };
-
       fetchDeck();
-    }, []);
+    }, [ ]);
 
+    
     const addToUserDecks = async () => {
         addUserDeck(axios, user.id, deck.id).then((ud)=>{
                console.log('added to userDecks:', ud)
@@ -52,6 +59,16 @@ const DeckDetails =  () => {
     })
     }
 
+    const rerollRound = async (round_id, cat, num) => {
+      console.log(round_id, cat, num)
+      updateRound(axios, round_id, cat, num).then(()=>{
+      fetchDeck();
+      console.log('rerolled round')
+     }).catch((error)=>{
+       console.error(error);
+    })
+    }
+
   const goBack = () => {
     navigate("/decks");
   }
@@ -63,6 +80,28 @@ const DeckDetails =  () => {
   else {
     addOrRemoveButton = <button className='add-userdeck-btn' onClick={() => removeFromUserDecks()}>Remove from my decks</button>
   }
+
+let roundsDisplay = [];
+for (const key in rounds) {
+    roundsDisplay.push(
+    <div>
+    <h3>Round {Number(key) + 1}</h3>
+    <button className='round-reroll-btn' onClick={() => rerollRound(rounds[key]["id"], rounds[key]["categories"], rounds[key]["num_questions"])}>Generate new questions</button>
+    <ol className='questionlist'>
+        {
+          questions ? 
+          questions.map((question) => (
+            <div>
+                {question.round_number == Number(key) + 1 ? <li><div className='question'>{question.question}</div></li> : <></>}
+              </div>
+          ))
+          : <></>
+        }
+      </ol>
+      </div>);
+  }
+
+  console.log(roundsDisplay)
 
   return (
     <div className="page">
@@ -88,20 +127,8 @@ const DeckDetails =  () => {
       <h5>Deck #{deck.id}</h5>
       <h3>{deck.description}</h3>
       {addOrRemoveButton}
-      <h2>Questions</h2>
-      <ol className='questionlist'>
-        {
-          questions ? 
-          questions.map((question) => (
-            <li>
-              <div className='question'>
-                {question?.question}
-              </div>
-            </li>
-          ))
-          : <></>
-        }
-      </ol>
+      <h2>Rounds</h2>
+      {roundsDisplay}
     </div>
   );
 }
