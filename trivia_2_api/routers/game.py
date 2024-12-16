@@ -141,27 +141,18 @@ async def answer_question(request:Request, game_id: UUID, answer: AnswerRequest)
             
             question_id = results.get("id", None)
             first_answer = results.get("first_answer", None)
-            a = results.get("a", None)
-            b = results.get("b", None)
-            if first_answer is None or question_id is None or a is None or b is None:
+            if first_answer is None or question_id is None:
                 raise HTTPException(status_code=500, detail="Failed to get question")
             
             
-            
-            is_tf = ((a == 'False' and b == 'True') or (a == 'True' and b =='False'))
-
             cur.execute('''
                         INSERT INTO "Answers" 
                         (game_id, team_id, round_number, question_number, question_id, answer)
                         SELECT %s, gp.team_id, %s, %s, %s, 
-                        CASE WHEN %s THEN
-                            %s::text
-                        ELSE
-                            unshuffle_answer(%s::text, (SELECT first_answer FROM "Questions" WHERE id = %s)::int)
-                        END
+                        unshuffle_answer(%s::text, (SELECT first_answer FROM "Questions" WHERE id = %s)::int)
                         FROM "GamePlayers" as gp
                         WHERE gp.player_id = %s and gp.is_active = true
-                        ON CONFLICT (game_id, team_id, round_number, question_number) DO UPDATE SET answer = EXCLUDED.answer''', (game_id, answer.round_number, answer.question_number, question_id, is_tf, answer.answer, answer.answer, question_id, request.state.user.id))
+                        ON CONFLICT (game_id, team_id, round_number, question_number) DO UPDATE SET answer = EXCLUDED.answer''', (game_id, answer.round_number, answer.question_number, question_id, answer.answer, question_id, request.state.user.id))
             
 
 @router.post("/{game_id}/next")
