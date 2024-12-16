@@ -78,7 +78,7 @@ async def join_game(request:Request, game: JoinGameRequest) -> None:
             if count > 0:
                 raise HTTPException(status_code=400, detail="Player already in game")
             
-            cur.execute('''INSERT INTO "GamePlayers" (game_id, player_id, team_id) VALUES (%s, %s, %s) ON CONFLICT DO NOTHING''', (results.get("id", None), request.state.user.id, game.team_id))
+            cur.execute('''INSERT INTO "GamePlayers" (game_id, player_id, team_id, is_active) VALUES (%s, %s, %s, %s) ON CONFLICT DO NOTHING''', (results.get("id", None), request.state.user.id, game.team_id, False))
             
 
 
@@ -87,6 +87,12 @@ async def start_game(game_id: UUID) -> None:
     with db.connection() as conn:
         with conn.cursor() as cur:
             cur.execute('''UPDATE "Games" SET status = 'in_progress' WHERE id = %s''', (game_id,))
+
+@router.put("/{game_id}/leave")
+async def leave_game(request: Request, game_id: UUID) -> None:
+    with db.connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute('''UPDATE "GamePlayers" SET is_active = false WHERE game_id = %s and player_id = %s''', (game_id, request.state.user.id))
 
 @router.delete("/{id}")
 async def delete_game(id: UUID) -> None:
@@ -150,7 +156,7 @@ async def answer_question(request:Request, game_id: UUID, answer: AnswerRequest)
                             unshuffle_answer(%s::text, (SELECT first_answer FROM "Questions" WHERE id = %s)::int)
                         END
                         FROM "GamePlayers" as gp
-                        WHERE gp.player_id = %s
+                        WHERE gp.player_id = %s and gp.is_active = true
                         ON CONFLICT (game_id, team_id, round_number, question_number) DO UPDATE SET answer = EXCLUDED.answer''', (game_id, answer.round_number, answer.question_number, question_id, is_tf, answer.answer, answer.answer, question_id, request.state.user.id))
             
 
