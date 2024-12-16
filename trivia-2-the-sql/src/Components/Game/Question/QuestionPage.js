@@ -145,7 +145,18 @@ const QuestionPage =  () => {
                 <h3>Team Score: 0</h3>
             </div>
             <div>
-                scores : {scores}
+                <h1>Scores</h1>
+                <ul>
+
+                    {scores ? 
+                    scores.map((s) => (
+                    <li key={s.name}>
+                        <h3>{s.name}: {s.score}</h3>
+                    </li>
+                    ))
+                    : <></>
+                    }
+                </ul>
             </div>
         </div>
     );
