@@ -825,7 +825,7 @@ const LoadingPage = () => {
             <div className='grid-container'>
                 {teams ? 
                 teams.map((t) => (
-                <div className='grid-item'>
+                <div className='grid-item' key={t.id}>
                     <h3>{t}</h3>
                 </div>
                 ))
