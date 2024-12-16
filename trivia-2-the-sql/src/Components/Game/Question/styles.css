@@ -55,3 +55,6 @@
   .question-grid-item button:active {
     background-color: #003f7f; /* Even darker blue when pressed */
   }
+  .next-question-button {
+    justify-content: end;
+  }

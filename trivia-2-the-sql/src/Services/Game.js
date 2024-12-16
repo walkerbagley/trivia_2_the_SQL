@@ -167,7 +167,6 @@ export const GameService = {
 
     try {
       const response = await axiosClient.request(config);
-      console.log("Game scores fetched successfully:", response.data);
       return response.data;
     } catch (error) {
       console.error("Error fetching game scores:", error);
