@@ -53,11 +53,11 @@ export const GameService = {
     }
   },
 
-  async joinGame(axiosClient, gameId, joinData) {
+  async joinGame(axiosClient, joinData) {
     const config = {
       method: 'post',
       maxBodyLength: Infinity,
-      url: `/game/${gameId}/join`,
+      url: `/game/join`,
       data: joinData,
     };
 
@@ -72,7 +72,6 @@ export const GameService = {
   },
 
   async startGame(axiosClient, gameId) {
-    console.log(axiosClient, gameId)
     const config = {
       method: 'post',
       maxBodyLength: Infinity,
@@ -81,8 +80,7 @@ export const GameService = {
 
     try {
       const response = await axiosClient.request(config);
-      console.log("Game started successfully:", response.data);
-      return response.data;
+      return response;
     } catch (error) {
       console.error("Error starting game:", error);
       throw error;

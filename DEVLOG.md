@@ -4,6 +4,7 @@
 - [ ] Allow hosts to be on a team (API and then front end)
 - [ ] Allow entering a custom question time from the host page
 - [ ] If there is a custom question time, add a timer to the question page and advance to the next question when it expires
+- [ ] Selected team should be highlighted on joinPage
 
 ### Bugs
 - [ ] decks page does not immediately load decks until you click on a button
@@ -17,7 +18,6 @@
 - [ ] Add team scores to game page
 - [ ] Handle end of round and end of game
 - [ ] Allow non hosts to join a game
-- [ ] Allow hosts to start a game from the loading page
 
 ### Walker
 - [ ] Can't read deck name on the host page due to the font color

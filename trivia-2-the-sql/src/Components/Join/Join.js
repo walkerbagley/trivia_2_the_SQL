@@ -53,8 +53,7 @@ const JoinPage =  () => {
       }
       GameService.joinGame(axios, {"join_code":joinCode, "team_id":teamId}).then((data)=>{
         console.log('Requestion Join Game',data);
-        // setGameId(data[0])
-        // navigate("/loading/"+formValues.join_code, { state: { gameId : data[0], joinCode : formValues.join_code } })
+        navigate("/loading/"+joinCode, { state: { gameId : data[0], joinCode : joinCode, teamId:teamId } })
       });
     } catch (error){
       toast.error(error);
