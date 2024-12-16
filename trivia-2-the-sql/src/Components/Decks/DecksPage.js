@@ -43,6 +43,7 @@ const Decks =  () => {
 
       fetchDecks();
       fetchUserDecks();
+
     }, []);
 
     useEffect(() => {
@@ -54,6 +55,7 @@ const Decks =  () => {
       }
       
     }, [filter])
+
 
     return (
     <div className="deckspage">
