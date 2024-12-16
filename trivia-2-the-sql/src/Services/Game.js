@@ -175,7 +175,7 @@ export const GameService = {
     const config = {
       method: 'put',
       maxBodyLength: Infinity,
-      url: `${url_start}/game/${gameId}/leave`,
+      url: `/game/${gameId}/leave`,
     };
   
     try {

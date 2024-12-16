@@ -87,6 +87,14 @@ const QuestionPage =  () => {
         });
     };
 
+    function leaveGame(){
+        const confirmed = window.confirm("Are you sure you want to leave?");
+        if (confirmed){
+            GameService.leaveGame(axios, location.state.gameId).then((resp) => {
+                navigate('/');
+            });
+        };
+    };
 
     return (
         <div className='question-page'>
@@ -128,6 +136,9 @@ const QuestionPage =  () => {
             <div className='next-question-button'>
                {isHost && (
                 <button onClick={()=>{nextQuestion()}} disabled={!isHost}>Next Question</button>
+                )}
+                {!isHost && (
+                <button onClick={leaveGame} disabled={isHost}>Leave Game</button>
                 )}
             </div>
             <div className='margin-left'>
