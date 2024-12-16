@@ -8,6 +8,8 @@ import { addUserDeck } from '../../Services/User.js';
 import { useForm, useFieldArray, Controller } from 'react-hook-form';
 import Select from 'react-select';
 import { Multiselect } from "multiselect-react-dropdown";
+import { useUserSession } from "../../Providers/UserProvider.js";
+
 
 
 type FormValues = {
@@ -32,7 +34,7 @@ const CreateDeck = () => {
               rounds: [{ categories: [], num_questions: '' }]
             },
           });
-
+      
     const axios = useAxios(); 
     const navigate = useNavigate();
 
@@ -70,14 +72,18 @@ const CreateDeck = () => {
     const createDeckFunc = async () => {
       console.log(getValues('deckname'), getValues('deckdesc'), getValues('rounds'))
 
-      try {
-        const ds = await createDeck(axios, deckName, deckDesc, rounds);
-        console.log('ds:', ds);
-        navigate(`/decks/${ds.id}`, {state: {deckId:ds.id}});
-        //const added = await addUserDeck(axios, deckName, deckDesc, ds.id);
-      } catch (error) {
+      createDeck(axios, deckName, deckDesc, rounds).then((ds) => {
+        console.log('deck created:', ds);
+        // console.log(user.id, ds.id);
+        // addUserDeck(axios, user.id, ds.id).then((ud)=>{
+        //   console.log('added to userDecks:', ud)
+        // }).catch((error)=>{
+        //   console.error(error);
+        // });
+        // navigate(`/decks/${ds.id}`, {state: {deckId:ds.id}});
+      }).catch((error) => {
         console.error("Failed to create deck:", error);
-      }
+      })
 
     };
 

@@ -13,11 +13,12 @@
 
 ### Dagny
 - [ ] Creating a deck should add it to the UserDecks table
+    - see the DecksPage for how to get userid, but this needs to be a js file for it to work, otherwise you need to create a ts version of UserProvider.js
 
 ### Patrick
 - [x] diable answer buttons if the answer option is null
-- [ ] Enable filtering to just view your decks on the decks page
-- [ ] Add  team scores to game page
+- [x] Enable filtering to just view your decks on the decks page
+- [ ] Add team scores to game page
 
 ### Walker
 - [ ] Can't read deck name on the host page due to the font color

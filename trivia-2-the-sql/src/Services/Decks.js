@@ -14,7 +14,6 @@ export const getAllDecks = async (axiosClient) => {
 
   try {
     const response = await axiosClient.request(config);
-    console.log("in getAllDecks", JSON.stringify(response.data));
     return response.data;
   } catch (error) {
     console.error("Failed to fetch decks:", error);
