@@ -46,15 +46,15 @@ const JoinPage =  () => {
   };
 
   function joinGame() {
-    console.log(teamId, joinCode);
     if (teamId==="" || joinCode===""){
       toast.info("Please select a team and enter a join code!")
       return;
     }
+    console.log({"join_code":joinCode, "team_id":teamId})
     GameService.joinGame(axios, {"join_code":joinCode, "team_id":teamId}).then((data)=>{
       console.log('Requestion Join Game',data);
-      // navigate("/loading/"+joinCode, { state: { gameId : data[0], joinCode : joinCode, teamId:teamId } })
-    }).error((error)=>{
+      navigate("/loading/"+joinCode, { state: { gameId : data.game_id, joinCode : joinCode, teamId:teamId } })
+    }).catch((error)=>{
       console.error(error);
       toast.error(error);
     });
@@ -64,6 +64,11 @@ const JoinPage =  () => {
   //   if (gameId == 'active'){
   //   }
   // }
+  const handleSubmit = (e) => {
+    e.preventDefault(); // Prevents form reload
+    joinGame(); // Your function for handling the submission
+  };
+  
   
     return (
     <div className="join-page center">
@@ -79,21 +84,29 @@ const JoinPage =  () => {
           ))}
         </div>
         <h1>Enter GameID</h1>
-        <form>
+        <form onSubmit={handleSubmit} className="form-container">
           <div className="form-field">
-            <label htmlFor="join_code">Join Code:</label>
-            <input 
-              type="text" 
-              id="join_code" 
+            <label htmlFor="join_code" className="form-label">
+              Join Code:
+            </label>
+            <input
+              type="text"
+              id="join_code"
               name="join_code"
               value={joinCode}
-              onChange={handleChange} 
+              onChange={handleChange}
+              placeholder="Enter your join code"
+              aria-required="true"
+              className="form-input"
               required
             />
           </div>
-          <button className='join-button' onClick={()=>joinGame()}>Join Game</button>
-          <ToastContainer/>
-      </form>
+
+          <button type="submit" className="join-button">
+            Join Game
+          </button>
+        </form>
+          <ToastContainer />
     </div>
   );
 }
