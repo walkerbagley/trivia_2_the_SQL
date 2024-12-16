@@ -151,8 +151,8 @@ async def answer_question(request:Request, game_id: UUID, answer: AnswerRequest)
                         SELECT %s, gp.team_id, %s, %s, %s, 
                         unshuffle_answer(%s::text, (SELECT first_answer FROM "Questions" WHERE id = %s)::int)
                         FROM "GamePlayers" as gp
-                        WHERE gp.player_id = %s and gp.is_active = true
-                        ON CONFLICT (game_id, team_id, round_number, question_number) DO UPDATE SET answer = EXCLUDED.answer''', (game_id, answer.round_number, answer.question_number, question_id, answer.answer, question_id, request.state.user.id))
+                        WHERE gp.player_id = %s and gp.is_active = true and gp.game_id = %s
+                        ON CONFLICT (game_id, team_id, round_number, question_number) DO UPDATE SET answer = EXCLUDED.answer''', (game_id, answer.round_number, answer.question_number, question_id, answer.answer, question_id, request.state.user.id, game_id))
             
 
 @router.post("/{game_id}/next")
