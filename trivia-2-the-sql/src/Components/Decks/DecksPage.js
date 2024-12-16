@@ -44,25 +44,17 @@ const Decks =  () => {
       fetchDecks();
       fetchUserDecks();
 
-          // useEffect(() => {
-    //   if (filter) {
-    //     //setDecks(allDecks.filter(deck => deck.owner_id === user.id));
-    //     setDecks(userDecks);
-    //   } else {
-    //     setDecks(allDecks);
-    //   }
+    }, []);
 
-    }, [filter]);
-
-    // useEffect(() => {
-    //   if (filter) {
-    //     //setDecks(allDecks.filter(deck => deck.owner_id === user.id));
-    //     setDecks(userDecks);
-    //   } else {
-    //     setDecks(allDecks);
-    //   }
+    useEffect(() => {
+      if (filter) {
+        //setDecks(allDecks.filter(deck => deck.owner_id === user.id));
+        setDecks(userDecks);
+      } else {
+        setDecks(allDecks);
+      }
       
-    // }, [filter])
+    }, [filter])
 
 
     return (
