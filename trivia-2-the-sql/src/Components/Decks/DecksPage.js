@@ -4,6 +4,7 @@ import Deck from './Deck/Deck.js'
 import { Link, useNavigate } from 'react-router-dom'
 import { getAllDecks } from '../../Services/Decks.js'
 import { useAxios } from '../../Providers/AxiosProvider.js'
+import {getCurrentUserStatus} from '../../Services/User.js'
 
 
 const Decks =  () => {
@@ -15,6 +16,9 @@ const Decks =  () => {
     };
 
     const [allDecks, setAllDecks] = useState([]);
+    const [decks, setDecks] = useState([]);
+    const [filter, setFilter] = useState(false);
+    const [userId, setUserId] = useState("")
 
     useEffect(() => {
       const fetchDecks = async () => {
@@ -22,23 +26,30 @@ const Decks =  () => {
           const ds = await getAllDecks(axios);
           console.log(ds)
           setAllDecks(ds);
+          setDecks(ds);
         } catch (error) {
           console.error("Failed to fetch decks:", error);
         }
       };
 
       fetchDecks();
+      // getCurrentUserStatus.th
     }, []);
 
+    const toggleFilter = () => {
+      setFilter(!filter);
+      if (filter) {
 
+      }
+    };
 
     return (
     <div className="deckspage">
       <h1>Deck List</h1>
       <Link to={'/create'} className='no-underline'><button>Create Deck</button></Link>
       <div className="grid-container">
-        {allDecks ? 
-        allDecks.map((deck) => (
+        {decks ? 
+        decks.map((deck) => (
           <div className='deck-item'>
             <button onClick={() => goToDeckDetails(deck)} className='no-underline'><Deck deck={deck}/></button>
           </div>
