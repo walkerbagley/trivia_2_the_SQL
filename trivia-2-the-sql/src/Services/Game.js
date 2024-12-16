@@ -170,4 +170,21 @@ export const GameService = {
       throw error;
     }
   },
+
+  async leaveGame(axiosClient, gameId) {
+    const config = {
+      method: 'put',
+      maxBodyLength: Infinity,
+      url: `${url_start}/game/${gameId}/leave`,
+    };
+  
+    try {
+      const response = await axiosClient.request(config);
+      console.log(`Successfully left the game with ID: ${gameId}`);
+      return response.data;
+    } catch (error) {
+      console.error(`Failed to leave the game with ID ${gameId}:`, error);
+      throw error;
+    }
+  }
 };
