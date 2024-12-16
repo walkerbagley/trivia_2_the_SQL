@@ -136,7 +136,7 @@ export const getQuestions = async (axiosClient) => {
 }
 
 export const getDeckQuestions = async (axiosClient, deck_id) => {
-    
+  console.log("Getting new questions")
   let config = {
     method: 'get',
     maxBodyLength: Infinity,
@@ -242,7 +242,6 @@ export const addRound = async (axiosClient, num_questions=10, categories=[], att
 export const updateRound = async (axiosClient, round_id, categories, num_questions) => {
   let data = JSON.stringify({
     "categories": categories,
-    "attributes": [],
     "num_questions": num_questions
   });
 

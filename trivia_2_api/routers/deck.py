@@ -98,7 +98,8 @@ def add_questions(cur: Cursor, deck_id: UUID, round_id: UUID, round: DeckRoundRe
         query += " AND category = ANY(%s)"
         arguments.append(round.categories)
     
-    if round.attributes is not None:
+    print(round.attributes)
+    if round.attributes is not None and len(round.attributes) != 0:
         query += ''' AND q.id IN (SELECT question_id FROM "QuestionAttributes" WHERE attribute = ANY(%s))'''
         arguments.append(round.attributes)
     
@@ -108,6 +109,9 @@ def add_questions(cur: Cursor, deck_id: UUID, round_id: UUID, round: DeckRoundRe
     arguments.append(round.num_questions)
 
     query += ") as q "
+
+    print(query)
+    print(arguments)
 
     cur.execute(query, arguments)
     return None
