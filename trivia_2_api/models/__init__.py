@@ -5,5 +5,5 @@ from .question import Question, QuestionRequest
 from .score import Score, ScoreRequest
 from .token import Token, TokenData
 from .team import Team, TeamRequest
-from .user import User, UserRequest, UserResponse, UserStatus, GameStatus, UserGameScores, UserScores
+from .user import User, UserRequest, UserResponse, UserStatus, GameStatus, UserGameScores
 
