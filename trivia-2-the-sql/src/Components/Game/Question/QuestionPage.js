@@ -12,6 +12,7 @@ const QuestionPage =  () => {
     const location = useLocation();
     const navigate = useNavigate();
     const [answer, setAnswer] = useState("");
+    const [active, setActive] = useState("");
     const [question, setQuestion] = useState("");
     const [isHost, setIsHost] = useState(null);
     const [scores, setScores] = useState([]);
@@ -36,6 +37,7 @@ const QuestionPage =  () => {
 
     const answerQuestion = (letter) => {
         try {
+            setActive(letter);
             setAnswer(options[letter][0]);
             GameService.submitAnswer(axios,location.state.gameId,{"round_number":roundNumber,"question_number":questionNumber,"answer":options[letter][1]}).catch((error)=>{
                 console.error(error);
@@ -48,13 +50,7 @@ const QuestionPage =  () => {
     // get new question or round info
     const getGameStatus = () => {
         getCurrentUserStatus(axios).then((data) => {
-            if (location.state.host){
-                setAEnabled(false);
-                setBEnabled(false);
-                setCEnabled(false);
-                setDEnabled(false);
-            }
-            if (data.game_status.status === 'complete' || data.game_status===null){
+            if (data.game_status===null || data.game_status.status === 'complete'){
                 navigate("/score/"+location.state.joinCode, { state: { gameId : location.state.gameId } });
             }
             if (data?.game_status?.time_remaining){
@@ -67,13 +63,15 @@ const QuestionPage =  () => {
                         setScores(s);
                     });
                     setQuestionNumber(Number(data.game_status.question_number));
-                    questionNumberRef.current = Number(data.game_status.question_number)
+                    questionNumberRef.current = Number(data.game_status.question_number);
+                    setActive("");
                     getQuestionById(axios, data.game_status.question_id).then((resp) => {
                         setQuestion(resp.question);
                         setCorrectAnswer(resp.a);
                         const shuffledOptions = shuffleArray([[resp.a, "a"], [resp.b, "b"], [resp.c, "c"], [resp.d, "d"]])
-                        setOptions({"a": shuffledOptions[0], "b": shuffledOptions[1], "c": shuffledOptions[2], "d": shuffledOptions[3]})
-                        if (!location.state.host){
+                        setOptions({ "a": shuffledOptions[0], "b": shuffledOptions[1], "c": shuffledOptions[2], "d": shuffledOptions[3] })
+                        console.log(isHost);
+                        if (!isHost){
                             setAEnabled(options["a"][0] ? true : false);
                             setBEnabled(options["b"][0] ? true : false);
                             setCEnabled(options["c"][0] ? true : false);
@@ -98,7 +96,6 @@ const QuestionPage =  () => {
     useEffect(() => {
         const interval = setInterval(() => {
           getGameStatus();
-          console.log(location.state.host)
         }, 1000);
         return () => clearInterval(interval);
       }, []);
@@ -137,46 +134,39 @@ const QuestionPage =  () => {
                 <div className='question-grid-container'>
                     <div className='question-grid-item'>
                         <button onClick={()=>{answerQuestion('a')}} disabled={!aEnabled}
-                            className={answer===options["a"][0] ? 'selected-answer-button' : ""}>
+                            className={active == "a" ? 'selected-answer-button' : ""}>
                                 <strong>A</strong> {options["a"][0]}
                         </button>
                     </div>
                     <div className='question-grid-item'>
                         <button onClick={()=>{answerQuestion('b')}} disabled={!bEnabled}
-                            className={options.length != 0 && answer===options["b"][0] ? 'selected-answer-button' : ""}>
+                            className={active == "b" ? 'selected-answer-button' : ""}>
                             <strong>B</strong> {options["b"][0]}
                         </button>
                     </div>
                     <div className='question-grid-item'>
                         <button onClick={()=>{answerQuestion('c')}} disabled={!cEnabled}
-                            className={options.length != 0 && answer===options["c"][0] ? 'selected-answer-button' : ""}>
+                            className={active == "c" ? 'selected-answer-button' : ""}>
                             <strong>C</strong> {options["c"][0]}
                         </button>
                     </div>
                     <div className='question-grid-item'>
                         <button onClick={()=>{answerQuestion('d')}} disabled={!dEnabled}
-                            className={options.length != 0 && answer===options["d"][0] ? 'selected-answer-button' : ""}>
+                            className={active == "d" ? 'selected-answer-button' : ""}>
                             <strong>D</strong> {options["d"][0]}
                         </button>
                     </div>
                 </div>
-            {/* <div className='center'>
-                Current Answer: <br/>
-                {answer != '' ? answer : "No Answer"}
-            </div> */}
             <div className='next-question-button'>
-               {location.state.host && (
+               {isHost && (
                 <>
-                    <button onClick={()=>{nextQuestion()}} disabled={!location.state.host}>Next Question</button>
-                    <button onClick={() => {endGame()}} disable={!location.state.host}>End Game</button>
+                    <button onClick={()=>{nextQuestion()}} disabled={!isHost}>Next Question</button>
+                    <button onClick={() => {endGame()}} disable={!isHost}>End Game</button>
                 </>
                 )}
-                {!location.state.host && (
-                <button onClick={leaveGame} disabled={location.state.host}>Leave Game</button>
+                {!isHost && (
+                <button onClick={leaveGame} disabled={isHost}>Leave Game</button>
                 )}
-            </div>
-            <div className='margin-left'>
-                {!location.state.host && (<h3>Team Score: {scores[location["state"]["teamId"]]}</h3>)}
             </div>
             <div>
                 <h1>Scores</h1>
