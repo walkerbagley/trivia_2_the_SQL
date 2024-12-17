@@ -72,6 +72,10 @@ const QuestionPage =  () => {
             if (data.game_status){
                 setRoundNumber(data.game_status.round_number);
                 if (questionNumberRef.current!=Number(data.game_status.question_number)){
+                    GameService.getGameScores(axios, location.state.gameId).then((s) => {
+                        setScores(s);
+                        console.log(s)
+                    });
                     setQuestionNumber(Number(data.game_status.question_number));
                     questionNumberRef.current = Number(data.game_status.question_number)
                     getQuestionById(axios, data.game_status.question_id).then((resp) => {
@@ -111,10 +115,6 @@ const QuestionPage =  () => {
     const nextQuestion = () => {
         GameService.moveToNextQuestion(axios, location.state.gameId).then((resp) => {
             getGameStatus();
-            GameService.getGameScores(axios, location.state.gameId).then((s) => {
-                setScores(s);
-                console.log(s)
-            });
         });
     };
 
