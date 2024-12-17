@@ -137,7 +137,7 @@ async def get_team_names(game_id: UUID) -> list[str]:
     with db.connection() as conn:
         with conn.cursor(row_factory=dict_row) as cur:
             cur.execute('''
-                        SELECT t.name 
+                        SELECT distinct t.name 
                         FROM "GamePlayers" as gp
                         INNER JOIN "Teams" as t
                         ON gp.team_id = t.id
