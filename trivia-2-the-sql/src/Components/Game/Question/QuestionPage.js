@@ -99,6 +99,13 @@ const QuestionPage =  () => {
         });
     };
 
+    const endGame = () => {
+        GameService.endGame(axios, location.state.gameId).then((resp) => {
+            navigate("/score/"+location.state.joinCode, { state: { gameId : location.state.gameId } });
+        });
+    };
+    
+
     function leaveGame(){
         const confirmed = window.confirm("Are you sure you want to leave?");
         if (confirmed){
@@ -151,7 +158,10 @@ const QuestionPage =  () => {
             </div>
             <div className='next-question-button'>
                {isHost && (
-                <button onClick={()=>{nextQuestion()}} disabled={!isHost}>Next Question</button>
+                <div>
+                    <button onClick={()=>{nextQuestion()}} disabled={!isHost}>Next Question</button>
+                    <button onClick={() => {endGame()}} disable={!isHost}>End Game</button>
+                </div>
                 )}
                 {!isHost && (
                 <button onClick={leaveGame} disabled={isHost}>Leave Game</button>

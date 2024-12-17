@@ -2,7 +2,7 @@ import './styles.css'
 import { useNavigate } from "react-router-dom";
 import { getCurrentUserStatus } from '../../Services/User.js';
 import { useAxios } from '../../Providers/AxiosProvider.js';
-import React from 'react'
+import React, { useEffect } from 'react'
 import { GameService } from '../../Services/Game.js';
 import { toast, ToastContainer } from "react-toastify";
 
@@ -15,15 +15,13 @@ const Main =  () => {
     const getGameStatus = () => {
         getCurrentUserStatus(axios).then((data) => {
             console.log('user status ',data)
-            if (data.game_status===null || data.game_status.status==='completed'){
-                toast.info('You are not in an active game.');
+            if (data.game_status===null || data.user_status == 'home' || data.game_status.status==='completed'){
                 return
             }
             if (data.game_status.id){
                 GameService.getGameById(axios,data.game_status.id).then((game) => {
                     console.log(game)
                     if (!game){
-                        toast.info('You are not in an active game.');
                         return;
                     };
                     if (game.status === "open"){
@@ -34,15 +32,24 @@ const Main =  () => {
                         navigate("/play/"+game.join_code, { state: { gameId : game.id } });
                     }
                     else {
-                        toast.info('You are not in an active game.');
+                        return
                     };
                 });
-                // }).error((error)=>{
-                //     toast.info('You are not in an active game.');
-                // });
             }
         });
     };
+
+    // const rejoinGame = () => {
+    //     GameService.rejoinGame(axios, game).then((value) => {
+    //         console.log('rejoin game',value)
+    //     }
+    //     );
+    // }
+
+
+    useEffect(() => {
+        getGameStatus();
+    });
 
     return (
     <div className="titlepage">
@@ -61,7 +68,7 @@ const Main =  () => {
             </button>
             <button
                 className="button-52"
-                onClick={getGameStatus}>
+                onClick={() => {}}>
                 Rejoin Game
             </button>
         </div>

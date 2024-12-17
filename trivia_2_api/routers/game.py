@@ -104,6 +104,22 @@ async def rejoin_game(request: Request, game_id: UUID) -> None:
         with conn.cursor() as cur:
             cur.execute('''UPDATE "GamePlayers" SET is_active = true WHERE game_id = %s and player_id = %s''', (game_id, request.state.user.id))
 
+
+@router.put("/{game_id}/end")
+async def end_game(request: Request, game_id: UUID) -> None:
+    with db.connection() as conn:
+        with conn.cursor(row_factory=dict_row) as cur:
+            cur.execute('''SELECT g.host_id FROM "Games" as g WHERE g.id = %s''', (game_id,))
+            results = cur.fetchone()
+
+            if results is None:
+                raise HTTPException(status_code=404, detail="Game not found")
+            
+            if results.get("host_id", None) != request.state.user.id:
+                raise HTTPException(status_code=401, detail="Only host can end game")
+            
+            cur.execute('''UPDATE "Games" SET status = 'complete', end_time = %s WHERE id = %s''', (datetime.now(), game_id))
+
 @router.delete("/{id}")
 async def delete_game(id: UUID) -> None:
     with db.connection() as conn:

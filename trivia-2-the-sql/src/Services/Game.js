@@ -186,5 +186,40 @@ export const GameService = {
       console.error(`Failed to leave the game with ID ${gameId}:`, error);
       throw error;
     }
+  },
+
+  async rejoinGame(axiosClient, gameId) {
+    const config = {
+      method: 'put',
+      maxBodyLength: Infinity,
+      url: `/game/${gameId}/rejoin`,
+    };
+  
+    try {
+      const response = await axiosClient.request(config);
+      console.log(`Successfully rejoined the game with ID: ${gameId}`);
+      return response.data;
+    } catch (error) {
+      console.error(`Failed to rejoin the game with ID ${gameId}:`, error);
+      throw error;
+    }
+  },
+
+  async endGame(axiosClient, gameId) {
+    const config = {
+      method: 'put',
+      maxBodyLength: Infinity,
+      url: `/game/${gameId}/end`,
+    };
+  
+    try {
+      const response = await axiosClient.request(config);
+      console.log(`Successfully ended the game with ID: ${gameId}`);
+      return response.data;
+    } catch (error) {
+      console.error(`Failed to end the game with ID ${gameId}:`, error);
+      throw error;
+    }
   }
+
 };

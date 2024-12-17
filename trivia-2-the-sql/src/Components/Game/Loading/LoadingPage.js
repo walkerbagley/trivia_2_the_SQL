@@ -809,6 +809,16 @@ const LoadingPage = () => {
         });
     };
 
+    function endGame() {
+        GameService.endGame(axios, location.state.gameId).then((resp)=>{
+            console.log('Game Ended as Host!',resp);
+            navigate("/");
+        }).catch((error)=>{
+            console.error("Failed to end game", error);
+            toast.error('You may not end this game.')
+        });
+    }
+
     return (
         <div className='loading-page'>
             <ToastContainer />
@@ -833,6 +843,7 @@ const LoadingPage = () => {
                 }
             </div>
             <button className='join-code' onClick={()=>handleStartGame()}>Start Game!</button>
+            <button className='join-code' onClick={()=>endGame()}>End Game</button>
         </div>
     );
 };
