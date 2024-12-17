@@ -826,16 +826,15 @@ const LoadingPage = () => {
     return (
         <div className='loading-page'>
             <ToastContainer />
-            <div className='join-code'>
-                <h3>{location.state.joinCode}</h3>
-            </div>
             <div className='center'>
-                <h1 className='loading-title'>Trivia2</h1>
-                <h5 className='loading-subtext'>the SQL</h5>
+                <h1 className='loading-title'>Trivia 2: The SQL</h1>
                 <p>Did you know: {fact}</p>
             </div>
+            <div className='join-code'>
+                <h2>Join Code: {location.state.joinCode}</h2>
+            </div>
             <p className='center'>Waiting for Players...</p>
-            <h2 className='center'>Team List:</h2>
+            <h2 className='center'>Team List</h2>
             <div className='grid-container'>
                 {teams ? 
                 teams.map((t) => (
@@ -847,14 +846,14 @@ const LoadingPage = () => {
                 }
             </div>
             {location.state.host ? (
-            <div>
-                <button className='join-code' onClick={()=>handleStartGame()}>Start Game!</button>
-                <button className='join-code' onClick={()=>endGame()}>End Game</button>
+            <div className='game-controls'>
+                <button className='join-btn' onClick={()=>handleStartGame()}>Start Game!</button>
+                <button className='join-btn' onClick={()=>endGame()}>End Game</button>
             </div>
             ) :
             (
-                <div>
-                    <button className='join-code' onClick={()=>leaveGame()}>Leave Game</button>
+                <div className='game-controls'>
+                    <button className='join-btn' onClick={()=>leaveGame()}>Leave Game</button>
                 </div>
             )}
         </div>
