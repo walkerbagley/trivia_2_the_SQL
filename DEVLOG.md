@@ -3,7 +3,10 @@
 ### Tasks
 - [ ] Allow entering a custom question time from the host page
 - [ ] If there is a custom question time, add a timer to the question page and advance to the next question when it expires
-- [ ] Allow hosts to be on a team (API and then front end)
+- [ ] View past game scores and teams under the account page
+- [ ] Enable add questions
+- [ ] enable deck creation based on the questions you have created
+- [ ] Add way to edit decks from the deck details page. Add an edit button that allows you to select questions to reroll from that category (select the first three questions that they should be deleted and rerolled from the question pool).
 
 ### Bugs
 
@@ -27,8 +30,8 @@
 
 # Shelved
 - [ ] Ability to join active games rather than just loading games
-- [ ] Add way to edit decks from the deck details page. Add an edit button that allows you to select questions to reroll from that category (select the first three questions that they should be deleted and rerolled from the question pool).
 - [ ] T/F questions should have their answers only populate to A and B answer options (not D or C) and should be in order
+- [ ] Allow hosts to be on a team (API and then front end)
 
 # Completed
 - [x] Creating a deck should add it to the UserDecks table
