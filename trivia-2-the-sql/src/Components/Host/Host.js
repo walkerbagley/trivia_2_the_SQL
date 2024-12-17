@@ -29,7 +29,7 @@ const HostPage =  () => {
     function startGame(deckId){
         GameService.createGame(axios,{deck_id:deckId,question_time_sec:20}).then((gameData)=>{
             console.log('Game Created!',gameData, "/loading/"+gameData.join_code)
-            navigate("/loading/"+gameData.join_code, { state: { gameId : gameData.id, joinCode : gameData.join_code } })
+            navigate("/loading/"+gameData.join_code, { state: { gameId : gameData.id, joinCode : gameData.join_code, host:true } })
         })
     };
 

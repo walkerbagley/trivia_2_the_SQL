@@ -15,6 +15,7 @@ const LoadingPage = () => {
     const location = useLocation();
     const [fact, setFact] = useState("");
     const [teams, setTeams] = useState([]);
+
     // console.log("In Loading page, gameid:",location.state);
 
     // Get Game by id and if stats=='open' then redirect to play/:id
@@ -842,8 +843,12 @@ const LoadingPage = () => {
                 : <></>
                 }
             </div>
-            <button className='join-code' onClick={()=>handleStartGame()}>Start Game!</button>
-            <button className='join-code' onClick={()=>endGame()}>End Game</button>
+            {location.state.host && (
+            <div>
+                <button className='join-code' onClick={()=>handleStartGame()}>Start Game!</button>
+                <button className='join-code' onClick={()=>endGame()}>End Game</button>
+            </div>
+            )}
         </div>
     );
 };

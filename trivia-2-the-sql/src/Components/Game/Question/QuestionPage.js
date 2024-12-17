@@ -189,14 +189,13 @@ const QuestionPage =  () => {
             <div>
                 <h1>Scores</h1>
                 <ul>
-
                     {scores ? 
                     scores.map((s) => (
                     <li key={s.name}>
                         <h3>{s.name}: {s.score}</h3>
                     </li>
                     ))
-                    : <></>
+                    : (<p>No Scores Found</p>)
                     }
                 </ul>
             </div>
