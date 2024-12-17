@@ -31,7 +31,6 @@ const QuestionPage =  () => {
     const answerQuestion = (text,letter) => {
         try{
             setAnswer(text);
-            console.log('Submitting answer:',location.state.gameId,{roundNumber,questionNumber,letter,text})
             GameService.submitAnswer(axios,location.state.gameId,{"round_number":roundNumber,"question_number":questionNumber,"answer":letter}).catch((error)=>{
                 console.error(error);
             });
@@ -64,9 +63,7 @@ const QuestionPage =  () => {
                 setRoundNumber(data.game_status.round_number);
                 if (questionNumber!=data.game_status.question_number){
                     setQuestionNumber(data.game_status.question_number);
-                    console.log(questionNumber, data.game_status.question_number)
                     getQuestionById(axios, data.game_status.question_id).then((resp) => {
-                        console.log("question resp: ", resp)
                         setQuestion(resp.question);
                         setA(resp.a);
                         setB(resp.b);
@@ -107,10 +104,8 @@ const QuestionPage =  () => {
 
     const nextQuestion = () => {
         GameService.moveToNextQuestion(axios, location.state.gameId).then((resp) => {
-            console.log("next q resp: ", resp)
             getGameStatus();
             GameService.getGameScores(axios, location.state.gameId).then((s) => {
-                console.log("game scores: ", s)
                 setScores(s);
             });
         });

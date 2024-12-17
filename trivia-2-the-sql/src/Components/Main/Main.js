@@ -14,21 +14,17 @@ const Main =  () => {
     // check if game has started
     const getGameStatus = () => {
         getCurrentUserStatus(axios).then((data) => {
-            console.log('user status ',data)
             if (data.game_status===null || data.user_status == 'home' || data.game_status.status==='completed'){
                 return
             }
             if (data.game_status.id){
                 GameService.getGameById(axios,data.game_status.id).then((game) => {
-                    console.log(game)
                     if (!game){
                         return;
                     };
                     if (game.status === "open"){
-                        console.log('game loading, go there')
                         navigate("/loading/"+game.join_code, { state: { gameId : game.id, joinCode : game.join_code, teamId:null } })
                     } else if (game.status === "in_progress") {
-                        console.log('game has started get in there!')
                         navigate("/play/"+game.join_code, { state: { gameId : game.id } });
                     }
                     else {
@@ -41,7 +37,6 @@ const Main =  () => {
 
     const rejoinGame = () => {
         GameService.rejoinGame(axios).then((value) => {
-            console.log('rejoin game',value)
         }
         );
     }

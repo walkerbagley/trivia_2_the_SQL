@@ -8,14 +8,12 @@ import { getCurrentUserStatus } from '../../../Services/User';
 import './styles.css'
 
 // The joinCode is the gameid
-// const LoadingPage = (joinCode) => {
 const LoadingPage = () => {
     const axios = useAxios();
     const navigate = useNavigate();
     const location = useLocation();
     const [fact, setFact] = useState("");
     const [teams, setTeams] = useState([]);
-    // console.log("In Loading page, gameid:",location.state);
 
     // Get Game by id and if stats=='open' then redirect to play/:id
     // send request to /game/getTeams to get players
@@ -779,10 +777,8 @@ const LoadingPage = () => {
     // check if game has started
     const getGameStatus = () => {
         getCurrentUserStatus(axios).then((data) => {
-            console.log('user status ',data)
             if (data.game_status){
                 if (data.game_status.status === "in_progress"){
-                    console.log('Game Started!');
                     navigate("/play/"+location.state.joinCode, { state: { gameId : location.state.gameId } });
                 }
             } else {
@@ -793,7 +789,6 @@ const LoadingPage = () => {
 
     function updateTeams(){
         GameService.getTeamNames(axios, location.state.gameId).then((data)=>{
-            console.log("joined teams:",data);
             setTeams(data);
         });
     }
@@ -801,7 +796,6 @@ const LoadingPage = () => {
 
     function handleStartGame(){
         GameService.startGame(axios,location.state.gameId).then((resp)=>{
-            console.log('Game Started as Host!',resp);
             navigate("/play/"+location.state.joinCode, { state: { gameId : location.state.gameId, joinCode: location.state.joinCode } });
         }).catch((error)=>{
             console.error("Failed to start game", error);
@@ -811,7 +805,6 @@ const LoadingPage = () => {
 
     function endGame() {
         GameService.endGame(axios, location.state.gameId).then((resp)=>{
-            console.log('Game Ended as Host!',resp);
             navigate("/");
         }).catch((error)=>{
             console.error("Failed to end game", error);

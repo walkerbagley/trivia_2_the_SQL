@@ -27,7 +27,7 @@ export const createUser = (user) => {
     };
 
     axios.request(config).then((response) => {
-        console.log(JSON.stringify(response.data));
+        JSON.stringify(response.data);
         return response;
     }).catch((error) => {
         console.log(error);

@@ -27,7 +27,7 @@ export const getQuestionById = async (axiosClient, id) => {
   
     try {
       const response = await axiosClient.request(config);
-      console.log("in createQuestion", JSON.stringify(response.data));
+      JSON.stringify(response.data);
       return response.data; // Returns the created question's ID
     } catch (error) {
       console.error("Failed to create question:", error);
@@ -46,7 +46,6 @@ export const getQuestionById = async (axiosClient, id) => {
   
     try {
       const response = await axiosClient.request(config);
-      console.log("in updateQuestion", response.data);
       return response.data;
     } catch (error) {
       console.error(`Failed to update question with ID ${id}:`, error);
@@ -64,7 +63,6 @@ export const getQuestionById = async (axiosClient, id) => {
   
     try {
       const response = await axiosClient.request(config);
-      console.log("in deleteQuestion", response.data);
       return response.data;
     } catch (error) {
       console.error(`Failed to delete question with ID ${id}:`, error);
