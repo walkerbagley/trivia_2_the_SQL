@@ -23,9 +23,9 @@ const Main =  () => {
                         return;
                     };
                     if (game.status === "open"){
-                        navigate("/loading/"+game.join_code, { state: { gameId : game.id, joinCode : game.join_code, teamId:null } })
+                        navigate("/loading/"+game.join_code, { state: { gameId : game.id, joinCode : game.join_code, teamId:null, host: data.user_status=='hosting'  } })
                     } else if (game.status === "in_progress") {
-                        navigate("/play/"+game.join_code, { state: { gameId : game.id } });
+                        navigate("/play/"+game.join_code, { state: { gameId : game.id, host: data.user_status=='hosting'  } });
                     }
                     else {
                         return
@@ -60,11 +60,6 @@ const Main =  () => {
                 className="button-52"
                 onClick={() => navigate('/Host')}>
                 Host Game
-            </button>
-            <button
-                className="button-52"
-                onClick={() => rejoinGame()}>
-                Rejoin Game
             </button>
         </div>
     </div>
