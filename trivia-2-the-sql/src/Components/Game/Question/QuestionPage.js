@@ -32,9 +32,11 @@ const QuestionPage =  () => {
         try{
             setAnswer(text);
             console.log('Submitting answer:',location.state.gameId,{roundNumber,questionNumber,letter,text})
-            GameService.submitAnswer(axios,location.state.gameId,{"round_number":roundNumber,"question_number":questionNumber,"answer":letter});
+            GameService.submitAnswer(axios,location.state.gameId,{"round_number":roundNumber,"question_number":questionNumber,"answer":letter}).catch((error)=>{
+                console.error(error);
+            });
         } catch (error) {
-            console.log(error);
+            console.error(error);
         }
     };
     // Get Status from /User/Status should be called on a time out to get the current question number (1-3s)
@@ -98,7 +100,7 @@ const QuestionPage =  () => {
     useEffect(() => {
         const interval = setInterval(() => {
           getGameStatus();
-        }, 5000);
+        }, 1000);
         return () => clearInterval(interval);
       }, []);
 
