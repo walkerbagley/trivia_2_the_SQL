@@ -15,25 +15,34 @@ const QuestionPage =  () => {
     const [question, setQuestion] = useState("");
     const [isHost, setIsHost] = useState(null);
     const [scores, setScores] = useState([]);
-    const [a, setA] = useState("");
-    const [b, setB] = useState("");
-    const [c, setC] = useState("");
-    const [d, setD] = useState("");
-    const [aEnabled, setAEnabled] = useState(true)
-    const [bEnabled, setBEnabled] = useState(true)
-    const [cEnabled, setCEnabled] = useState(true)
-    const [dEnabled, setDEnabled] = useState(true)
+    // const [a, setA] = useState("");
+    // const [b, setB] = useState("");
+    // const [c, setC] = useState("");
+    // const [d, setD] = useState("");
+    const [options, setOptions] = useState({"a": [], "b": [], "c": [], "d": []});
+    const [correctAnswer, setCorrectAnswer] = useState("");
+    const [aEnabled, setAEnabled] = useState(true);
+    const [bEnabled, setBEnabled] = useState(true);
+    const [cEnabled, setCEnabled] = useState(true);
+    const [dEnabled, setDEnabled] = useState(true);
     const [roundNumber, setRoundNumber] = useState(0);
     const [questionNumber, setQuestionNumber] = useState(0);
     const questionNumberRef = useRef(0);
     const [timeRemaining, setTimeRemaining] = useState(0);
 
-    
-    let qnum = 0
-    const answerQuestion = (text,letter) => {
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    const answerQuestion = (letter) => {
         try{
-            setAnswer(letter);
-            GameService.submitAnswer(axios,location.state.gameId,{"round_number":roundNumber,"question_number":questionNumber,"answer":letter}).catch((error)=>{
+            //console.log("Setting answer to",text);
+            // setAnswer(text);
+            GameService.submitAnswer(axios,location.state.gameId,{"round_number":roundNumber,"question_number":questionNumber,"answer":options[letter][1]}).catch((error)=>{
                 console.error(error);
             });
         } catch (error) {
@@ -75,10 +84,13 @@ const QuestionPage =  () => {
                     questionNumberRef.current = Number(data.game_status.question_number)
                     getQuestionById(axios, data.game_status.question_id).then((resp) => {
                         setQuestion(resp.question);
-                        setA(resp.a);
-                        setB(resp.b);
-                        setC(resp.c);
-                        setD(resp.d);
+                        setCorrectAnswer(resp.a);
+                        // setA(resp.a);
+                        // setB(resp.b);
+                        // setC(resp.c);
+                        // setD(resp.d);
+                        const shuffledOptions = shuffleArray([[resp.a, "a"], [resp.b, "b"], [resp.c, "c"], [resp.d, "d"]])
+                        setOptions({"a": shuffledOptions[0], "b": shuffledOptions[1], "c": shuffledOptions[2], "d": shuffledOptions[3]})
                         if (!isHost){
                             setAEnabled((resp.a) ? true : false);
                             setBEnabled((resp.b) ? true : false);
@@ -90,6 +102,25 @@ const QuestionPage =  () => {
             } else {
                 console.error("Game Status is null:",data)
             }
+            console.log("Checking answer exists and length", data?.game_status?.team_answer, data?.game_status?.team_answer);
+            if (data?.game_status?.team_answer != null && data.game_status.team_answer.length > 0){
+                console.log("Setting answer to",data.game_status.team_answer);
+                // if (data.game_status.team_answer==="a"){
+                //     setAnswer(options[0]);
+                // } if (data.game_status.team_answer==="b"){
+                //     setAnswer(options[1]);
+                // } if (data.game_status.team_answer==="c"){
+                //     setAnswer(options[2]);
+                // } if (data.game_status.team_answer==="d"){
+                //     setAnswer(options[3]);
+                // }
+                for (const [key, value] of Object.entries(options)) {
+                    if (data.game_status.team_answer == value[1]) {
+                        setAnswer(value[0]);
+                    }
+                  }
+                // setAnswer(options[data.game_status.team_answer])
+            };
         });
     };
 
@@ -137,27 +168,27 @@ const QuestionPage =  () => {
             </div>
                 <div className='question-grid-container'>
                     <div className='question-grid-item'>
-                        <button onClick={()=>{answerQuestion(a,'a')}} disabled={!aEnabled}
-                            className={answer===a ? 'selected-answer-button' : ""}>
-                                <strong>A</strong> {a}
+                        <button onClick={()=>{answerQuestion('a')}} disabled={!aEnabled}
+                            className={answer===options["a"][0] ? 'selected-answer-button' : ""}>
+                                <strong>A</strong> {options["a"][0]}
                         </button>
                     </div>
                     <div className='question-grid-item'>
-                        <button onClick={()=>{answerQuestion(b,'b')}} disabled={!bEnabled}
-                            className={answer===b ? 'selected-answer-button' : ""}>
-                            <strong>B</strong> {b}
+                        <button onClick={()=>{answerQuestion('b')}} disabled={!bEnabled}
+                            className={options.length != 0 && answer===options["b"][0] ? 'selected-answer-button' : ""}>
+                            <strong>B</strong> {options["b"][0]}
                         </button>
                     </div>
                     <div className='question-grid-item'>
-                        <button onClick={()=>{answerQuestion(c,'c')}} disabled={!cEnabled}
-                            className={answer===c ? 'selected-answer-button' : ""}>
-                            <strong>C</strong> {c}
+                        <button onClick={()=>{answerQuestion('c')}} disabled={!cEnabled}
+                            className={options.length != 0 && answer===options["c"][0] ? 'selected-answer-button' : ""}>
+                            <strong>C</strong> {options["c"][0]}
                         </button>
                     </div>
                     <div className='question-grid-item'>
-                        <button onClick={()=>{answerQuestion(d,'d')}} disabled={!dEnabled}
-                            className={answer===d ? 'selected-answer-button' : ""}>
-                            <strong>D</strong> {d}
+                        <button onClick={()=>{answerQuestion('d')}} disabled={!dEnabled}
+                            className={options.length != 0 && answer===options["d"][0] ? 'selected-answer-button' : ""}>
+                            <strong>D</strong> {options["d"][0]}
                         </button>
                     </div>
                 </div>
@@ -177,9 +208,9 @@ const QuestionPage =  () => {
                 )}
             </div>
             <div className='margin-left'>
-                {isHost && (<h3>Team Score: {scores[location["state"]["teamId"]]}</h3>)}
+                {!isHost && (<h3>Team Score: {scores[location["state"]["teamId"]]}</h3>)}
             </div>
-            {!isHost && 
+            {isHost && 
             (<div>
                 <h1>Scores</h1>
                 <ul>
