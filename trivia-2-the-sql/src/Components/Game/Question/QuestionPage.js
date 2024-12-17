@@ -15,10 +15,6 @@ const QuestionPage =  () => {
     const [question, setQuestion] = useState("");
     const [isHost, setIsHost] = useState(null);
     const [scores, setScores] = useState([]);
-    // const [a, setA] = useState("");
-    // const [b, setB] = useState("");
-    // const [c, setC] = useState("");
-    // const [d, setD] = useState("");
     const [options, setOptions] = useState({"a": [], "b": [], "c": [], "d": []});
     const [correctAnswer, setCorrectAnswer] = useState("");
     const [aEnabled, setAEnabled] = useState(true);
@@ -40,8 +36,6 @@ const QuestionPage =  () => {
 
     const answerQuestion = (letter) => {
         try{
-            //console.log("Setting answer to",text);
-            // setAnswer(text);
             GameService.submitAnswer(axios,location.state.gameId,{"round_number":roundNumber,"question_number":questionNumber,"answer":options[letter][1]}).catch((error)=>{
                 console.error(error);
             });
@@ -77,18 +71,12 @@ const QuestionPage =  () => {
             }
             if (data.game_status){
                 setRoundNumber(data.game_status.round_number);
-                setAnswer(data.game_status.team_answer);
                 if (questionNumberRef.current!=Number(data.game_status.question_number)){
-                    //setAnswer("")
                     setQuestionNumber(Number(data.game_status.question_number));
                     questionNumberRef.current = Number(data.game_status.question_number)
                     getQuestionById(axios, data.game_status.question_id).then((resp) => {
                         setQuestion(resp.question);
                         setCorrectAnswer(resp.a);
-                        // setA(resp.a);
-                        // setB(resp.b);
-                        // setC(resp.c);
-                        // setD(resp.d);
                         const shuffledOptions = shuffleArray([[resp.a, "a"], [resp.b, "b"], [resp.c, "c"], [resp.d, "d"]])
                         setOptions({"a": shuffledOptions[0], "b": shuffledOptions[1], "c": shuffledOptions[2], "d": shuffledOptions[3]})
                         if (!isHost){
@@ -105,21 +93,13 @@ const QuestionPage =  () => {
             console.log("Checking answer exists and length", data?.game_status?.team_answer, data?.game_status?.team_answer);
             if (data?.game_status?.team_answer != null && data.game_status.team_answer.length > 0){
                 console.log("Setting answer to",data.game_status.team_answer);
-                // if (data.game_status.team_answer==="a"){
-                //     setAnswer(options[0]);
-                // } if (data.game_status.team_answer==="b"){
-                //     setAnswer(options[1]);
-                // } if (data.game_status.team_answer==="c"){
-                //     setAnswer(options[2]);
-                // } if (data.game_status.team_answer==="d"){
-                //     setAnswer(options[3]);
-                // }
                 for (const [key, value] of Object.entries(options)) {
+                    console.log(data.game_status.team_answer);
                     if (data.game_status.team_answer == value[1]) {
+                        console.log(value[0]);
                         setAnswer(value[0]);
                     }
                   }
-                // setAnswer(options[data.game_status.team_answer])
             };
         });
     };
