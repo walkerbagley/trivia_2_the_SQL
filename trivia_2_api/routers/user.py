@@ -3,10 +3,10 @@ from fastapi.responses import JSONResponse
 from psycopg.rows import class_row, dict_row
 from uuid import UUID
 
-from trivia_2_api.models.user import GameStatus
+from trivia_2_api.models.user import GameStatus, User
 
 from ..db import db
-from ..models import Deck, UserRequest, UserResponse, UserStatus
+from ..models import Deck, UserRequest, UserResponse, UserStatus, UserGameScores, UserScores
 
 answer_choices = ['a', 'b', 'c', 'd']
 
@@ -128,6 +128,24 @@ async def remove_user_deck(user_id: UUID, deck_id: UUID) -> None:
     with db.connection() as conn:
         with conn.cursor() as cur:
             cur.execute('''DELETE FROM "UserDecks" WHERE user_id = %s AND deck_id = %s''', (user_id, deck_id))
+
+
+@router.get("/{user_id}/scores")
+async def get_user_scores(user_id: UUID) -> list[UserGameScores]:
+    with db.connection() as conn:
+        with conn.cursor(row_factory=class_row(UserGameScores)) as cur:
+            cur.execute('''
+                        select g.id as game_id, g.start_time::Date as date, sum(CASE WHEN a.answer = 'a' THEN 1 ELSE 0 END) as score, (sum(CASE WHEN a.answer = 'a' THEN 1 ELSE 0 END) / sum(dr.num_questions) * 100)::integer as percentage
+                        FROM "GamePlayers" as gp
+                        LEFT OUTER JOIN "Teams" as t ON gp.team_id = t.id
+                        LEFT OUTER JOIN "Games" as g on gp.game_id = g.id
+                        LEFT OUTER JOIN "Answers" as a on a.game_id = g.id and a.team_id = gp.team_id
+                        LEFT OUTER JOIN "Questions" as q on a.question_id = q.id
+                        LEFT OUTER JOIN "DeckRounds" as dr on dr.deck_id = g.deck_id
+                        where gp.player_id = %s
+                        group by g.id
+                        order by date desc''', (user_id,))
+            return cur.fetchall()
 
 
 
