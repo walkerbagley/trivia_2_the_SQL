@@ -25,6 +25,7 @@ const QuestionPage =  () => {
     const [dEnabled, setDEnabled] = useState(true)
     const [roundNumber, setRoundNumber] = useState(0);
     const [questionNumber, setQuestionNumber] = useState(0);
+    const [timeRemaining, setTimeRemaining] = useState(0);
     
     let qnum = 0
     const answerQuestion = (text,letter) => {
@@ -54,8 +55,10 @@ const QuestionPage =  () => {
             if (data.game_status === 'complete' || data.game_status===null){
                 navigate("/score/"+location.state.joinCode, { state: { gameId : location.state.gameId } });
             }
+            if (data?.game_status?.time_remaining){
+                setTimeRemaining(data.game_status.time_remaining);
+            }
             else if (data.game_status){
-
                 setRoundNumber(data.game_status.round_number);
                 if (questionNumber!=data.game_status.question_number){
                     setQuestionNumber(data.game_status.question_number);
@@ -75,8 +78,19 @@ const QuestionPage =  () => {
                     });
                 }
             } else {
-            console.error("Game Status is null:",data)
+                console.error("Game Status is null:",data)
             }
+            if (data?.game_status?.team_answer){
+                if (data.game_status.team_answer==="a"){
+                    setAnswer(a);
+                } if (data.game_status.team_answer==="b"){
+                    setAnswer(b);
+                } if (data.game_status.team_answer==="c"){
+                    setAnswer(c);
+                } if (data.game_status.team_answer==="d"){
+                    setAnswer(d);
+                }
+            };
         });
     };
 
@@ -118,6 +132,7 @@ const QuestionPage =  () => {
     return (
         <div className='question-page'>
             <div className='center'>
+                <h2>Time Remaining: {timeRemaining}</h2>
                 <br />
                 <h1 className='question-text'>Question {questionNumber}: {question}</h1>
                 <br/>
