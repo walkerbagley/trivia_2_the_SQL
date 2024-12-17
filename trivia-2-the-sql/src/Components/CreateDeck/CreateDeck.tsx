@@ -108,7 +108,7 @@ const CreateDeck = () => {
                     <div className="form-control" key={field.id}>
                       <label className='rounds_categories'>Categories</label>
                       <Controller control={control} {...register(`rounds.${index}.categories` as const)} render={({ field: {value, onChange} }) => (
-                        <Multiselect  options={category_options} isObject={false} showCheckbox={true} closeOnSelect={false} onSelect={onChange} onRemove={onChange} selectedValues={value}/>
+                        <Multiselect className='multiselect' options={category_options} isObject={false} showCheckbox={true} closeOnSelect={false} onSelect={onChange} onRemove={onChange} selectedValues={value}/>
                       )}/>
                       
                       <label className='rounds_questions'>Number of questions</label>
