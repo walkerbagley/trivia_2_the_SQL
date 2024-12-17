@@ -1,7 +1,7 @@
 import React from 'react'
 import './styles.css'
 import { useAxios } from '../../../Providers/AxiosProvider.js'
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { GameService } from '../../../Services/Game.js';
 import {getCurrentUserStatus} from '../../../Services/User.js'
@@ -25,6 +25,7 @@ const QuestionPage =  () => {
     const [dEnabled, setDEnabled] = useState(true)
     const [roundNumber, setRoundNumber] = useState(0);
     const [questionNumber, setQuestionNumber] = useState(0);
+    const questionNumberRef = useRef(0);
     const [timeRemaining, setTimeRemaining] = useState(0);
     
     let qnum = 0
@@ -61,9 +62,10 @@ const QuestionPage =  () => {
             }
             if (data.game_status){
                 setRoundNumber(data.game_status.round_number);
-                if (questionNumber!=data.game_status.question_number){
+                if (questionNumberRef!=Number(data.game_status.question_number)){
                     setAnswer("")
                     setQuestionNumber(data.game_status.question_number);
+                    questionNumberRef.current = Number(data.game_status.question_number)
                     getQuestionById(axios, data.game_status.question_id).then((resp) => {
                         setQuestion(resp.question);
                         setA(resp.a);
