@@ -13,7 +13,7 @@ export const GameService = {
       return response.data;
     } catch (error) {
       console.error("Error fetching games:", error);
-      throw error;
+      
     }
   },
 
@@ -29,7 +29,7 @@ export const GameService = {
       return response.data;
     } catch (error) {
       console.error("Error fetching game details:", error);
-      throw error;
+      
     }
   },
 
@@ -46,7 +46,7 @@ export const GameService = {
       return response.data;
     } catch (error) {
       console.error("Error creating game:", error);
-      throw error;
+      
     }
   },
 
@@ -63,7 +63,7 @@ export const GameService = {
       return response.data;
     } catch (error) {
       console.error("Error joining game:", error);
-      throw error;
+      
     }
   },
 
@@ -79,7 +79,7 @@ export const GameService = {
       return response;
     } catch (error) {
       console.error("Error starting game:", error);
-      throw error;
+      
     }
   },
 
@@ -95,7 +95,7 @@ export const GameService = {
       return response.data;
     } catch (error) {
       console.error("Error deleting game:", error);
-      throw error;
+      
     }
   },
 
@@ -111,7 +111,7 @@ export const GameService = {
       return response.data;
     } catch (error) {
       console.error("Error fetching team names:", error);
-      throw error;
+      
     }
   },
 
@@ -128,7 +128,7 @@ export const GameService = {
       return response.data;
     } catch (error) {
       console.error("Error submitting answer:", error);
-      throw error;
+      
     }
   },
 
@@ -144,7 +144,7 @@ export const GameService = {
       return response.data;
     } catch (error) {
       console.error("Error moving to next question:", error);
-      throw error;
+      
     }
   },
 
@@ -160,7 +160,7 @@ export const GameService = {
       return response.data;
     } catch (error) {
       console.error("Error fetching game scores:", error);
-      throw error;
+      
     }
   },
 
@@ -176,7 +176,7 @@ export const GameService = {
       return response.data;
     } catch (error) {
       console.error(`Failed to leave the game with ID ${gameId}:`, error);
-      throw error;
+      
     }
   },
 
@@ -192,7 +192,7 @@ export const GameService = {
       return response.data;
     } catch (error) {
       console.error(`Failed to rejoin the game`, error);
-      throw error;
+      
     }
   },
 
@@ -208,7 +208,7 @@ export const GameService = {
       return response.data;
     } catch (error) {
       console.error(`Failed to end the game with ID ${gameId}:`, error);
-      throw error;
+      
     }
   }
 

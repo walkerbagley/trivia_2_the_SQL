@@ -15,7 +15,7 @@ export const getAllDecks = async (axiosClient) => {
     return response.data;
   } catch (error) {
     console.error("Failed to fetch decks:", error);
-    throw error;  // Propagate the error so it can be handled by the caller
+      // Propagate the error so it can be handled by the caller
   }
 };
 
@@ -31,7 +31,7 @@ export const getDeck = async (axiosClient, id) => {
     return response.data
   }catch (error) {
     console.error("Failed to fetch deck:", error);
-    throw error; 
+     
   }
 };
 
@@ -55,7 +55,7 @@ export const createDeck = async (axiosClient, name, description, rounds=[]) => {
     return response.data;
   } catch (error) {
     console.error(error);
-    throw error;
+    
   }
 
 }
@@ -131,7 +131,7 @@ export const getQuestions = async (axiosClient) => {
       return response.data;
     } catch (error) {
       console.error("Failed to fetch decks:", error);
-      throw error;  // Propagate the error so it can be handled by the caller
+        // Propagate the error so it can be handled by the caller
     }
 }
 
@@ -148,7 +148,7 @@ export const getDeckQuestions = async (axiosClient, deck_id) => {
     return response.data;
   } catch (error) {
     console.error("Failed to fetch decks:", error);
-    throw error;  // Propagate the error so it can be handled by the caller
+      // Propagate the error so it can be handled by the caller
   }
 }
 
@@ -166,7 +166,7 @@ export const getDeckRounds = async (axiosClient, deck_id) => {
     return response.data;
   } catch (error) {
     console.error("Failed to fetch rounds:", error);
-    throw error;  // Propagate the error so it can be handled by the caller
+      // Propagate the error so it can be handled by the caller
   }
 }
 
@@ -208,7 +208,7 @@ export const getSortedQuestions = async (cat, diff, axiosClient) => {
     return response.data;
   } catch (error) {
     console.error("Failed to fetch decks:", error);
-    throw error;  // Propagate the error so it can be handled by the caller
+      // Propagate the error so it can be handled by the caller
   }
 }
 
@@ -234,7 +234,7 @@ export const addRound = async (axiosClient, num_questions=10, categories=[], att
     return response.data;
   } catch (error) {
     console.error("Failed to fetch decks:", error);
-    throw error;  // Propagate the error so it can be handled by the caller
+      // Propagate the error so it can be handled by the caller
   }
 }
 
