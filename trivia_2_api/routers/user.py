@@ -106,7 +106,7 @@ async def get_current_user_status(request: Request) -> UserStatus:
                 return UserStatus(user_status="hosting", game_status=game_status)
             else:
                 cur.execute('''
-                            SELECT g.id, g.status, g.current_round as round_number, g.current_question as question_number, q.id as question_id, shuffle_answer(a.answer::text, q.first_answer::int) as team_answer, 
+                            SELECT g.id, g.status, g.current_round as round_number, g.current_question as question_number, q.id as question_id, a.answer as answer, 
                             CASE WHEN g.status = 'in_progress'
                                 THEN g.question_time_sec - EXTRACT(EPOCH FROM (now() - g.last_question_start))::int
                                 ELSE null
