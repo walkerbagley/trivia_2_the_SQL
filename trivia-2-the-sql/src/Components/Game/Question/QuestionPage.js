@@ -53,7 +53,7 @@ const QuestionPage =  () => {
     // get new question or round info
     const getGameStatus = () => {
         getCurrentUserStatus(axios).then((data) => {
-            console.log("User Status",data);
+            // console.log("User Status",data);
             if (isHost === null){
                 setIsHost( (data.user_status == 'hosting') ? true : false )
                 if (isHost){
@@ -90,13 +90,9 @@ const QuestionPage =  () => {
             } else {
                 console.error("Game Status is null:",data)
             }
-            console.log("Checking answer exists and length", data?.game_status?.team_answer, data?.game_status?.team_answer);
             if (data?.game_status?.team_answer != null && data.game_status.team_answer.length > 0){
-                console.log("Setting answer to",data.game_status.team_answer);
                 for (const [key, value] of Object.entries(options)) {
-                    console.log(data.game_status.team_answer);
                     if (data.game_status.team_answer == value[1]) {
-                        console.log(value[0]);
                         setAnswer(value[0]);
                     }
                   }
@@ -172,10 +168,10 @@ const QuestionPage =  () => {
                         </button>
                     </div>
                 </div>
-            <div className='center'>
+            {/* <div className='center'>
                 Current Answer: <br/>
                 {answer != '' ? answer : "No Answer"}
-            </div>
+            </div> */}
             <div className='next-question-button'>
                {isHost && (
                 <>
