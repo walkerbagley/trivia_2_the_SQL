@@ -35,7 +35,8 @@ const QuestionPage =  () => {
     }
 
     const answerQuestion = (letter) => {
-        try{
+        try {
+            setAnswer(options[letter][0]);
             GameService.submitAnswer(axios,location.state.gameId,{"round_number":roundNumber,"question_number":questionNumber,"answer":options[letter][1]}).catch((error)=>{
                 console.error(error);
             });
