@@ -60,12 +60,13 @@ const QuestionPage =  () => {
             if (data?.game_status?.time_remaining){
                 setTimeRemaining(data.game_status.time_remaining);
             }
-            else if (data.game_status){
+            if (data.game_status){
                 setRoundNumber(data.game_status.round_number);
                 if (questionNumber!=data.game_status.question_number){
                     setQuestionNumber(data.game_status.question_number);
                     console.log(questionNumber, data.game_status.question_number)
                     getQuestionById(axios, data.game_status.question_id).then((resp) => {
+                        console.log("question resp: ", resp)
                         setQuestion(resp.question);
                         setA(resp.a);
                         setB(resp.b);
