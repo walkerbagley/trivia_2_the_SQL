@@ -39,6 +39,10 @@ const QuestionPage =  () => {
             console.error(error);
         }
     };
+
+    useEffect(() => {
+        console.log("question number", questionNumber)
+    }, [questionNumber]);
     // Get Status from /User/Status should be called on a time out to get the current question number (1-3s)
     // get question by id from user/status (/question/questionid)
 
@@ -62,9 +66,9 @@ const QuestionPage =  () => {
             }
             if (data.game_status){
                 setRoundNumber(data.game_status.round_number);
-                if (questionNumberRef!=Number(data.game_status.question_number)){
+                if (questionNumberRef.current!=Number(data.game_status.question_number)){
                     setAnswer("")
-                    setQuestionNumber(data.game_status.question_number);
+                    setQuestionNumber(Number(data.game_status.question_number));
                     questionNumberRef.current = Number(data.game_status.question_number)
                     getQuestionById(axios, data.game_status.question_id).then((resp) => {
                         setQuestion(resp.question);
