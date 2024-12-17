@@ -59,25 +59,38 @@ const QuestionPage =  () => {
                 console.error(error);
             });
             if (questionNumberRef.current!=Number(data.game_status.question_number)){
-                questionNumberRef.current = Number(data.game_status.question_number;
+                questionNumberRef.current = Number(data.game_status.question_number);
+                setActive("");
+                getQuestionById(axios, data.game_status.question_id).then((resp) => {
+                    setQuestion(resp.question);
+                    // setCorrectAnswer(resp.a);
+                    const shuffledOptions = shuffleArray([[resp.a, "a"], [resp.b, "b"], [resp.c, "c"], [resp.d, "d"]])
+                    setOptions({ "a": shuffledOptions[0], "b": shuffledOptions[1], "c": shuffledOptions[2], "d": shuffledOptions[3] })
+                }).catch((error)=>{
+                    console.error(error);
+                });
             }
         }).catch((error)=>{
             console.error(error);
         });
     };
-    useEffect(() => { // fetch question when number changes
-        setActive("");
-        getQuestionById(axios, data.game_status.question_id).then((resp) => {
-            setQuestion(resp.question);
-            // setCorrectAnswer(resp.a);
-            const shuffledOptions = shuffleArray([[resp.a, "a"], [resp.b, "b"], [resp.c, "c"], [resp.d, "d"]])
-            setOptions({ "a": shuffledOptions[0], "b": shuffledOptions[1], "c": shuffledOptions[2], "d": shuffledOptions[3] })
-        }).catch((error)=>{
-            console.error(error);
-        });
-      }, [questionNumberRef]);
+    // useEffect(() => { // fetch question when number changes
+    //     setActive("");
+    //     getQuestionById(axios, data.game_status.question_id).then((resp) => {
+    //         setQuestion(resp.question);
+    //         // setCorrectAnswer(resp.a);
+    //         const shuffledOptions = shuffleArray([[resp.a, "a"], [resp.b, "b"], [resp.c, "c"], [resp.d, "d"]])
+    //         setOptions({ "a": shuffledOptions[0], "b": shuffledOptions[1], "c": shuffledOptions[2], "d": shuffledOptions[3] })
+    //     }).catch((error)=>{
+    //         console.error(error);
+    //     });
+    //   }, [questionNumberRef]);
       useEffect(() => { // set team answer when active changes
-        if (active === "") {
+        if (options?.active === null || options?.active === undefined ) {
+            return;
+        }
+        if (active === "" || active === null){
+            setCurrAnswer("No Answer");
             return;
         }
         setCurrAnswer(options[active][0])
@@ -157,10 +170,9 @@ const QuestionPage =  () => {
                 <button onClick={leaveGame} >Leave Game</button>
                 )}
             </div>
-            <div>
-                <p>
-                    Current Answer: {currAnswer}
-                </p>
+            <div className='center'>
+                <p>Current Answer: </p>
+                <p>{currAnswer}</p>
             </div>
             <div>
                 <h1>Scores</h1>
