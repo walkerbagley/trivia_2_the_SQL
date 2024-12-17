@@ -27,6 +27,7 @@ const QuestionPage =  () => {
     const [questionNumber, setQuestionNumber] = useState(0);
     const questionNumberRef = useRef(0);
     const [timeRemaining, setTimeRemaining] = useState(0);
+
     
     let qnum = 0
     const answerQuestion = (text,letter) => {
@@ -119,6 +120,7 @@ const QuestionPage =  () => {
             getGameStatus();
             GameService.getGameScores(axios, location.state.gameId).then((s) => {
                 setScores(s);
+                console.log(s)
             });
         });
     };
@@ -189,9 +191,10 @@ const QuestionPage =  () => {
                 )}
             </div>
             <div className='margin-left'>
-                <h3>Team Score: 0</h3>
+                {isHost && (<h3>Team Score: {scores[location["state"]["teamId"]]}</h3>)}
             </div>
-            <div>
+            {!isHost && 
+            (<div>
                 <h1>Scores</h1>
                 <ul>
                     {scores ? 
@@ -203,7 +206,7 @@ const QuestionPage =  () => {
                     : (<p>No Scores Found</p>)
                     }
                 </ul>
-            </div>
+            </div>)}
         </div>
     );
 };
