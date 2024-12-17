@@ -16,7 +16,7 @@ const QuestionPage =  () => {
     const [question, setQuestion] = useState("");
     const [scores, setScores] = useState([]);
     const [options, setOptions] = useState({"a": [], "b": [], "c": [], "d": []});
-    // const [correctAnswer, setCorrectAnswer] = useState("");
+    const liveOptions = useRef({"a": [], "b": [], "c": [], "d": []});
     const [roundNumber, setRoundNumber] = useState(0);
     const [questionNumber, setQuestionNumber] = useState(0);
     const questionNumberRef = useRef(0);
@@ -32,10 +32,10 @@ const QuestionPage =  () => {
 
     const answerQuestion = (letter) => {
         try {
-            setActive(letter);
             GameService.submitAnswer(axios,location.state.gameId,{"round_number":roundNumber,"question_number":questionNumber,"answer":options[letter][1]}).catch((error)=>{
                 console.error(error);
             });
+            console.log("submitted ", letter);
         } catch (error) {
             console.error(error);
         }
@@ -43,14 +43,18 @@ const QuestionPage =  () => {
 
     const getGameStatus = () => {
         getCurrentUserStatus(axios).then((data) => {
-            console.log(data)
+            console.log('options ', options);
             if (data===null || data.game_status===null || data.game_status.status === 'complete'){
                 navigate("/score/"+location.state.joinCode, { state: { gameId : location.state.gameId } });
             }
             if (data?.game_status?.time_remaining){
                 setTimeRemaining(data.game_status.time_remaining);
             }
-            setActive(data?.game_status?.team_answer);
+            if (data?.game_status?.team_answer !== null){
+                // console.log(data.game_status.team_answer, typeof(data.game_status.team_answer))
+                setActive(liveOptions.current[data.game_status.team_answer][1]);
+                // setActive(data.game_status.team_answer);
+            }
             setRoundNumber(data?.game_status?.round_number);
             setQuestionNumber(Number(data.game_status.question_number));
             GameService.getGameScores(axios, location.state.gameId).then((s) => {
@@ -63,9 +67,10 @@ const QuestionPage =  () => {
                 setActive("");
                 getQuestionById(axios, data.game_status.question_id).then((resp) => {
                     setQuestion(resp.question);
-                    // setCorrectAnswer(resp.a);
-                    const shuffledOptions = shuffleArray([[resp.a, "a"], [resp.b, "b"], [resp.c, "c"], [resp.d, "d"]])
-                    setOptions({ "a": shuffledOptions[0], "b": shuffledOptions[1], "c": shuffledOptions[2], "d": shuffledOptions[3] })
+                    // const NonshuffledOptions = ([[resp.a, "a"], [resp.b, "b"],[resp.c, "c"], [resp.d, "d"]]);
+                    const shuffledOptions = shuffleArray([[resp.a, "a"], [resp.b, "b"], [resp.c, "c"], [resp.d, "d"]]);
+                    liveOptions.current = { "a": shuffledOptions[0], "b": shuffledOptions[1], "c": shuffledOptions[2], "d": shuffledOptions[3] };
+                    setOptions({ "a": shuffledOptions[0], "b": shuffledOptions[1], "c": shuffledOptions[2], "d": shuffledOptions[3] });
                 }).catch((error)=>{
                     console.error(error);
                 });
@@ -74,26 +79,22 @@ const QuestionPage =  () => {
             console.error(error);
         });
     };
-    // useEffect(() => { // fetch question when number changes
-    //     setActive("");
-    //     getQuestionById(axios, data.game_status.question_id).then((resp) => {
-    //         setQuestion(resp.question);
-    //         // setCorrectAnswer(resp.a);
-    //         const shuffledOptions = shuffleArray([[resp.a, "a"], [resp.b, "b"], [resp.c, "c"], [resp.d, "d"]])
-    //         setOptions({ "a": shuffledOptions[0], "b": shuffledOptions[1], "c": shuffledOptions[2], "d": shuffledOptions[3] })
-    //     }).catch((error)=>{
-    //         console.error(error);
-    //     });
-    //   }, [questionNumberRef]);
+
       useEffect(() => { // set team answer when active changes
-        if (options?.active === null || options?.active === undefined ) {
-            return;
+        try{
+            console.log("active ",active, typeof(active))
+            if (active === "" || active === null){
+                setCurrAnswer("No Answer");
+                return;
+            }
+            if (options[active] === null || options[active] === undefined ) {
+                return;
+            }
+            setCurrAnswer(options[active][0])
+            console.log('curr answer set')
+        } catch{
+            console.log('error with options')
         }
-        if (active === "" || active === null){
-            setCurrAnswer("No Answer");
-            return;
-        }
-        setCurrAnswer(options[active][0])
       }, [active])
 
 
