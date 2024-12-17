@@ -44,6 +44,12 @@ const QuestionPage =  () => {
         getCurrentUserStatus(axios).then((data) => {
             if (isHost === null){
                 setIsHost( (data.user_status == 'hosting') ? true : false )
+                if (isHost){
+                    setAEnabled(false);
+                    setBEnabled(false);
+                    setCEnabled(false);
+                    setDEnabled(false);
+                }
             }
             if (data.game_status === 'complete' || data.game_status===null){
                 navigate("/score/"+location.state.joinCode, { state: { gameId : location.state.gameId } });
@@ -57,13 +63,15 @@ const QuestionPage =  () => {
                     getQuestionById(axios, data.game_status.question_id).then((resp) => {
                         setQuestion(resp.question);
                         setA(resp.a);
-                        setAEnabled((resp.a) ? true : false);
                         setB(resp.b);
-                        setBEnabled((resp.b) ? true : false);
                         setC(resp.c);
-                        setCEnabled((resp.c) ? true : false);
                         setD(resp.d);
-                        setDEnabled((resp.d) ? true : false);
+                        if (!isHost){
+                            setAEnabled((resp.a) ? true : false);
+                            setBEnabled((resp.b) ? true : false);
+                            setCEnabled((resp.c) ? true : false);
+                            setDEnabled((resp.d) ? true : false);
+                        }
                     });
                 }
             } else {
@@ -110,25 +118,29 @@ const QuestionPage =  () => {
                 <div className='question-grid-container'>
                     <div className='question-grid-item'>
                         <button onClick={()=>{answerQuestion(a,'a')}} disabled={!aEnabled}
-                            style={{backgroundColor: aEnabled ? "whitesmoke" : "gray"}}>
+                            style={{backgroundColor: aEnabled ? "whitesmoke" : "gray"}}
+                            className={answer===a ? 'selected-answer-button' : ""}>
                                 A: {a}
                         </button>
                     </div>
                     <div className='question-grid-item'>
                         <button onClick={()=>{answerQuestion(b,'b')}} disabled={!bEnabled}
-                            style={{backgroundColor: bEnabled ? "whitesmoke" : "gray"}}>
+                            style={{backgroundColor: bEnabled ? "whitesmoke" : "gray"}}
+                            className={answer===b ? 'selected-answer-button' : ""}>
                             B: {b}
                         </button>
                     </div>
                     <div className='question-grid-item'>
                         <button onClick={()=>{answerQuestion(c,'c')}} disabled={!cEnabled}
-                            style={{backgroundColor: cEnabled ? "whitesmoke" : "gray"}}>
+                            style={{backgroundColor: cEnabled ? "whitesmoke" : "gray"}}
+                            className={answer===c ? 'selected-answer-button' : ""}>
                             C: {c}
                         </button>
                     </div>
                     <div className='question-grid-item'>
                         <button onClick={()=>{answerQuestion(d,'d')}} disabled={!dEnabled}
-                            style={{backgroundColor: dEnabled ? "whitesmoke" : "gray"}}>
+                            style={{backgroundColor: dEnabled ? "whitesmoke" : "gray"}}
+                            className={answer===d ? 'selected-answer-button' : ""}>
                             D: {d}
                         </button>
                     </div>

@@ -58,3 +58,8 @@
   .next-question-button {
     justify-content: end;
   }
+
+  .selected-answer-button {
+    background-color: #01305f; /* A Still Darker Blue!*/
+    transform: scale(1.01);
+  }

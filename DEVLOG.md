@@ -15,6 +15,7 @@
 
 ### Walker
 - [ ] score page styling
+- [ ] join page styling
 - [ ] Can't read deck name on the host page due to the font color
 - [ ] Head size adjusted (thinner)
 - [ ] Ensure formatting reaches the bottom of the page on a monitor sized screen
