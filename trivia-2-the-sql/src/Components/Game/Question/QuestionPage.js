@@ -28,9 +28,13 @@ const QuestionPage =  () => {
     
     let qnum = 0
     const answerQuestion = (text,letter) => {
-        setAnswer(text);
-        console.log('Submitting answer:',location.state.gameId,{roundNumber,questionNumber,letter,text})
-        GameService.submitAnswer(axios,location.state.gameId,{"round_number":roundNumber,"question_number":questionNumber,"answer":letter});
+        try{
+            setAnswer(text);
+            console.log('Submitting answer:',location.state.gameId,{roundNumber,questionNumber,letter,text})
+            GameService.submitAnswer(axios,location.state.gameId,{"round_number":roundNumber,"question_number":questionNumber,"answer":letter});
+        } catch (error) {
+            console.log(error);
+        }
     };
     // Get Status from /User/Status should be called on a time out to get the current question number (1-3s)
     // get question by id from user/status (/question/questionid)
