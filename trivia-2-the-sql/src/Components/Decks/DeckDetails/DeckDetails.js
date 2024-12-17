@@ -45,7 +45,6 @@ const DeckDetails =  () => {
     
     const addToUserDecks = async () => {
         addUserDeck(axios, user.id, deck.id).then((ud)=>{
-               console.log('added to userDecks:', ud)
             }).catch((error)=>{
               console.error(error);
         })
@@ -53,17 +52,14 @@ const DeckDetails =  () => {
 
     const removeFromUserDecks = async () => {
       removeUserDeck(axios, user.id, deck.id).then(()=>{
-        console.log('removed from userDecks')
      }).catch((error)=>{
        console.error(error);
     })
     }
 
     const rerollRound = async (round_id, cat, num) => {
-      console.log(round_id, cat, num)
       updateRound(axios, round_id, cat, num).then(()=>{
       fetchDeck();
-      console.log('rerolled round')
      }).catch((error)=>{
        console.error(error);
     })
@@ -101,7 +97,6 @@ for (const key in rounds) {
       </div>);
   }
 
-  console.log(roundsDisplay)
 
   return (
     <div className="page">

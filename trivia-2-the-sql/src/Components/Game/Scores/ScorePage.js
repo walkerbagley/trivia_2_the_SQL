@@ -11,7 +11,6 @@ const ScorePage = () => {
 
     const fetchGameScores = async () => {
         GameService.getGameScores(axios, location["state"]["gameId"]).then((value) => {
-            console.log(value)
             setScores(value)
         }).catch((error) => {
           console.log("failed to get scores", error)
@@ -20,7 +19,6 @@ const ScorePage = () => {
 
     useEffect(() => {
           fetchGameScores();
-          console.log(location["state"]["gameId"]);
 
         }, []);
 

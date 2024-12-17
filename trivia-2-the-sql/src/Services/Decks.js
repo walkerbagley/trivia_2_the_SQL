@@ -36,7 +36,6 @@ export const getDeck = async (axiosClient, id) => {
 };
 
 export const createDeck = async (axiosClient, name, description, rounds=[]) => {
-  console.log(rounds)
   let data = JSON.stringify({
     "name": name,
     "description": description,
@@ -79,7 +78,7 @@ export const updateDeck = (axiosClient, id, name, description) => {
 
   axiosClient.request(config)
   .then((response) => {
-    console.log(JSON.stringify(response.data));
+    JSON.stringify(response.data);
   })
   .catch((error) => {
     console.log(error);
@@ -95,7 +94,7 @@ export const deleteDeck = (axiosClient, id) => {
 
   axiosClient.request(config)
   .then((response) => {
-    console.log(JSON.stringify(response.data));
+    JSON.stringify(response.data);
   })
   .catch((error) => {
     console.log(error);
@@ -111,7 +110,7 @@ export const addQuestion = (axiosClient, deckId, questionId) => {
 
   axiosClient.request(config)
   .then((response) => {
-    console.log(JSON.stringify(response.data));
+    JSON.stringify(response.data);
   })
   .catch((error) => {
     console.log(error);
@@ -137,7 +136,6 @@ export const getQuestions = async (axiosClient) => {
 }
 
 export const getDeckQuestions = async (axiosClient, deck_id) => {
-  console.log("Getting new questions")
   let config = {
     method: 'get',
     maxBodyLength: Infinity,
@@ -181,7 +179,7 @@ export const removeQuestion = (axiosClient, deckId, questionId) => {
     
     axiosClient.request(config)
     .then((response) => {
-      console.log(JSON.stringify(response.data));
+      JSON.stringify(response.data);
     })
     .catch((error) => {
       console.log(error);

@@ -19,7 +19,7 @@ export const login = () => {
   
   axios.request(config)
   .then((response) => {
-    console.log(JSON.stringify(response.data));
+    JSON.stringify(response.data);
   })
   .catch((error) => {
     console.log(error);
@@ -45,7 +45,7 @@ export const register = () => {
 
     axios.request(config)
     .then((response) => {
-    console.log(JSON.stringify(response.data));
+    JSON.stringify(response.data);
     })
     .catch((error) => {
     console.log(error);

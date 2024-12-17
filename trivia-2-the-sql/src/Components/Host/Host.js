@@ -14,11 +14,8 @@ const HostPage =  () => {
     const { user } = useUserSession();
     const [decks, setDecks] = useState([]);
 
-    console.log(user)
-
     useEffect(()=>{
         getUserDecks(axios, user.id).then((data)=>{
-                console.log('Hosts decks: ',data)
                 setDecks(data);
             })
             .catch((error)=>{
@@ -28,7 +25,6 @@ const HostPage =  () => {
 
     function startGame(deckId){
         GameService.createGame(axios,{deck_id:deckId,question_time_sec:20}).then((gameData)=>{
-            console.log('Game Created!',gameData, "/loading/"+gameData.join_code)
             navigate("/loading/"+gameData.join_code, { state: { gameId : gameData.id, joinCode : gameData.join_code, host:true } })
         })
     };

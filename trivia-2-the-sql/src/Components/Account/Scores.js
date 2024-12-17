@@ -11,7 +11,6 @@ const ScoresHistoryPage = () => {
 
     useEffect(() => {
         getUserScores(axios, user.id).then((data)=>{
-            console.log(data);
             setScores(data);
         });
     }, []);

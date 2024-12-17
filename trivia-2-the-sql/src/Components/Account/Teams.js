@@ -60,7 +60,6 @@ const TeamsPage = () => {
   const createNewTeam = async (teamName) => {
     try {
       const r = await createTeam(axios, teamName, user.id);
-      // console.log(r.id);
       const m = await addMember(axios, r.id, user.id);
       setUpdateTeams(true);
     } catch (error) {

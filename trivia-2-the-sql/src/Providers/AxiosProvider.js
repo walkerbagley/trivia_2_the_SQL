@@ -19,7 +19,6 @@ export const AxiosProvider = ({ children }) => {
   const { token, logout } = useAuthSession();
   
   const axiosInstance = useMemo(() => {
-    console.log(process.env.API_PORT)
     return axios.create({
       baseURL:  baseURL, 
       headers: {
@@ -41,7 +40,6 @@ export const AxiosProvider = ({ children }) => {
 
   axiosInstance.interceptors.response.use(
     (response) => {
-      // console.log("response", response)
       return response;
     },
     (error) => {

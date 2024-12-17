@@ -10,7 +10,6 @@ export const GameService = {
 
     try {
       const response = await axiosClient.request(config);
-      console.log("Games fetched successfully:", response.data);
       return response.data;
     } catch (error) {
       console.error("Error fetching games:", error);
@@ -27,7 +26,6 @@ export const GameService = {
 
     try {
       const response = await axiosClient.request(config);
-      console.log("Game details fetched successfully:", response.data);
       return response.data;
     } catch (error) {
       console.error("Error fetching game details:", error);
@@ -45,7 +43,6 @@ export const GameService = {
 
     try {
       const response = await axiosClient.request(config);
-      console.log("Game created successfully:", response.data);
       return response.data;
     } catch (error) {
       console.error("Error creating game:", error);
@@ -63,7 +60,6 @@ export const GameService = {
 
     try {
       const response = await axiosClient.request(config);
-      console.log("Joined game successfully:", response.data);
       return response.data;
     } catch (error) {
       console.error("Error joining game:", error);
@@ -96,7 +92,6 @@ export const GameService = {
 
     try {
       const response = await axiosClient.request(config);
-      console.log("Game deleted successfully:", response.data);
       return response.data;
     } catch (error) {
       console.error("Error deleting game:", error);
@@ -130,7 +125,6 @@ export const GameService = {
 
     try {
       const response = await axiosClient.request(config);
-      console.log("Answer submitted successfully:", response.data);
       return response.data;
     } catch (error) {
       console.error("Error submitting answer:", error);
@@ -147,7 +141,6 @@ export const GameService = {
 
     try {
       const response = await axiosClient.request(config);
-      console.log("Moved to next question successfully:", response.data);
       return response.data;
     } catch (error) {
       console.error("Error moving to next question:", error);
@@ -180,7 +173,6 @@ export const GameService = {
   
     try {
       const response = await axiosClient.request(config);
-      console.log(`Successfully left the game with ID: ${gameId}`);
       return response.data;
     } catch (error) {
       console.error(`Failed to leave the game with ID ${gameId}:`, error);
@@ -197,7 +189,6 @@ export const GameService = {
   
     try {
       const response = await axiosClient.request(config);
-      console.log(`Successfully rejoined the game`);
       return response.data;
     } catch (error) {
       console.error(`Failed to rejoin the game`, error);
@@ -214,7 +205,6 @@ export const GameService = {
   
     try {
       const response = await axiosClient.request(config);
-      console.log(`Successfully ended the game with ID: ${gameId}`);
       return response.data;
     } catch (error) {
       console.error(`Failed to end the game with ID ${gameId}:`, error);

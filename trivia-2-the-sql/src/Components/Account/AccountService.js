@@ -78,7 +78,6 @@ export const updateTeam = async (axios, teamID, newName) => {
       
     try {
         const response = await axios.request(config);
-        console.log(response);
         return response.data;
     } catch (error) {
         console.error("Failed to update team:", error);

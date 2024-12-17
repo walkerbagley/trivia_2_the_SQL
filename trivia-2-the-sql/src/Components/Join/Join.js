@@ -51,9 +51,7 @@ const JoinPage =  () => {
       toast.info("Please select a team and enter a join code!")
       return;
     }
-    console.log({"join_code":joinCode, "team_id":teamId})
     GameService.joinGame(axios, {"join_code":joinCode, "team_id":teamId}).then((data)=>{
-      console.log('Requestion Join Game',data);
       navigate("/loading/"+joinCode, { state: { gameId : data.game_id, joinCode : joinCode, teamId:teamId, host:false } })
     }).catch((error)=>{
       console.error(error);

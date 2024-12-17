@@ -10,7 +10,6 @@ export const getAllUsers = async (axiosClient) => {
 
   try {
     const response = await axiosClient.request(config);
-    console.log("in getAllUsers", JSON.stringify(response.data));
     return response.data;
   } catch (error) {
     console.error("Failed to fetch users:", error);
@@ -37,7 +36,6 @@ export const getCurrentUserStatus = async (axiosClient) => {
 
 // Get a user by ID
 export const getUserById = async (axiosClient, id) => {
-  console.log('get user by id call')
   const config = {
     method: 'get',
     maxBodyLength: Infinity,
@@ -46,7 +44,6 @@ export const getUserById = async (axiosClient, id) => {
 
   try {
     const response = await axiosClient.request(config);
-    console.log("in getUserById", JSON.stringify(response.data));
     return response.data;
   } catch (error) {
     console.error(`Failed to fetch user with ID ${id}:`, error);
@@ -65,7 +62,6 @@ export const updateUser = async (axiosClient, id, user) => {
 
   try {
     const response = await axiosClient.request(config);
-    console.log("in updateUser", response.data);
     return response.data;
   } catch (error) {
     console.error(`Failed to update user with ID ${id}:`, error);
@@ -83,7 +79,6 @@ export const deleteUser = async (axiosClient, id) => {
 
   try {
     const response = await axiosClient.request(config);
-    console.log("in deleteUser", response.data);
     return response.data;
   } catch (error) {
     console.error(`Failed to delete user with ID ${id}:`, error);
@@ -101,7 +96,6 @@ export const getUserDecks = async (axiosClient, userId) => {
 
   try {
     const response = await axiosClient.request(config);
-    console.log("in getUserDecks", JSON.stringify(response.data));
     return response.data;
   } catch (error) {
     console.error(`Failed to fetch decks for user ID ${userId}:`, error);
@@ -119,7 +113,6 @@ export const addUserDeck = async (axiosClient, userId, deckId) => {
 
   try {
     const response = await axiosClient.request(config);
-    console.log("in addUserDeck", response.data);
     return response.data;
   } catch (error) {
     console.error(`Failed to add deck ${deckId} to user ID ${userId}:`, error);
@@ -137,7 +130,6 @@ export const removeUserDeck = async (axiosClient, userId, deckId) => {
 
   try {
     const response = await axiosClient.request(config);
-    console.log("in removeUserDeck", response.data);
     return response.data;
   } catch (error) {
     console.error(`Failed to remove deck ${deckId} from user ID ${userId}:`, error);
@@ -154,7 +146,6 @@ export const getUserScores = async (axiosClient, userId) => {
 
   try {
     const response = await axiosClient.request(config);
-    console.log(`User scores for ID ${userId}:`, JSON.stringify(response.data));
     return response.data; // Returns the list of user scores
   } catch (error) {
     console.error(`Failed to fetch scores for user ID ${userId}:`, error);

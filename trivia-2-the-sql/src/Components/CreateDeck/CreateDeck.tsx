@@ -60,25 +60,18 @@ const CreateDeck = () => {
       'general',
       'humanities',
     ];
-    console.log(errors)
-    console.log(watch())
 
 
 
     const deckName = watch('deckname')
     const deckDesc = watch('deckdesc')
     const rounds = watch('rounds')
-    console.log(rounds)
 
 
     const createDeckFunc = async () => {
-      //console.log(getValues('deckname'), getValues('deckdesc'), getValues('rounds'))
 
       createDeck(axios, deckName, deckDesc, rounds).then((ds) => {
-        console.log('deck created:', ds);
-        console.log(user.id, ds.id);
         addUserDeck(axios, user.id, ds.id).then((ud)=>{
-           console.log('added to userDecks:', ud)
         }).catch((error)=>{
           console.error(error);
         });
@@ -94,7 +87,6 @@ const CreateDeck = () => {
             <h1>Create a Deck!</h1>
 
             <form className='create-deck-form' onSubmit={handleSubmit((data) => {
-              console.log(data)
             })}>
               <div>
               <label className='deckname'>Deck Name</label>
