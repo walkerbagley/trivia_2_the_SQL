@@ -98,6 +98,12 @@ async def leave_game(request: Request, game_id: UUID) -> None:
         with conn.cursor() as cur:
             cur.execute('''UPDATE "GamePlayers" SET is_active = false WHERE game_id = %s and player_id = %s''', (game_id, request.state.user.id))
 
+@router.put("/{game_id}/rejoin")
+async def rejoin_game(request: Request, game_id: UUID) -> None:
+    with db.connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute('''UPDATE "GamePlayers" SET is_active = true WHERE game_id = %s and player_id = %s''', (game_id, request.state.user.id))
+
 @router.delete("/{id}")
 async def delete_game(id: UUID) -> None:
     with db.connection() as conn:
