@@ -31,7 +31,8 @@ const QuestionPage =  () => {
     let qnum = 0
     const answerQuestion = (text,letter) => {
         try{
-            setAnswer(text);
+            //console.log("Setting answer to",text);
+            // setAnswer(text);
             GameService.submitAnswer(axios,location.state.gameId,{"round_number":roundNumber,"question_number":questionNumber,"answer":letter}).catch((error)=>{
                 console.error(error);
             });
@@ -49,6 +50,7 @@ const QuestionPage =  () => {
     // get new question or round info
     const getGameStatus = () => {
         getCurrentUserStatus(axios).then((data) => {
+            console.log("User Status",data);
             if (isHost === null){
                 setIsHost( (data.user_status == 'hosting') ? true : false )
                 if (isHost){
@@ -66,8 +68,9 @@ const QuestionPage =  () => {
             }
             if (data.game_status){
                 setRoundNumber(data.game_status.round_number);
+                // setAnswer(data.game_status.team_answer);
                 if (questionNumberRef.current!=Number(data.game_status.question_number)){
-                    setAnswer("")
+                    // setAnswer("")
                     setQuestionNumber(Number(data.game_status.question_number));
                     questionNumberRef.current = Number(data.game_status.question_number)
                     getQuestionById(axios, data.game_status.question_id).then((resp) => {
@@ -87,7 +90,9 @@ const QuestionPage =  () => {
             } else {
                 console.error("Game Status is null:",data)
             }
-            if (data?.game_status?.team_answer && data.game_status.team_answer.length > 0){
+            console.log("Checking answer exists and length", data?.game_status?.team_answer, data?.game_status?.team_answer);
+            if (data?.game_status?.team_answer != null && data.game_status.team_answer.length > 0){
+                console.log("Setting answer to",data.game_status.team_answer);
                 if (data.game_status.team_answer==="a"){
                     setAnswer(a);
                 } if (data.game_status.team_answer==="b"){
