@@ -34,6 +34,6 @@ class UserGameScores(BaseModel):
     game_id: UUID
     team_name: str
     date: datetime
-    score: int
-    percentage: float
+    score: Optional[int] = None
+    percentage: Optional[float] = None
 
