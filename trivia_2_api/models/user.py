@@ -31,6 +31,7 @@ class UserStatus(BaseModel):
 
 class UserGameScores(BaseModel):
     game_id: UUID
+    team_name: str
     date: datetime
     score: int
     percentage: float

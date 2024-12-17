@@ -135,7 +135,7 @@ async def get_user_scores(user_id: UUID) -> list[UserGameScores]:
     with db.connection() as conn:
         with conn.cursor(row_factory=class_row(UserGameScores)) as cur:
             cur.execute('''
-                        select g.id as game_id, g.start_time::Date as date, sum(CASE WHEN a.answer = 'a' THEN 1 ELSE 0 END) as score, (sum(CASE WHEN a.answer = 'a' THEN 1 ELSE 0 END) / sum(dr.num_questions) * 100)::integer as percentage
+                        select g.id as game_id, t.name as team_name, g.start_time::Date as date, sum(CASE WHEN a.answer = 'a' THEN 1 ELSE 0 END) as score, (sum(CASE WHEN a.answer = 'a' THEN 1 ELSE 0 END) / sum(dr.num_questions) * 100)::integer as percentage
                         FROM "GamePlayers" as gp
                         LEFT OUTER JOIN "Teams" as t ON gp.team_id = t.id
                         LEFT OUTER JOIN "Games" as g on gp.game_id = g.id
