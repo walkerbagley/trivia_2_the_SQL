@@ -194,7 +194,7 @@ const QuestionPage =  () => {
                 </div>
             <div className='center'>
                 Current Answer: <br/>
-                {answer == 'a' ? a : answer == 'b' ? b : answer == 'c' ? c : answer == 'd' ? d : "No Answer"}
+                {answer != '' ? answer : "No Answer"}
             </div>
             <div className='next-question-button'>
                {isHost && (
