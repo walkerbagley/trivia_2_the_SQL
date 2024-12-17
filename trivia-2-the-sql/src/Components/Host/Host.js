@@ -13,6 +13,7 @@ const HostPage =  () => {
     const axios = useAxios();
     const { user } = useUserSession();
     const [decks, setDecks] = useState([]);
+    const [questionTime, setQuestionTime] = useState(30);
 
     useEffect(()=>{
         getUserDecks(axios, user.id).then((data)=>{
@@ -29,9 +30,27 @@ const HostPage =  () => {
         })
     };
 
+    function handleChange(){
+        
+    }
+
     return (
     <div className="hostpage">
-        <div>Enter Question Time: </div>
+        <div className="form-field">
+            <label htmlFor="" className="form-label">
+                Question Time:
+            </label>
+            <input
+                type="text"
+                id="question_time"
+                name="question_time"
+                value={questionTime}
+                onChange={handleChange}
+                placeholder="Enter desired quesiton time"
+                aria-required="true"
+                className="form-input"
+            />
+        </div>
         <div>Choose Deck: </div>
         <div className="grid-container">
             {decks ? 
