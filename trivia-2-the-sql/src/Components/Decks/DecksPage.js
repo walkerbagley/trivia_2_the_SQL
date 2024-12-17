@@ -16,7 +16,7 @@ const Decks =  () => {
     const navigate = useNavigate();
     const [allDecks, setAllDecks] = useState([]);
     const [userDecks, setUserDecks] = useState([]);
-    const [filter, setFilter] = useState(false);
+    const [filter, setFilter] = useState(true);
     const [decks, setDecks] = useState([]);
 
     const goToDeckDetails = (deck) => {
