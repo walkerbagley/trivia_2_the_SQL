@@ -189,7 +189,7 @@ async def get_user_scores(user_id: UUID) -> list[UserGameScores]:
                         LEFT OUTER JOIN "Questions" as q on a.question_id = q.id
                         LEFT OUTER JOIN "DeckRounds" as dr on dr.deck_id = g.deck_id
                         where gp.player_id = %s
-                        group by g.id
+                        group by g.id, t.name
                         order by date desc''', (user_id,))
             return cur.fetchall()
 
