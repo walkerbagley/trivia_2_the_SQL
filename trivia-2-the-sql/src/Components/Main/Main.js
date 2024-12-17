@@ -39,12 +39,12 @@ const Main =  () => {
         });
     };
 
-    // const rejoinGame = () => {
-    //     GameService.rejoinGame(axios, game).then((value) => {
-    //         console.log('rejoin game',value)
-    //     }
-    //     );
-    // }
+    const rejoinGame = () => {
+        GameService.rejoinGame(axios).then((value) => {
+            console.log('rejoin game',value)
+        }
+        );
+    }
 
 
     useEffect(() => {
@@ -68,7 +68,7 @@ const Main =  () => {
             </button>
             <button
                 className="button-52"
-                onClick={() => {}}>
+                onClick={() => rejoinGame()}>
                 Rejoin Game
             </button>
         </div>

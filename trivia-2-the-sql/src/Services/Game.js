@@ -188,19 +188,19 @@ export const GameService = {
     }
   },
 
-  async rejoinGame(axiosClient, gameId) {
+  async rejoinGame(axiosClient) {
     const config = {
       method: 'put',
       maxBodyLength: Infinity,
-      url: `/game/${gameId}/rejoin`,
+      url: `/game/rejoin`,
     };
   
     try {
       const response = await axiosClient.request(config);
-      console.log(`Successfully rejoined the game with ID: ${gameId}`);
+      console.log(`Successfully rejoined the game`);
       return response.data;
     } catch (error) {
-      console.error(`Failed to rejoin the game with ID ${gameId}:`, error);
+      console.error(`Failed to rejoin the game`, error);
       throw error;
     }
   },
