@@ -54,7 +54,7 @@ const QuestionPage =  () => {
                 setCEnabled(false);
                 setDEnabled(false);
             }
-            if (data.game_status.status === 'complete' || data.game_status===null){
+            if (data===null || data.game_status===null || data.game_status.status === 'complete'){
                 navigate("/score/"+location.state.joinCode, { state: { gameId : location.state.gameId } });
             }
             if (data?.game_status?.time_remaining){
