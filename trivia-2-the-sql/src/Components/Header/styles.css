@@ -10,6 +10,10 @@
     font-family:Verdana, Geneva, Tahoma, sans-serif
 }
 
+.navbar .title {
+  font-family: 'Galindo';
+}
+
 .navbar h2 {
   text-align: left; /* Align title to the left */
   font-size: xx-large;
