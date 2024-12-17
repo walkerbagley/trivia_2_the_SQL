@@ -814,6 +814,15 @@ const LoadingPage = () => {
         });
     }
 
+    function leaveGame(){
+        GameService.leaveGame(axios, location.state.gameId).then((resp)=>{
+            navigate("/");
+        }).catch((error)=>{
+            console.error("Failed to leave game", error);
+            toast.error('You may not leave this game.')
+        });
+    }  
+
     return (
         <div className='loading-page'>
             <ToastContainer />
@@ -837,11 +846,16 @@ const LoadingPage = () => {
                 : <></>
                 }
             </div>
-            {location.state.host && (
+            {location.state.host ? (
             <div>
                 <button className='join-code' onClick={()=>handleStartGame()}>Start Game!</button>
                 <button className='join-code' onClick={()=>endGame()}>End Game</button>
             </div>
+            ) :
+            (
+                <div>
+                    <button className='join-code' onClick={()=>leaveGame()}>Leave Game</button>
+                </div>
             )}
         </div>
     );
