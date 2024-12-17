@@ -1,12 +1,14 @@
+from datetime import datetime
 from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import JSONResponse
 from psycopg.rows import class_row, dict_row
 from uuid import UUID
 
 from trivia_2_api.models.user import GameStatus, User
+from trivia_2_api.routers.game import next_question
 
 from ..db import db
-from ..models import Deck, UserRequest, UserResponse, UserStatus, UserGameScores, UserScores
+from ..models import Deck, UserRequest, UserResponse, UserStatus, UserGameScores
 
 answer_choices = ['a', 'b', 'c', 'd']
 
@@ -23,6 +25,42 @@ async def get_user() -> list[UserResponse]:
             cur.execute('''SELECT id, user_name FROM "Users"''')
             return cur.fetchall()
 
+async def next_question_if_needed(game_id: UUID) -> None:
+    with db.connection() as conn:
+        with conn.cursor(row_factory=dict_row) as cur:
+            cur.execute(''' 
+                        SELECT g.host_id, g.current_round, g.current_question, dr.num_questions, g.question_time_sec - EXTRACT(EPOCH FROM (now() - g.last_question_start))::int as time_remaining
+                        FROM "Games" as g
+                        INNER JOIN "Decks" as d ON g.deck_id = d.id
+                        INNER JOIN "DeckRounds" as dr ON d.id = dr.deck_id
+                        WHERE g.id = %s and dr.round_number = g.current_round''', (game_id,))
+            game = cur.fetchone()
+
+            if game is None:
+                raise HTTPException(status_code=404, detail="Game not found")
+            
+            if game.get("time_remaining", None) > 0:
+                return
+            
+            if game.get("current_question", None) < game.get("num_questions", None):
+                cur.execute('''UPDATE "Games" SET current_question = current_question + 1 WHERE id = %s''', (game_id,))
+                return
+            
+            else:
+                cur.execute(''' SELECT count(*) as rounds FROM "DeckRounds" as dr WHERE dr.deck_id = (SELECT g.deck_id FROM "Games" as g WHERE g.id = %s)''', (game_id,))
+
+                results = cur.fetchone()
+                if results is None:
+                    raise HTTPException(status_code=404, detail="Game not found")
+                
+                if results.get("rounds", None) > game.get("current_round", None):
+                    cur.execute('''UPDATE "Games" SET current_round = current_round + 1, current_question = 1 WHERE id = %s''', (game_id,))
+                    return
+                
+                else:
+                    cur.execute('''UPDATE "Games" SET status = 'complete', end_time = %s WHERE id = %s''', (datetime.now(), game_id))
+                    return
+            
 @router.get("/status")
 async def get_current_user_status(request: Request) -> UserStatus:
     with db.connection() as conn:
@@ -47,13 +85,17 @@ async def get_current_user_status(request: Request) -> UserStatus:
             status = game.get("status", None)
             if game_id is None or host_id is None or status is None:
                 raise HTTPException(status_code=500, detail="Failed to get game status")
-
+        
             if status == 'open':
                 return UserStatus(user_status="hosting" if host_id == request.state.user.id else "playing", game_status=GameStatus(id=game_id, status="open", round_number=0, question_number=0, question_id=None))
             
             elif host_id == request.state.user.id:
                 cur.execute('''
-                            SELECT g.id, g.status, g.current_round as round_number, g.current_question as question_number, q.id as question_id
+                            SELECT g.id, g.status, g.current_round as round_number, g.current_question as question_number, q.id as question_id, 
+                            CASE WHEN g.status = 'in_progress'
+                                THEN g.question_time_sec - EXTRACT(EPOCH FROM (now() - g.last_question_start))::int
+                                ELSE null
+                            END as time_remaining
                             FROM "Games" as g
                             LEFT OUTER JOIN "Decks" as d ON g.deck_id = d.id
                             LEFT OUTER JOIN "DeckRounds" as dr ON dr.deck_id = d.id and dr.round_number = g.current_round
@@ -64,7 +106,11 @@ async def get_current_user_status(request: Request) -> UserStatus:
                 return UserStatus(user_status="hosting", game_status=game_status)
             else:
                 cur.execute('''
-                            SELECT g.id, g.status, g.current_round as round_number, g.current_question as question_number, q.id as question_id, shuffle_answer(a.answer::text, q.first_answer::int) as team_answer
+                            SELECT g.id, g.status, g.current_round as round_number, g.current_question as question_number, q.id as question_id, shuffle_answer(a.answer::text, q.first_answer::int) as team_answer, 
+                            CASE WHEN g.status = 'in_progress'
+                                THEN g.question_time_sec - EXTRACT(EPOCH FROM (now() - g.last_question_start))::int
+                                ELSE null
+                            END as time_remaining
                             FROM "Games" as g
                             INNER JOIN "GamePlayers" as gp ON g.id = gp.game_id and gp.player_id = %s
                             LEFT OUTER JOIN "Answers" as a ON g.id = a.game_id and gp.team_id = a.team_id and a.round_number = g.current_round and a.question_number = g.current_question

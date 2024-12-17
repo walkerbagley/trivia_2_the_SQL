@@ -23,6 +23,7 @@ class GameStatus(BaseModel):
     question_number: int
     question_id: Optional[UUID] = None
     team_answer: Optional[str] = None
+    time_remaining: Optional[int] = None
 
 class UserStatus(BaseModel):
     user_status: str
@@ -35,7 +36,4 @@ class UserGameScores(BaseModel):
     date: datetime
     score: int
     percentage: float
-
-class UserScores(BaseModel):
-    scores: list[UserGameScores]
 
