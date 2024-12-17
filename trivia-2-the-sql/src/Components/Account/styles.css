@@ -1,7 +1,7 @@
 .accountpage {
     color: var(--main-text-color);
     width: 100%;
-    height: 100%;
+    min-height: 90vh;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -16,9 +16,28 @@
   padding: 2em;
 }
 
-/* .teamCard {
+.toggle-buttons {
+  background-color: var(--main-background-color);
   display: flex;
-} */
+  margin: 2em;
+  border-radius: 0.5em;
+  overflow: hidden;
+  box-shadow:  10px 10px 10px #bebebe,
+             -10px -10px 10px #ffffff;
+}
+
+.toggle-buttons button {
+  background-color: transparent;
+  border: 0;
+  cursor: pointer;
+  padding: 1em;
+  transition: 0.2s ease-in-out;
+}
+
+.toggle-buttons .active {
+  background-color: var(--accent2);
+  color: var(--main-background-color);
+}
 
 .teamCard {
   width: 100%;
@@ -86,15 +105,23 @@
 .scoresGrid {
   display: grid;
   gap: 1em;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   padding: 2em;
 }
 
 .scoresGrid-item {
+  background-color: var(--accent2);
+  padding: 1em;
+  border-radius: 0.5em;
   display: block;
   flex-grow: 1;
   align-items: center;
   justify-content: center;
-  width: 100%;
-  height: 100%;
+  box-shadow:  10px 10px 10px #bebebe,
+             -10px -10px 10px #ffffff;
+}
+
+.scoresGrid-item > div {
+  display: flex;
+  justify-content: space-between;
 }

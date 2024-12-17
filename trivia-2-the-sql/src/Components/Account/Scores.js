@@ -23,17 +23,14 @@ const ScoresHistoryPage = () => {
                     scores.map((s) => (
                         <div className='scoresGrid-item' key={s.game_id}>
                             <h3>
-                                <strong>{new Date(s.date).toDateString()}</strong>
+                                {s.team_name}
                             </h3>
-                            <p>
-                                Team Name: {s.team_name}
+                            <p>{new Date(s.date).toDateString()}
                             </p>
-                            <p>
-                                Score: {s.score}
-                            </p>
-                            <p>
-                                Percent Correct: {s.percentage}%
-                            </p>
+                            <div>
+                                <p><strong>{s.score}</strong><br/>points</p>
+                                <p><strong>{s.percentage}%</strong><br/>correct</p>
+                            </div>
                         </div>
                     ))
                 ) : (
