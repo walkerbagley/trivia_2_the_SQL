@@ -69,9 +69,8 @@ async def get_current_user_status(request: Request) -> UserStatus:
                         SELECT g.id, g.host_id, g.status
                         FROM "Games" as g
                         LEFT OUTER JOIN "GamePlayers" as gp ON g.id = gp.game_id
-                        WHERE (gp.player_id = %s OR g.host_id = %s)
+                        WHERE (gp.player_id = %s and gp.is_active = true) OR g.host_id = %s
                         AND (g.status = 'open' OR g.status = 'in_progress')
-                        AND gp.is_active = true
                         ORDER BY g.start_time desc
                         LIMIT 1
                         ''', (request.state.user.id,request.state.user.id,))
