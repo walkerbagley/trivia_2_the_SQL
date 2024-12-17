@@ -80,10 +80,10 @@ const QuestionPage =  () => {
                         const shuffledOptions = shuffleArray([[resp.a, "a"], [resp.b, "b"], [resp.c, "c"], [resp.d, "d"]])
                         setOptions({"a": shuffledOptions[0], "b": shuffledOptions[1], "c": shuffledOptions[2], "d": shuffledOptions[3]})
                         if (!isHost){
-                            setAEnabled((resp.a) ? true : false);
-                            setBEnabled((resp.b) ? true : false);
-                            setCEnabled((resp.c) ? true : false);
-                            setDEnabled((resp.d) ? true : false);
+                            setAEnabled(options["a"][0] ? true : false);
+                            setBEnabled(options["b"][0] ? true : false);
+                            setCEnabled(options["c"][0] ? true : false);
+                            setDEnabled(options["d"][0] ? true : false);
                         }
                     });
                 }
