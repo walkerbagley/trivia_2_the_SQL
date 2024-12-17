@@ -5,7 +5,6 @@ from psycopg.rows import class_row, dict_row
 from uuid import UUID
 
 from trivia_2_api.models.user import GameStatus, User
-from trivia_2_api.routers.game import next_question
 
 from ..db import db
 from ..models import Deck, UserRequest, UserResponse, UserStatus, UserGameScores
@@ -85,12 +84,12 @@ async def get_current_user_status(request: Request) -> UserStatus:
             if game_id is None or host_id is None or status is None:
                 raise HTTPException(status_code=500, detail="Failed to get game status")
 
-            await next_question_if_needed(game_id)
-
             if status == 'open':
                 return UserStatus(user_status="hosting" if host_id == request.state.user.id else "playing", game_status=GameStatus(id=game_id, status="open", round_number=0, question_number=0, question_id=None))
             
             elif host_id == request.state.user.id:
+                await next_question_if_needed(game_id)
+
                 cur.execute('''
                             SELECT g.id, g.status, g.current_round as round_number, g.current_question as question_number, q.id as question_id, 
                             CASE WHEN g.status = 'in_progress'

@@ -2,21 +2,54 @@
     background-color: var(--main-background-color);
     font: var(--main-font);
     color: var(--main-text-color);
+    min-height: 85vh;
+    padding: 2em;
 }
 
-.join-button {
+.join-page h1 {
+    margin: 0;
+}
+
+.join-page .teamCard {
+    border: 0;
+    border-radius: 0.5em;
+}
+
+.join-page .teamCard-button {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+.join-page .join-button {
     width: 100px;
     height: 50px;
     margin: 10px;
 }
 
-.teamCard-button {
-    width: 100%;
-    height: 100%;
+.join-page .teamCard.selected {
+    background-color: var(--accent2);
+    border-color: var(--main-text-color);
 }
 
-.teamCard.selected {
-    background-color: var(--main-background-color); /* Highlight color */
-    border-color: var(--main-text-color);    /* Highlight border color */
-    transform: scale(1.05);   /* Slightly enlarge the card */
-  }
+.join-page .form-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1em;
+}
+
+.join-page .form-container input, .join-page .form-container button {
+    height: 100%;
+    padding: 1em;
+    border: 0;
+    border-radius: 0.5em;
+}
+
+.join-page .form-container button {
+    cursor: pointer;
+    background-color: var(--accent2);
+    font-weight: 100;
+}

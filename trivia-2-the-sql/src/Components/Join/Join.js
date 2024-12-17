@@ -84,9 +84,6 @@ const JoinPage =  () => {
         <h1>Enter GameID</h1>
         <form onSubmit={handleSubmit} className="form-container">
           <div className="form-field">
-            <label htmlFor="join_code" className="form-label">
-              Join Code:
-            </label>
             <input
               type="text"
               id="join_code"
