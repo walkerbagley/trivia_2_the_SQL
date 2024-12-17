@@ -29,9 +29,16 @@
     margin: 10px;
 }
 
+.join-page .teamCard{
+    transition: 0.2s ease-in-out;
+}
+
+.join-page .teamCard:hover{
+    background-color: var(--accent2);
+}
+
 .join-page .teamCard.selected {
     background-color: var(--accent2);
-    border-color: var(--main-text-color);
 }
 
 .join-page .form-container {
