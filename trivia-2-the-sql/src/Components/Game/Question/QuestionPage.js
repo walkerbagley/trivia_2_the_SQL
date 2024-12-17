@@ -150,43 +150,39 @@ const QuestionPage =  () => {
                 <div className='question-grid-container'>
                     <div className='question-grid-item'>
                         <button onClick={()=>{answerQuestion(a,'a')}} disabled={!aEnabled}
-                            style={{backgroundColor: aEnabled ? "whitesmoke" : "gray"}}
                             className={answer===a ? 'selected-answer-button' : ""}>
-                                A: {a}
+                                <strong>A</strong> {a}
                         </button>
                     </div>
                     <div className='question-grid-item'>
                         <button onClick={()=>{answerQuestion(b,'b')}} disabled={!bEnabled}
-                            style={{backgroundColor: bEnabled ? "whitesmoke" : "gray"}}
                             className={answer===b ? 'selected-answer-button' : ""}>
-                            B: {b}
+                            <strong>B</strong> {b}
                         </button>
                     </div>
                     <div className='question-grid-item'>
                         <button onClick={()=>{answerQuestion(c,'c')}} disabled={!cEnabled}
-                            style={{backgroundColor: cEnabled ? "whitesmoke" : "gray"}}
                             className={answer===c ? 'selected-answer-button' : ""}>
-                            C: {c}
+                            <strong>C</strong> {c}
                         </button>
                     </div>
                     <div className='question-grid-item'>
                         <button onClick={()=>{answerQuestion(d,'d')}} disabled={!dEnabled}
-                            style={{backgroundColor: dEnabled ? "whitesmoke" : "gray"}}
                             className={answer===d ? 'selected-answer-button' : ""}>
-                            D: {d}
+                            <strong>D</strong> {d}
                         </button>
                     </div>
                 </div>
             <div className='center'>
-                Current Answer: <br/>
+                <stong>Current Answer:</stong> 
                 {answer}
             </div>
             <div className='next-question-button'>
                {isHost && (
-                <div>
+                <>
                     <button onClick={()=>{nextQuestion()}} disabled={!isHost}>Next Question</button>
                     <button onClick={() => {endGame()}} disable={!isHost}>End Game</button>
-                </div>
+                </>
                 )}
                 {!isHost && (
                 <button onClick={leaveGame} disabled={isHost}>Leave Game</button>

@@ -1,65 +1,84 @@
 .question-page {
-    background-color: var(--main-background-color);
-    color: var(--main-text-color);
-    width: 100%;
-    height: 100vh;
+  background-color: var(--main-background-color);
+  color: var(--main-text-color);
+  width: 100%;
+  min-height: 90vh;
 }
 
-.center {
-    align-items: center;
-    justify-content: center;
-    margin: auto;
-    text-align: center;
+.question-page .center {
+  padding: 2em;
+  align-items: center;
+  text-align: center;
 }
 
-.question-text {
-    font-size: 3em;
+.question-page h1, .question-page .center h2 {
+  margin: 0;
 }
 
-.margin-left {
-    margin-left: 25px;
+.question-page .question-text {
+  font-size: 3em;
 }
 
-.question-grid-container { 
-    display: grid; 
-    grid-template-columns: repeat(2, 1fr); 
-    gap: 10px; 
-    padding: 20px;
-  } 
+.question-page .question-grid-container { 
+  display: grid; 
+  grid-template-columns: repeat(2, 1fr); 
+  gap: 1em; 
+  padding: 2em;
+} 
     
-  .question-grid-item { 
-    background-color: #ff5c61ff; 
-    border: 1px solid #ccc; 
-    border-radius: 5px; 
-    padding: 20px; 
-    text-align: center; 
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
-  }
+.question-page .question-grid-item {
+  text-align: center; 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  border-radius: 1em;
+}
 
-  .question-grid-item button {
-    width: 100%; /* Makes the button fill the entire width of the grid item */
-    height: 100%; /* Makes the button fill the entire height of the grid item */
-    background-color: whitesmoke; /* Primary blue background color */
-    color: black; /* White text color */
-    border: none; /* Removes default button border */
-    border-radius: 8px; /* Adds rounded corners for a modern look */
-    font-size: 1rem; /* Adjusts font size for readability */
-    cursor: pointer; /* Changes cursor to pointer on hover */
-    transition: background-color 0.3s ease; /* Adds a smooth hover effect */
-  }
-  
-  .question-grid-item button:hover {
-    background-color: #0056b3; /* Darker blue on hover */
-  }
-  
-  .question-grid-item button:active {
-    background-color: #003f7f; /* Even darker blue when pressed */
-  }
-  .next-question-button {
-    justify-content: end;
-  }
+.question-page .question-grid-item button {
+  width: 100%; /* Makes the button fill the entire width of the grid item */
+  height: 100%; /* Makes the button fill the entire height of the grid item */
+  font-size: medium;
+  padding: 2em;
+  background-color: white; /* Primary blue background color */
+  color: black; /* White text color */
+  border: none; /* Removes default button border */
+  border-radius: 1em;
+  cursor: pointer; /* Changes cursor to pointer on hover */
+  transition: 0.2s ease-in-out; /* Adds a smooth hover effect */
+}
 
-  .selected-answer-button {
-    background-color: #01305f; /* A Still Darker Blue!*/
-    transform: scale(1.01);
-  }
+.question-page .question-grid-item button:hover {
+  background-color: var(--accent3);
+  color: var(--main-background-color);
+}
+
+.question-page .question-grid-item .selected-answer-button {
+  background-color: var(--accent3);
+  color: var(--main-background-color);
+}
+
+.question-page .next-question-button {
+  justify-content: end;
+}
+
+.question-page .next-question-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1em;
+}
+
+.question-page .next-question-button button {
+  border: 3px solid var(--accent3);
+  color: var(--accent3);
+  font-size: medium;
+  cursor: pointer;
+  padding: 0.5em;
+  border-radius: 0.5em;
+  background-color: transparent;
+  transition: 0.2s ease-in-out;
+}
+
+.question-page .next-question-button button:hover {
+  color: var(--main-background-color);
+  background-color: var(--accent3);
+}

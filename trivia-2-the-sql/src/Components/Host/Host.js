@@ -54,8 +54,8 @@ const HostPage =  () => {
         <h3>Select a Deck</h3>
         <div className="grid-container">
             {decks ? 
-            decks.map((d) => (
-            <div className='grid-item'>
+            decks.map((d, index) => (
+            <div className='grid-item' key={index}>
                 <button onClick={() => startGame(d.id)} className='no-underline'><Deck deck={d}/></button>
             </div>
             ))
