@@ -12,69 +12,65 @@ const TeamsPage = () => {
   const [newName, setNewName] = useState("");
   const [myteams, setMyteams] = useState([]);
   const [teams, setTeams] = useState([]);
-  const [updateTeams, setUpdateTeams] = useState(true);
+
+  const fetchTeams = async () => {
+    try {
+      const t = await getTeams(axios);
+      let m = [];
+      let o = [];
+      t.forEach(team => {
+        if (team.member_ids.includes(user.id)) {
+          m.push(team);
+        }
+        else {
+          o.push(team);
+        }
+      });
+      setTeams(o);
+      setMyteams(m);
+    }
+    catch (error) {
+      console.error("Failed to fetch teams:", error);
+    }
+  };
 
   useEffect(() => {
-    const fetchTeams = async () => {
-      try {
-        const t = await getTeams(axios);
-        let m = [];
-        let o = [];
-        t.forEach(team => {
-          if (team.member_ids.includes(user.id)) {
-            m.push(team);
-          }
-          else {
-            o.push(team);
-          }
-        });
-        setTeams(o);
-        setMyteams(m);
-      }
-      catch (error) {
-        console.error("Failed to fetch teams:", error);
-      }
-    };
-    if (updateTeams) {
-      fetchTeams();
-      setUpdateTeams(false);
-    }
-  }, [updateTeams]);
+    fetchTeams();
+  }, []);
 
   const addToTeam = async (teamID) => {
-    try {
-      const r = await addMember(axios, teamID, user.id);
-      setUpdateTeams(true);
-    } catch (error) {
+      addMember(axios, teamID, user.id).then(() => {
+        fetchTeams();
+      }).catch ((error) => {
       console.error("Failed to add user to team:", error);
+      });
     }
-  }
+
   const removeFromTeam = async (teamID) => {
-    try {
-      const r = await removeMember(axios, teamID, user.id);
-      setUpdateTeams(true);
-    } catch (error) {
+      removeMember(axios, teamID, user.id).then(() => {
+        fetchTeams();
+      }).catch ((error) => {
       console.error("Failed to remove user from team:", error);
-    }
+      });
   }
+
   const createNewTeam = async (teamName) => {
-    try {
-      const r = await createTeam(axios, teamName, user.id);
-      const m = await addMember(axios, r.id, user.id);
-      setUpdateTeams(true);
-    } catch (error) {
-      console.error("Failed to remove user from team:", error);
-    }
+    createTeam(axios, teamName, user.id).then((value) => {
+      fetchTeams();
+      setTeamName("");
+    }).catch ((error) => {
+      console.error("Failed to create team:", error);
+    });
   }
+
   const renameTeam = async (teamID, teamName) => {
-    try {
-      const r = await updateTeam(axios, teamID, teamName);
-      setEdit("");
-      setNewName("");
-      setUpdateTeams(true);
-    } catch (error) {
-      console.error("Failed to rename team:", error);
-    }
+      updateTeam(axios, teamID, teamName).then(() => {
+        setEdit("");
+        setNewName("");
+        fetchTeams();
+      }).catch ((error) => {
+        console.error("Failed to rename team:", error);
+      });
   }
 
   return (
@@ -87,7 +83,7 @@ const TeamsPage = () => {
               e.preventDefault();
               createNewTeam(teamName);
             }}>
-            <input className='textfield' type='text' name='teamname' placeholder='Team Name' onChange={(e) => {
+            <input className='textfield' type='text' value={teamName} name='teamname' placeholder='Team Name' onChange={(e) => {
               e.preventDefault();
               setTeamName(e.target.value);
             }} required></input>
