@@ -144,3 +144,20 @@ export const removeUserDeck = async (axiosClient, userId, deckId) => {
     throw error;
   }
 };
+
+export const getUserScores = async (axiosClient, userId) => {
+  const config = {
+    method: 'get',
+    maxBodyLength: Infinity,
+    url: `/user/${userId}/scores`,
+  };
+
+  try {
+    const response = await axiosClient.request(config);
+    console.log(`User scores for ID ${userId}:`, JSON.stringify(response.data));
+    return response.data; // Returns the list of user scores
+  } catch (error) {
+    console.error(`Failed to fetch scores for user ID ${userId}:`, error);
+    throw error;
+  }
+};

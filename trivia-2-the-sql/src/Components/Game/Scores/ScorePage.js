@@ -1,10 +1,9 @@
-import { useNavigate, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { GameService } from '../../../Services/Game.js'
 import { useAxios } from '../../../Providers/AxiosProvider.js'
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const ScorePage = () => {
-    const navigate = useNavigate();
     const location = useLocation();
     const axios = useAxios(); 
     const [scores, setScores] = useState([]);
@@ -47,6 +46,6 @@ const ScorePage = () => {
         </div>
     );
 
-}
+};
 
 export default ScorePage;

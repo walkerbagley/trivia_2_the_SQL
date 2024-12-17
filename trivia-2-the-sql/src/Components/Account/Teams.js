@@ -41,10 +41,6 @@ const TeamsPage = () => {
     }
   }, [updateTeams]);
 
-  // useEffect(() => {
-  //   console.log(myteams, teams);
-  // }, [myteams, teams]);
-
   const addToTeam = async (teamID) => {
     try {
       const r = await addMember(axios, teamID, user.id);
