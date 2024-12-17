@@ -781,7 +781,7 @@ const LoadingPage = () => {
         getCurrentUserStatus(axios).then((data) => {
             if (data.game_status){
                 if (data.game_status.status === "in_progress"){
-                    navigate("/play/"+location.state.joinCode, { state: { gameId : location.state.gameId } });
+                    navigate("/play/"+location.state.joinCode, { state: { gameId : location.state.gameId , host : location.state.host} });
                 }
             } else {
                 console.error("Game Status is null from loading page:",data)

@@ -48,14 +48,11 @@ const QuestionPage =  () => {
     // get new question or round info
     const getGameStatus = () => {
         getCurrentUserStatus(axios).then((data) => {
-            if (isHost === null){
-                setIsHost( (data.user_status == 'hosting') ? true : false )
-                if (isHost){
-                    setAEnabled(false);
-                    setBEnabled(false);
-                    setCEnabled(false);
-                    setDEnabled(false);
-                }
+            if (location.state.host){
+                setAEnabled(false);
+                setBEnabled(false);
+                setCEnabled(false);
+                setDEnabled(false);
             }
             if (data.game_status.status === 'complete' || data.game_status===null){
                 navigate("/score/"+location.state.joinCode, { state: { gameId : location.state.gameId } });
@@ -76,7 +73,7 @@ const QuestionPage =  () => {
                         setCorrectAnswer(resp.a);
                         const shuffledOptions = shuffleArray([[resp.a, "a"], [resp.b, "b"], [resp.c, "c"], [resp.d, "d"]])
                         setOptions({"a": shuffledOptions[0], "b": shuffledOptions[1], "c": shuffledOptions[2], "d": shuffledOptions[3]})
-                        if (!isHost){
+                        if (!location.state.host){
                             setAEnabled(options["a"][0] ? true : false);
                             setBEnabled(options["b"][0] ? true : false);
                             setCEnabled(options["c"][0] ? true : false);
@@ -101,6 +98,7 @@ const QuestionPage =  () => {
     useEffect(() => {
         const interval = setInterval(() => {
           getGameStatus();
+          console.log(location.state.host)
         }, 1000);
         return () => clearInterval(interval);
       }, []);
@@ -167,18 +165,18 @@ const QuestionPage =  () => {
                 {answer != '' ? answer : "No Answer"}
             </div> */}
             <div className='next-question-button'>
-               {isHost && (
+               {location.state.host && (
                 <>
-                    <button onClick={()=>{nextQuestion()}} disabled={!isHost}>Next Question</button>
-                    <button onClick={() => {endGame()}} disable={!isHost}>End Game</button>
+                    <button onClick={()=>{nextQuestion()}} disabled={!location.state.host}>Next Question</button>
+                    <button onClick={() => {endGame()}} disable={!location.state.host}>End Game</button>
                 </>
                 )}
-                {!isHost && (
-                <button onClick={leaveGame} disabled={isHost}>Leave Game</button>
+                {!location.state.host && (
+                <button onClick={leaveGame} disabled={location.state.host}>Leave Game</button>
                 )}
             </div>
             <div className='margin-left'>
-                {!isHost && (<h3>Team Score: {scores[location["state"]["teamId"]]}</h3>)}
+                {!location.state.host && (<h3>Team Score: {scores[location["state"]["teamId"]]}</h3>)}
             </div>
             <div>
                 <h1>Scores</h1>
