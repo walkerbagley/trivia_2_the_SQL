@@ -13,6 +13,7 @@
 .navbar h2 {
   text-align: left; /* Align title to the left */
   font-size: xx-large;
+  font-family: 'Galindo';
 }
 
 .navbar .icon {
