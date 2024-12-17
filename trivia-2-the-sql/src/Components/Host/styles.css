@@ -1,24 +1,64 @@
 .hostpage {
-    margin: 0;
-    color: var(--main-text-color);
-    width: 100%;
-    min-height: 90vh;
-    text-align: center;
-    background-color: var(--main-background-color);
-  }
+  margin: 0;
+  padding: 2em 0;
+  color: var(--main-text-color);
+  width: 100%;
+  min-height: 90vh;
+  text-align: center;
+  background-color: var(--main-background-color);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.hostpage .form-field {
+  max-width: 50vw;
+}
+
+.hostpage .form-field label {
+  font-weight: 700;
+}
+
+.hostpage .form-field input {
+  border: 0;
+  padding: 1em;
+  margin-left: 1em;
+  width: 3em;
+  border-radius: 0.5em;
+
+}
+
+.hostpage .grid-container { 
+  display: grid; 
+  grid-template-columns: repeat(3, 1fr); 
+  gap: 1em;
+  width: 90vw;
+} 
   
-  .grid-container { 
-    display: grid; 
-    grid-template-columns: repeat(3, 1fr); 
-    gap: 10px; 
-    padding: 20px; 
-  } 
-    
-  .grid-item { 
-    background-color: white; 
-    border: 1px solid #ccc; 
-    border-radius: 5px; 
-    padding: 20px; 
-    text-align: center; 
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
-  }
+.hostpage .grid-item {
+  background-color: white;
+  border-radius: 0.5em;
+  text-align: center;
+  flex-grow: 1;
+  transition: 0.2s ease-in-out;
+}
+
+.hostpage .grid-item:hover {
+  background-color: var(--accent2);
+}
+
+.hostpage .grid-item button {
+  border: 0;
+  padding: 1em;
+  background-color: transparent;
+  width: 100%;
+  height: 100%;
+}
+
+.hostpage .deckbox {
+  padding: 0;
+}
+
+.hostpage .deckbox .title, .hostpage .deckbox .description {
+  color: var(--main-text-color);
+}
