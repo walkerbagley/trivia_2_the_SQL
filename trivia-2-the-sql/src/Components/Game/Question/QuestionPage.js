@@ -21,13 +21,19 @@ const QuestionPage =  () => {
     const [questionNumber, setQuestionNumber] = useState(0);
     const questionNumberRef = useRef(0);
     const [timeRemaining, setTimeRemaining] = useState(0);
+    const randomNumRef = useRef(Math.floor(Math.random() * (4)));
 
-    function shuffleArray(array) {
-        for (let i = array.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [array[i], array[j]] = [array[j], array[i]];
+    function shuffleArray(arr) {
+        const length = arr.length;
+        const shuffled = new Array(length); // Create an empty array of the same length
+        // Adjust the offset in case it's larger than the array length
+        const normalizedOffset = ((randomNumRef % length) + length) % length;
+    
+        for (let i = 0; i < length; i++) {
+            const newIndex = (i + normalizedOffset) % length; // Calculate new position
+            shuffled[newIndex] = arr[i]; // Move the element to its new position
         }
-        return array;
+        return shuffled;
     }
 
     const answerQuestion = (letter) => {
@@ -66,6 +72,7 @@ const QuestionPage =  () => {
                 questionNumberRef.current = Number(data.game_status.question_number);
                 setActive("");
                 getQuestionById(axios, data.game_status.question_id).then((resp) => {
+                    randomNumRef.current = Math.floor(Math.random() * (4));
                     setQuestion(resp.question);
                     // const NonshuffledOptions = ([[resp.a, "a"], [resp.b, "b"],[resp.c, "c"], [resp.d, "d"]]);
                     const shuffledOptions = shuffleArray([[resp.a, "a"], [resp.b, "b"], [resp.c, "c"], [resp.d, "d"]]);
