@@ -17,6 +17,7 @@ const JoinPage =  () => {
   const [joinCode, setJoinCode] = useState("");
   const [teamId, setTeamId] = useState("");
   const [myteams, setMyteams] = useState([]);
+  // const [selectedTeamId, setSelectedTeamId] = useState(null);
   
 
   useEffect(() => { // fetch my teams
@@ -42,7 +43,7 @@ const JoinPage =  () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setJoinCode(value)
+    setJoinCode(String(value).toUpperCase())
   };
 
   function joinGame() {
@@ -69,13 +70,12 @@ const JoinPage =  () => {
     joinGame(); // Your function for handling the submission
   };
   
-  
-    return (
+  return (
     <div className="join-page center">
       <h1>Choose a team</h1>
         <div className='teamGrid'>
             {myteams?.map((team) => (
-              <div  key={team.id} className='teamCard'>
+              <div  key={team.id} className={`teamCard ${team.id === teamId ? 'selected' : ''}`}>
                 <button className="teamCard-button" onClick={()=>{setTeamId(team.id)}}>
                   <h3 className='h3'>{team.name}</h3>
                   <p className='p'>{team.member_ids.length} member{team.member_ids.length != 1 ? 's' : ''}</p>
