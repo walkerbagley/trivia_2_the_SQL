@@ -99,7 +99,7 @@ for (const key in rounds) {
 
 
   return (
-    <div className="page">
+    <div className="deckdetails-page">
       <button onClick={() => goBack()} className='backbutton'>
         <svg
           xmlns="http://www.w3.org/2000/svg"

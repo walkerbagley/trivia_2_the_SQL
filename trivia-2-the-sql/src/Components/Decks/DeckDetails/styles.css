@@ -1,4 +1,4 @@
-.page {
+.deckdetails-page {
     color: var(--main-text-color);
     align-items: center;
     justify-content: center;
@@ -6,18 +6,18 @@
     background-color: var(--main-background-color);
     padding: 2em 1em;
 }
-.question {
+.deckdetails-page .question {
     padding: 1em;
     text-align: left;
 }
-.questionlist {
+.deckdetails-page .questionlist {
     width: 80%;
     text-align: center;
     margin: 0 auto;
     list-style-type: none;
     counter-reset: list-counter;
 }
-.questionlist li {
+.deckdetails-page .questionlist li {
     counter-increment: list-counter; /* Increments counter for each <li> */
     position: relative;
     display: flex;
@@ -29,13 +29,13 @@
     border-radius: 1em;
     margin: 1em 0;
 }
-.questionlist li::before {
+.deckdetails-page .questionlist li::before {
     content: counter(list-counter); /* Adds numbers with a period */
     font-weight: 700;
     color: var(--accent3);
   }
 
-.backbutton {
+  .deckdetails-page .backbutton {
     cursor: pointer;
     font-weight: 400;
     transition: all 0.2s;
@@ -49,18 +49,18 @@
     margin-left: 1em;
 }
 
-.backbutton > svg {
+.deckdetails-page .backbutton > svg {
   width: 34px;
   margin-right: 10px;
   transition: transform 0.3s ease-in-out;
 }
 
-.backbutton:hover svg {
+.deckdetails-page .backbutton:hover svg {
   transform: translateX(-0.5em);
 }
   
 
-.add-userdeck-btn {
+.deckdetails-page .add-userdeck-btn {
   border: 0;
   padding: 1em;
   cursor: pointer;
@@ -71,12 +71,12 @@
   border-radius: 0.5em;
 }
 
-.add-userdeck-btn:hover {
+.deckdetails-page .add-userdeck-btn:hover {
   background-color: var(--accent3);
   transition: 0.2s ease-in-out;
 }
 
-.round-reroll-btn {
+.deckdetails-page .round-reroll-btn {
   border: 0;
   padding: 1em;
   cursor: pointer;
@@ -85,7 +85,7 @@
   border-radius: 0.5em;
 }
 
-.round-reroll-btn:hover {
+.deckdetails-page .round-reroll-btn:hover {
   background-color: var(--accent3);
   transition: 0.2s ease-in-out;
 }

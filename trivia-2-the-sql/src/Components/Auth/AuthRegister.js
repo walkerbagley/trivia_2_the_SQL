@@ -59,7 +59,7 @@ const AuthRegister = () => {
   };
 
   return (
-    <div className = "page">
+    <div className = "authpage">
       <div className="container">
         <div className="togglecontainer">
           <div onClick={() => setSignup(false)} className={`btn ${signup ? '' : 'active'}`}>Login</div>
