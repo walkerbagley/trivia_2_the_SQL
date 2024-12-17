@@ -798,7 +798,7 @@ const LoadingPage = () => {
 
     function handleStartGame(){
         GameService.startGame(axios,location.state.gameId).then((resp)=>{
-            navigate("/play/"+location.state.joinCode, { state: { gameId : location.state.gameId, joinCode: location.state.joinCode, teamId: location.state.teamId } });
+            navigate("/play/"+location.state.joinCode, { state: { gameId : location.state.gameId, joinCode: location.state.joinCode, host : location.state.host } });
         }).catch((error)=>{
             console.error("Failed to start game", error);
             toast.error('You may not start this game.')

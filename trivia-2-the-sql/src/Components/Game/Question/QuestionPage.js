@@ -16,7 +16,7 @@ const QuestionPage =  () => {
     const [question, setQuestion] = useState("");
     const [scores, setScores] = useState([]);
     const [options, setOptions] = useState({"a": [], "b": [], "c": [], "d": []});
-    const [correctAnswer, setCorrectAnswer] = useState("");
+    // const [correctAnswer, setCorrectAnswer] = useState("");
     const [roundNumber, setRoundNumber] = useState(0);
     const [questionNumber, setQuestionNumber] = useState(0);
     const questionNumberRef = useRef(0);
@@ -69,7 +69,7 @@ const QuestionPage =  () => {
         setActive("");
         getQuestionById(axios, data.game_status.question_id).then((resp) => {
             setQuestion(resp.question);
-            setCorrectAnswer(resp.a);
+            // setCorrectAnswer(resp.a);
             const shuffledOptions = shuffleArray([[resp.a, "a"], [resp.b, "b"], [resp.c, "c"], [resp.d, "d"]])
             setOptions({ "a": shuffledOptions[0], "b": shuffledOptions[1], "c": shuffledOptions[2], "d": shuffledOptions[3] })
         }).catch((error)=>{
