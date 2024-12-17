@@ -4,7 +4,7 @@ import { useAxios } from '../../Providers/AxiosProvider.js';
 import { useUserSession } from '../../Providers/UserProvider.js';
 import { getUserScores } from '../../Services/User.js'
 
-const ScoresPage = () => {
+const ScoresHistoryPage = () => {
     const axios = useAxios();
     const { user } = useUserSession();
     const [scores, setScores] = useState([])
@@ -14,7 +14,7 @@ const ScoresPage = () => {
             console.log(data);
             setScores(data);
         });
-    }, [scores]);
+    }, []);
 
     return (
       <div className='scoresGrid center'>
@@ -32,4 +32,4 @@ const ScoresPage = () => {
     );
 };
 
-export default ScoresPage;
+export default ScoresHistoryPage;

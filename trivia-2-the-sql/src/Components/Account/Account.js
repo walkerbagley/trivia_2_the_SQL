@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useAxios } from '../../Providers/AxiosProvider';
 import { useUserSession } from '../../Providers/UserProvider.js';
 import TeamsPage from './Teams.js'
-import ScorePage from './Scores.js'
+import ScoresHistoryPage from './Scores.js'
 
 const Account = () => {
   const axios = useAxios();
@@ -31,7 +31,7 @@ const Account = () => {
       {/* Render the selected page */}
       <div className="page-content">
         {currentPage === "teams" && <TeamsPage />}
-        {currentPage === "scores" && <ScorePage />}
+        {currentPage === "scores" && <ScoresHistoryPage />}
       </div>
     </div>
   );
