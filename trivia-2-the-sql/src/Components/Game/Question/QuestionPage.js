@@ -32,8 +32,7 @@ const QuestionPage =  () => {
     let qnum = 0
     const answerQuestion = (text,letter) => {
         try{
-            //console.log("Setting answer to",text);
-            // setAnswer(text);
+            setAnswer(letter);
             GameService.submitAnswer(axios,location.state.gameId,{"round_number":roundNumber,"question_number":questionNumber,"answer":letter}).catch((error)=>{
                 console.error(error);
             });
@@ -69,9 +68,9 @@ const QuestionPage =  () => {
             }
             if (data.game_status){
                 setRoundNumber(data.game_status.round_number);
-                // setAnswer(data.game_status.team_answer);
+                setAnswer(data.game_status.team_answer);
                 if (questionNumberRef.current!=Number(data.game_status.question_number)){
-                    // setAnswer("")
+                    //setAnswer("")
                     setQuestionNumber(Number(data.game_status.question_number));
                     questionNumberRef.current = Number(data.game_status.question_number)
                     getQuestionById(axios, data.game_status.question_id).then((resp) => {
@@ -91,19 +90,6 @@ const QuestionPage =  () => {
             } else {
                 console.error("Game Status is null:",data)
             }
-            console.log("Checking answer exists and length", data?.game_status?.team_answer, data?.game_status?.team_answer);
-            if (data?.game_status?.team_answer != null && data.game_status.team_answer.length > 0){
-                console.log("Setting answer to",data.game_status.team_answer);
-                if (data.game_status.team_answer==="a"){
-                    setAnswer(a);
-                } if (data.game_status.team_answer==="b"){
-                    setAnswer(b);
-                } if (data.game_status.team_answer==="c"){
-                    setAnswer(c);
-                } if (data.game_status.team_answer==="d"){
-                    setAnswer(d);
-                }
-            };
         });
     };
 
@@ -176,8 +162,8 @@ const QuestionPage =  () => {
                     </div>
                 </div>
             <div className='center'>
-                <stong>Current Answer:</stong> 
-                {answer}
+                Current Answer: <br/>
+                {answer == 'a' ? a : answer == 'b' ? b : answer == 'c' ? c : answer == 'd' ? d : "No Answer"}
             </div>
             <div className='next-question-button'>
                {isHost && (
