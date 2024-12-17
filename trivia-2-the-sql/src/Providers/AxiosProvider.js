@@ -2,7 +2,8 @@ import React, { createContext, useContext, useEffect, useMemo } from 'react';
 import { useAuthSession } from './AuthProvider';
 import axios from 'axios';
 
-const baseURL = 'http://127.0.0.1:8000';
+
+const baseURL = `http://db8.cse.nd.edu:${process.env.REACT_APP_API_PORT ?? 8000}`;
 
 const defaultAxiosInstance = axios.create({
   baseURL: baseURL, 
@@ -18,6 +19,7 @@ export const AxiosProvider = ({ children }) => {
   const { token, logout } = useAuthSession();
   
   const axiosInstance = useMemo(() => {
+    console.log(process.env.API_PORT)
     return axios.create({
       baseURL:  baseURL, 
       headers: {
