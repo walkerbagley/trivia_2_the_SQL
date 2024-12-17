@@ -772,7 +772,7 @@ const LoadingPage = () => {
           const interval = setInterval(() => {
             getGameStatus();
             updateTeams();
-          }, 5000);
+          }, 1000);
           return () => clearInterval(interval);
         }, []);
 
