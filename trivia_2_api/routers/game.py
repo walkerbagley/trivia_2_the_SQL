@@ -202,7 +202,7 @@ async def next_question(request: Request, game_id: UUID) -> None:
                 raise HTTPException(status_code=401, detail="Only host can move to next question")
             
             if game.get("current_question", None) < game.get("num_questions", None):
-                cur.execute('''UPDATE "Games" SET current_question = current_question + 1 WHERE id = %s''', (game_id,))
+                cur.execute('''UPDATE "Games" SET current_question = current_question + 1, last_question_start = now() WHERE id = %s''', (game_id,))
                 return
             
             else:
@@ -213,7 +213,7 @@ async def next_question(request: Request, game_id: UUID) -> None:
                     raise HTTPException(status_code=404, detail="Game not found")
                 
                 if results.get("rounds", None) > game.get("current_round", None):
-                    cur.execute('''UPDATE "Games" SET current_round = current_round + 1, current_question = 1 WHERE id = %s''', (game_id,))
+                    cur.execute('''UPDATE "Games" SET current_round = current_round + 1, current_question = 1, last_question_start = now() WHERE id = %s''', (game_id,))
                     return
                 
                 else:

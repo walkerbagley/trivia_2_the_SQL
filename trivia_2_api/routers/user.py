@@ -43,7 +43,7 @@ async def next_question_if_needed(game_id: UUID) -> None:
                 return
             
             if game.get("current_question", None) < game.get("num_questions", None):
-                cur.execute('''UPDATE "Games" SET current_question = current_question + 1 WHERE id = %s''', (game_id,))
+                cur.execute('''UPDATE "Games" SET current_question = current_question + 1, last_question_start = now() WHERE id = %s''', (game_id,))
                 return
             
             else:
@@ -54,7 +54,7 @@ async def next_question_if_needed(game_id: UUID) -> None:
                     raise HTTPException(status_code=404, detail="Game not found")
                 
                 if results.get("rounds", None) > game.get("current_round", None):
-                    cur.execute('''UPDATE "Games" SET current_round = current_round + 1, current_question = 1 WHERE id = %s''', (game_id,))
+                    cur.execute('''UPDATE "Games" SET current_round = current_round + 1, current_question = 1, last_question_start = now() WHERE id = %s''', (game_id,))
                     return
                 
                 else:
@@ -78,13 +78,15 @@ async def get_current_user_status(request: Request) -> UserStatus:
 
             if game is None:
                 return UserStatus(user_status="home")
-        
+            
             game_id = game.get("id", None)
             host_id = game.get("host_id", None)
             status = game.get("status", None)
             if game_id is None or host_id is None or status is None:
                 raise HTTPException(status_code=500, detail="Failed to get game status")
-        
+
+            await next_question_if_needed(game_id)
+
             if status == 'open':
                 return UserStatus(user_status="hosting" if host_id == request.state.user.id else "playing", game_status=GameStatus(id=game_id, status="open", round_number=0, question_number=0, question_id=None))
             
