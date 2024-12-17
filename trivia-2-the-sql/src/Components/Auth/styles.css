@@ -1,20 +1,20 @@
-.page {
+.authpage {
     color: var(--main-text-color);
     background-color: var(--main-background-color);
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
-    min-height: 90vh;
+    min-height: 95vh;
 }
 
-.container {
+.authpage .container {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: baseline;
 }
 
-.togglecontainer {
+.authpage .togglecontainer {
     display: flex;
     margin: 2em;
     border-radius: 0.5em;
@@ -24,20 +24,20 @@
     color: var(--main-background-color);
 }
 
-.btn {
+.authpage .btn {
     cursor: pointer;
     padding: 1em 2em;
     border-radius: 0.5em;
 }
 
-.active {
+.authpage .active {
     background-color: var(--main-background-color);
     color: var(--main-text-color);
     cursor: auto;
     transition: 0.2s ease-in-out;
 }
 
-.authform {
+.authpage .authform {
     margin-top: 2em;
     padding: 1em 3em;
     border-radius: 0.5em;
@@ -47,24 +47,24 @@
     color: var(--main-background-color);
 }
 
-.authform div {
+.authpage .authform div {
     display: flex;
     justify-content: center;
     gap: 1em;
 }
 
-.authform input {
+.authpage .authform input {
     border-radius: 0.5em;
     border: 0;
     height: 2em;
     margin-bottom: 1em;
 }
 
-.authform label {
+.authpage .authform label {
     font-weight: 100;
 }
 
-.authform button {
+.authpage .authform button {
     border: 0;
     border-radius: 0.5em;
     padding: 0.5em 1em;
