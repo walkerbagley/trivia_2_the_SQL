@@ -45,16 +45,9 @@ const QuestionPage =  () => {
         }
     };
 
-    useEffect(() => {
-        console.log("question number", questionNumber)
-    }, [questionNumber]);
-    // Get Status from /User/Status should be called on a time out to get the current question number (1-3s)
-    // get question by id from user/status (/question/questionid)
-
     // get new question or round info
     const getGameStatus = () => {
         getCurrentUserStatus(axios).then((data) => {
-            // console.log("User Status",data);
             if (isHost === null){
                 setIsHost( (data.user_status == 'hosting') ? true : false )
                 if (isHost){
@@ -64,7 +57,7 @@ const QuestionPage =  () => {
                     setDEnabled(false);
                 }
             }
-            if (data.game_status === 'complete' || data.game_status===null){
+            if (data.game_status.status === 'complete' || data.game_status===null){
                 navigate("/score/"+location.state.joinCode, { state: { gameId : location.state.gameId } });
             }
             if (data?.game_status?.time_remaining){
@@ -75,7 +68,6 @@ const QuestionPage =  () => {
                 if (questionNumberRef.current!=Number(data.game_status.question_number)){
                     GameService.getGameScores(axios, location.state.gameId).then((s) => {
                         setScores(s);
-                        console.log(s)
                     });
                     setQuestionNumber(Number(data.game_status.question_number));
                     questionNumberRef.current = Number(data.game_status.question_number)
@@ -140,6 +132,7 @@ const QuestionPage =  () => {
             <div className='center'>
                 <h2>Time Remaining: {timeRemaining}</h2>
                 <br />
+                <h1 className='question-text'>Round {roundNumber}</h1>
                 <h1 className='question-text'>Question {questionNumber}: {question}</h1>
                 <br/>
             </div>
@@ -187,8 +180,7 @@ const QuestionPage =  () => {
             <div className='margin-left'>
                 {!isHost && (<h3>Team Score: {scores[location["state"]["teamId"]]}</h3>)}
             </div>
-            {isHost && 
-            (<div>
+            <div>
                 <h1>Scores</h1>
                 <ul>
                     {scores ? 
@@ -200,7 +192,7 @@ const QuestionPage =  () => {
                     : (<p>No Scores Found</p>)
                     }
                 </ul>
-            </div>)}
+            </div>
         </div>
     );
 };
