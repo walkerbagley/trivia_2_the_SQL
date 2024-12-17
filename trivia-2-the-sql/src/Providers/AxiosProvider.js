@@ -3,7 +3,7 @@ import { useAuthSession } from './AuthProvider';
 import axios from 'axios';
 
 
-const baseURL = `http://db8.cse.nd.edu:${process.env.REACT_APP_API_PORT ?? 8000}`;
+const baseURL = `http://localhost:${process.env.REACT_APP_API_PORT ?? 8000}`;
 
 const defaultAxiosInstance = axios.create({
   baseURL: baseURL, 

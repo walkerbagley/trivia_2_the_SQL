@@ -5,41 +5,41 @@
     height: 100vh;
 }
 
-.loading-title {
+.loading-page .loading-title {
     font-family: 'Galindo';
     font-size: 4em;
     margin-bottom: 0px;
 }
 
-.loading-subtext {
+.loading-page .loading-subtext {
     margin-top: 0px;
     border-bottom: 1px solid;
 }
 
-.center {
+.loading-page .center {
     align-items: center;
     justify-content: center;
     text-align: center;
 }
 
-.grid-container { 
-    display: grid; 
-    grid-template-columns: repeat(4, 1fr); 
-    gap: 10px; 
-    padding: 20px;
-    padding-top: 0px;
-    margin-top: 0px;
-  } 
+.loading-page .grid-container { 
+  display: grid; 
+  grid-template-columns: repeat(4, 1fr); 
+  gap: 10px; 
+  padding: 20px;
+  padding-top: 0px;
+  margin-top: 0px;
+} 
     
-  .grid-item { 
-    background-color: white; 
-    border: 1px solid #ccc; 
-    border-radius: 5px; 
-    padding: 20px; 
-    text-align: center; 
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
-  }
+.loading-page .grid-item { 
+  background-color: white; 
+  border: 1px solid #ccc; 
+  border-radius: 5px; 
+  padding: 20px; 
+  text-align: center; 
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+}
 
-  .join-code {
-    margin-left: 25px;
-  }
+.loading-page .join-code {
+  margin-left: 25px;
+}

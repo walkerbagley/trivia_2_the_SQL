@@ -51,7 +51,7 @@ const HostPage =  () => {
                 className="form-input"
             />
         </div>
-        <div>Choose Deck: </div>
+        <h3>Select a Deck</h3>
         <div className="grid-container">
             {decks ? 
             decks.map((d) => (

@@ -90,7 +90,7 @@ async def join_game(request:Request, game: JoinGameRequest) -> None:
 async def start_game(game_id: UUID) -> None:
     with db.connection() as conn:
         with conn.cursor() as cur:
-            cur.execute('''UPDATE "Games" SET status = 'in_progress' WHERE id = %s''', (game_id,))
+            cur.execute('''UPDATE "Games" SET status = 'in_progress', last_question_start = now() WHERE id = %s''', (game_id,))
 
 @router.put("/{game_id}/leave")
 async def leave_game(request: Request, game_id: UUID) -> None:
