@@ -63,8 +63,8 @@ const QuestionPage =  () => {
             else if (data.game_status){
                 setRoundNumber(data.game_status.round_number);
                 if (questionNumber!=data.game_status.question_number){
+                    setAnswer("")
                     setQuestionNumber(data.game_status.question_number);
-                    console.log(questionNumber, data.game_status.question_number)
                     getQuestionById(axios, data.game_status.question_id).then((resp) => {
                         setQuestion(resp.question);
                         setA(resp.a);
@@ -82,7 +82,7 @@ const QuestionPage =  () => {
             } else {
                 console.error("Game Status is null:",data)
             }
-            if (data?.game_status?.team_answer){
+            if (data?.game_status?.team_answer && data.game_status.team_answer.length > 0){
                 if (data.game_status.team_answer==="a"){
                     setAnswer(a);
                 } if (data.game_status.team_answer==="b"){
@@ -106,10 +106,8 @@ const QuestionPage =  () => {
 
     const nextQuestion = () => {
         GameService.moveToNextQuestion(axios, location.state.gameId).then((resp) => {
-            console.log("next q resp: ", resp)
             getGameStatus();
             GameService.getGameScores(axios, location.state.gameId).then((s) => {
-                console.log("game scores: ", s)
                 setScores(s);
             });
         });
