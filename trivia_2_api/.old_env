@@ -1,0 +1,6 @@
+POSTGRES_DB='postgres'
+POSTGRES_USER='postgres.jshtkrzcjqxhuauzkvyr'
+POSTGRES_PASSWORD='deqqUq-zovdeg-fanzy6'
+POSTGRES_HOST='aws-0-us-east-2.pooler.supabase.com'
+POSTGRES_PORT='5432'
+JWT_SECRET='advonawoivaoiaw'
