@@ -29,7 +29,7 @@ Current categories and attributes (10/7/2024):
 - Attributes: `{'music', 'literature', 'animals', 'chemistry', 'max', 'math', 'quotes', 'cartoon', 'geography', 'biology', 'politics', 'tv', 'physics', 'movies', 'video-games', 'mythology', 'celebrities', 'cs', 'videogames', 'people', 'usa'}`
 
 
-### Dev Plan
+### Dev Plan fa2024
 Oct 9th: Clean and parse data, standup database
 Oct 17th: Working MVP with basic CRUD functionality
 Nov 6th: Stage 3 - basic functionality done
