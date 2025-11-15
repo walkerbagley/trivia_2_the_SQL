@@ -3,7 +3,8 @@ from pydantic import BaseModel
 from typing import Optional
 from uuid import UUID
 
-from trivia_2_api.models import question
+from . import question
+
 
 class Game(BaseModel):
     id: UUID
@@ -16,13 +17,16 @@ class Game(BaseModel):
     start_time: datetime
     end_time: Optional[datetime] = None
 
+
 class GameRequest(BaseModel):
     deck_id: UUID
     question_time_sec: Optional[int] = 20
 
+
 class JoinGameRequest(BaseModel):
     join_code: str
     team_id: UUID
+
 
 class AnswerRequest(BaseModel):
     round_number: int

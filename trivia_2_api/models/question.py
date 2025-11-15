@@ -4,6 +4,7 @@ from pydantic import BaseModel
 from typing import Optional
 from uuid import UUID
 
+
 class Question(BaseModel):
     id: UUID
     question: str
@@ -13,7 +14,9 @@ class Question(BaseModel):
     c: Optional[str]
     d: Optional[str]
     category: str
-    attributes: list[str]
+    # attributes: list[str]
+    first_answer: Optional[int] = None
+
 
 class QuestionRequest(BaseModel):
     question: str
