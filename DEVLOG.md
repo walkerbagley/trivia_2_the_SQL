@@ -1,6 +1,7 @@
 
 # TODO
 ### Tasks
+- [ ] Check that question randomization works
 - [ ] Allow entering a custom question time from the host page
 - [ ] If there is a custom question time, add a timer to the question page and advance to the next question when it expires
 - [ ] View past game scores and teams under the account page

@@ -12,6 +12,9 @@ import { mdiPencilOutline, mdiCheck, mdiClose, mdiSync, mdiPlus } from '@mdi/js'
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+// TODO: add new round feature
+// TODO: delete round feature
+
 
 const DeckDetails =  () => {
   const { user } = useUserSession();
@@ -175,6 +178,7 @@ const DeckDetails =  () => {
     addOrRemoveButton = <button className='add-userdeck-btn' onClick={() => removeFromUserDecks()}>Remove from my decks</button>
   }
 
+  // TODO: make sure the regenerate/remove question buttons work correctly
 let roundsDisplay = [];
 for (const key in rounds) {
     roundsDisplay.push(
@@ -183,7 +187,7 @@ for (const key in rounds) {
     <button className='round-reroll-btn' onClick={() => rerollRound(rounds[key]["id"], rounds[key]["categories"], rounds[key]["num_questions"])}>Generate new questions</button>
     <ol className='questionlist'>
         {
-          questions ? 
+          questions ?
           questions.map((question) => (
             <div key={question.id}>
                 {question.round_number == Number(key) + 1 ? 
