@@ -101,11 +101,36 @@ export const deleteDeck = (axiosClient, id) => {
   });
 }
 
-export const addQuestionToRound = async (axiosClient, roundId, question_number, questionId) => {
+// export const addQuestionToRound = async (axiosClient, roundId, question_number, questionId) => {
+//   let config = {
+//     method: 'post',
+//     maxBodyLength: Infinity,
+//     url: '/deck/round/' + roundId + '/' + question_number + '/' + questionId
+//   };
+
+//   try {
+//     const response = await axiosClient.request(config);
+//     return response;
+//   } catch (error) {
+//     console.log(error);
+//     throw error;
+//   }
+// }
+
+export const addQuestionToRound = async (axiosClient, roundId, questionNumber, category = null, difficulty = null) => {
+  const params = new URLSearchParams();
+  
+  if (category) {
+    params.append('category', category);
+  }
+  if (difficulty) {
+    params.append('difficulty', difficulty);
+  }
+
   let config = {
     method: 'post',
     maxBodyLength: Infinity,
-    url: '/deck/round/' + roundId + '/' + question_number + '/' + questionId
+    url: `/deck/round/${roundId}/${questionNumber}${params.toString() ? `?${params.toString()}` : ''}`
   };
 
   try {
@@ -116,6 +141,35 @@ export const addQuestionToRound = async (axiosClient, roundId, question_number, 
     throw error;
   }
 }
+
+export const replaceQuestionInRound = async (axiosClient, roundId, questionId, questionNumber, category = null, difficulty = null) => {
+  const params = new URLSearchParams();
+  
+  if (category) {
+    params.append('category', category);
+  } else {
+    throw new Error("Category must be provided to replace question in round");
+  }
+  if (difficulty) {
+    params.append('difficulty', difficulty);
+  }
+
+  let config = {
+    method: 'put',
+    maxBodyLength: Infinity,
+    url: `/deck/round/${roundId}/question/${questionId}/${questionNumber}${params.toString() ? `?${params.toString()}` : ''}`
+  };
+
+  try {
+    const response = await axiosClient.request(config);
+    return response;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
+
 
 export const getQuestions = async (axiosClient) => {
     

@@ -143,7 +143,7 @@ async def get_categories() -> list[str]:
             return categories
 
 
-@router.get("/new/")
+# TODO: ensure the question does not already exist in the user's deck
 async def roll_question(
     category: Optional[str] = None, difficulty: Optional[int] = None
 ) -> Question:

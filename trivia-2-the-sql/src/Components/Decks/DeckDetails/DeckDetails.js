@@ -2,8 +2,8 @@ import React, {useEffect, useState} from 'react';
 // import { useParams } from 'react-router-dom';
 import './styles.css';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
-import { getDeckQuestions, getDeck, getDeckRounds, updateRound, updateDeck, addQuestionToRound, removeQuestionFromRound } from '../../../Services/Decks';
-import { getNewQuestion, getAvailableCategories } from '../../../Services/Question.js';
+import { getDeckQuestions, getDeck, getDeckRounds, updateRound, updateDeck, addQuestionToRound, removeQuestionFromRound, replaceQuestionInRound } from '../../../Services/Decks';
+import { getAvailableCategories } from '../../../Services/Question.js';
 import { useAxios } from '../../../Providers/AxiosProvider.js'
 import { useUserSession } from "../../../Providers/UserProvider.js";
 import { addUserDeck, removeUserDeck } from '../../../Services/User.js';
@@ -146,21 +146,28 @@ const DeckDetails =  () => {
 
     const handleAddQuestion = async (roundNumber, category, difficulty) => {
       try {
-        const newQuestion = await getNewQuestion(axios, category || null, difficulty || null);
-        if (!newQuestion || !newQuestion.id) {
-          throw new Error("No question returned from API");
-        }
-        
         // Calculate the correct question number for this specific round
         const questionsInRound = questions.filter(q => q.round_number === roundNumber + 1);
         const questionNumber = questionsInRound.length + 1;
         
-        const ret = await addQuestionToRound(axios, rounds[roundNumber]["id"], questionNumber, newQuestion.id);
-        if (!ret || ret.status < 200 || ret.status >= 300) {
+        const response = await addQuestionToRound(
+          axios, 
+          rounds[roundNumber]["id"], 
+          questionNumber, 
+          category || null, 
+          difficulty || null
+        );
+        
+        if (!response || response.status < 200 || response.status >= 300) {
           throw new Error("Failed to add question to round");
         }
+        
+        const newQuestion = response.data.question;
+        newQuestion.round_number = roundNumber + 1;
+        
         toast("Question added successfully!");
-        setQuestions([...questions, {...newQuestion, question_number: questionNumber, round_number: roundNumber + 1}]);
+        setQuestions([...questions, newQuestion]);
+        console.log(questions)
       } catch (error) {
         console.error("Failed to add question:", error);
         toast("No questions available for the selected filters.");
@@ -205,6 +212,43 @@ const DeckDetails =  () => {
         toast("Failed to remove question from round.");
       }
     };
+
+    const handleReplaceQuestion = async (questionId, roundId, questionNumber, roundIndex) => {
+      try {
+        const confirmed = window.confirm("Are you sure you want to regenerate this question? This cannot be undone.");
+        if (!confirmed) {
+          return;
+        }
+        const currentQuestion = questions.find(q => q.id === questionId);
+        if (!currentQuestion || !currentQuestion.category) {
+          throw new Error("Question not found");
+        }
+        const response = await replaceQuestionInRound(
+          axios,
+          roundId,
+          questionId,
+          questionNumber,
+          currentQuestion.category,
+          null
+        );
+        if (!response || response.status < 200 || response.status >= 300) {
+          throw new Error("Failed to replace question in round");
+        }
+        const newQuestion = response.data.question;
+        newQuestion.round_number = Math.floor(roundIndex) + 1;
+        
+        toast("Question replaced successfully!");
+        
+        const updatedQuestions = questions.map(q => 
+          q.id === questionId ? newQuestion : q
+        );
+        setQuestions(updatedQuestions);
+        
+      } catch (error) {
+        console.error("Failed to replace question:", error);
+        toast("Failed to regenerate question. No questions available for the selected filters.");
+      }
+    };
  
     const getDefaultCategory = (roundCategories) => {
       if (roundCategories && roundCategories.length === 1) {
@@ -225,11 +269,11 @@ const DeckDetails =  () => {
     addOrRemoveButton = <button className='add-userdeck-btn' onClick={() => removeFromUserDecks()}>Remove from my decks</button>
   }
 
-  // TODO: make sure the regenerate/remove question buttons work correctly
+  // TODO: make sure the regenerate question buttons work correctly
 let roundsDisplay = [];
 for (const key in rounds) {
     roundsDisplay.push(
-    <div>
+    <div key={key}>
     <h3>Round {Number(key) + 1}</h3>
     <button className='round-reroll-btn' onClick={() => rerollRound(rounds[key]["id"], rounds[key]["categories"], rounds[key]["num_questions"])}>Generate new questions</button>
     <ol className='questionlist'>
@@ -241,7 +285,8 @@ for (const key in rounds) {
                   <li>
                     <div className='question'>{question.question.slice(0, 115)}</div>
                     <div className='question-actions'>
-                      <button className='question-action-btn' title='Regenerate Question'>
+                      <button className='question-action-btn' title='Regenerate Question'
+                              onClick={() => handleReplaceQuestion(question.id, rounds[key]["id"], question.question_number, Number(key))}>
                         <Icon path={mdiSync} size={0.8} />
                       </button>
                       <button className='question-action-btn' title='Remove Question'

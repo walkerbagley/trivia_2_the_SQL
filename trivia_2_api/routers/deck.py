@@ -14,6 +14,7 @@ from ..models import (
     DeckUpdateRequest,
     Round,
 )
+from .question import roll_question
 
 router = APIRouter(
     prefix="/deck",
@@ -241,18 +242,26 @@ async def _update_deck_round(round_id: UUID, round: DeckRoundRequest) -> None:
     return True
 
 
-@router.post("/round/{round_id}/{question_num}/{question_id}")
+@router.post("/round/{round_id}/{question_num}")
 async def add_question_to_round(
-    question_num: int, question_id: UUID, round_id: UUID
-) -> None:
-    if not all([question_num, question_id, round_id]):
+    round_id: UUID, question_num: int, category: str = None, difficulty: int = None
+) -> dict:
+    if not all([question_num, round_id]):
         raise HTTPException(status_code=400, detail="Invalid parameters")
+
+    try:
+        question = await roll_question(category=category, difficulty=difficulty)
+    except HTTPException:
+        raise HTTPException(
+            status_code=404, detail="No questions available for the selected filters"
+        )
+
     round_req = DeckRoundRequest()
     with db.connection() as conn:
         with conn.cursor(row_factory=dict_row) as cur:
             cur.execute(
                 """INSERT INTO "RoundQuestions" (round_id, question_id, question_number) VALUES (%s, %s, %s)""",
-                (round_id, question_id, question_num),
+                (round_id, question.id, question_num),
             )
             # Check if the insert was successful by checking rowcount
             if cur.rowcount == 0:
@@ -270,18 +279,123 @@ async def add_question_to_round(
             round_req.num_questions = result["num_questions"] + 1
             round_req.categories = result["categories"] if result["categories"] else []
             round_req.attributes = result["attributes"] if result["attributes"] else []
-            cur.execute("""SELECT * from "Questions" WHERE id = %s""", (question_id,))
-            result = cur.fetchone()
-            if not result:
-                raise HTTPException(
-                    status_code=500, detail="Failed to add question to round"
-                )
-            if result["category"] not in round_req.categories:
-                round_req.categories.append(result["category"])
+
+            if question.category not in round_req.categories:
+                round_req.categories.append(question.category)
+
     ret = await _update_deck_round(round_id, round_req)
     if ret:
-        return True
-    return None
+        # Return the question data for the frontend to use
+        return {
+            "success": True,
+            "question": {
+                "id": str(question.id),
+                "question": question.question,
+                "difficulty": question.difficulty,
+                "a": question.a,
+                "b": question.b,
+                "c": question.c,
+                "d": question.d,
+                "category": question.category,
+                "question_number": question_num,
+                "round_number": None,  # Frontend will set this
+            },
+        }
+    raise HTTPException(status_code=500, detail="Failed to update round")
+
+
+@router.put("/round/{round_id}/question/{question_id}/{question_number}")
+async def replace_question_in_round(
+    round_id: UUID,
+    question_id: UUID,
+    question_number: int,
+    category: str = None,
+    difficulty: int = None,
+) -> dict:
+    """
+    Please ensure that the new question will have the same category as the old question
+    """
+    if not all([question_id, round_id]):
+        raise HTTPException(status_code=400, detail="Invalid parameters")
+
+    try:
+        new_question = await roll_question(category=category, difficulty=difficulty)
+    except HTTPException:
+        raise HTTPException(
+            status_code=404, detail="No questions available for the selected filters"
+        )
+
+    with db.connection() as conn:
+        with conn.cursor(row_factory=dict_row) as cur:
+            cur.execute(
+                """UPDATE "RoundQuestions" SET question_id = %s 
+                   WHERE round_id = %s AND question_id = %s""",
+                (new_question.id, round_id, question_id),
+            )
+
+            if cur.rowcount == 0:
+                raise HTTPException(
+                    status_code=500, detail="Failed to replace question in round"
+                )
+        return {
+            "success": True,
+            "question": {
+                "id": str(new_question.id),
+                "question": new_question.question,
+                "difficulty": new_question.difficulty,
+                "a": new_question.a,
+                "b": new_question.b,
+                "c": new_question.c,
+                "d": new_question.d,
+                "category": new_question.category,
+                "question_number": question_number,
+                "round_number": None,  # Frontend will set this
+            },
+        }
+    raise HTTPException(status_code=500, detail="Failed to update round")
+
+
+# @router.post("/round/{round_id}/{question_num}/{question_id}")
+# async def add_question_to_round(
+#     question_num: int, question_id: UUID, round_id: UUID
+# ) -> None:
+#     if not all([question_num, question_id, round_id]):
+#         raise HTTPException(status_code=400, detail="Invalid parameters")
+#     round_req = DeckRoundRequest()
+#     with db.connection() as conn:
+#         with conn.cursor(row_factory=dict_row) as cur:
+#             cur.execute(
+#                 """INSERT INTO "RoundQuestions" (round_id, question_id, question_number) VALUES (%s, %s, %s)""",
+#                 (round_id, question_id, question_num),
+#             )
+#             # Check if the insert was successful by checking rowcount
+#             if cur.rowcount == 0:
+#                 raise HTTPException(
+#                     status_code=500, detail="Failed to add question to round"
+#                 )
+#             cur.execute(
+#                 """SELECT * from "DeckRounds" WHERE round_id = %s""", (round_id,)
+#             )
+#             result = cur.fetchone()
+#             if not result:
+#                 raise HTTPException(
+#                     status_code=500, detail="Failed to add question to round"
+#                 )
+#             round_req.num_questions = result["num_questions"] + 1
+#             round_req.categories = result["categories"] if result["categories"] else []
+#             round_req.attributes = result["attributes"] if result["attributes"] else []
+#             cur.execute("""SELECT * from "Questions" WHERE id = %s""", (question_id,))
+#             result = cur.fetchone()
+#             if not result:
+#                 raise HTTPException(
+#                     status_code=500, detail="Failed to add question to round"
+#                 )
+#             if result["category"] not in round_req.categories:
+#                 round_req.categories.append(result["category"])
+#     ret = await _update_deck_round(round_id, round_req)
+#     if ret:
+#         return True
+#     return None
 
 
 @router.delete("/round/{round_id}/question/{question_id}")
