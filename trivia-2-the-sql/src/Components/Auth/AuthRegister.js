@@ -3,8 +3,7 @@ import { User, createUser } from "./AuthService.js";
 import AuthForm from "./AuthForm.js";
 import "./styles.css";
 import { useNavigate } from "react-router-dom";
-import { toast, ToastContainer } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
+import { toast } from "react-toastify";
 import { useAuthSession } from "../../Providers/AuthProvider.js";
 import { useUserSession } from "../../Providers/UserProvider.js";
 
@@ -65,7 +64,6 @@ const AuthRegister = () => {
           <div onClick={() => setSignup(false)} className={`btn ${signup ? '' : 'active'}`}>Login</div>
           <div onClick={() => setSignup(true)} className={`btn ${signup ? 'active' : ''}`}>Register</div>
         </div>
-        <ToastContainer />
         <AuthForm
           user={newUser}
           onChange={onChangeHandler}

@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react'
 import { useLocation, useNavigate } from 'react-router-dom';
 import { GameService } from '../../../Services/Game';
 import { useAxios } from '../../../Providers/AxiosProvider';
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import { getCurrentUserStatus } from '../../../Services/User';
 
 import './styles.css'
@@ -825,7 +825,6 @@ const LoadingPage = () => {
 
     return (
         <div className='loading-page'>
-            <ToastContainer />
             <div className='center'>
                 <h1 className='loading-title'>Trivia 2: The SQL</h1>
                 <p>Did you know: {fact}</p>

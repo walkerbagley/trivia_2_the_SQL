@@ -10,7 +10,6 @@ import { addUserDeck, removeUserDeck } from '../../../Services/User.js';
 import Icon from '@mdi/react';
 import { mdiPencilOutline, mdiCheck, mdiClose, mdiSync, mdiPlus } from '@mdi/js';
 import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 // TODO: add new round feature
 // TODO: delete round feature
@@ -115,6 +114,7 @@ const DeckDetails =  () => {
       setIsEditingTitle(false);
       setTempTitle('');
       updateDeck(axios, deck.id, tempTitle, deck.description).then(() => {
+        console.log("Updated deck title");
         toast("Successfully updated deck name");
       }).catch((error) => {
         console.error("Failed to update deck title:", error);
@@ -269,7 +269,6 @@ const DeckDetails =  () => {
     addOrRemoveButton = <button className='add-userdeck-btn' onClick={() => removeFromUserDecks()}>Remove from my decks</button>
   }
 
-  // TODO: make sure the regenerate question buttons work correctly
 let roundsDisplay = [];
 for (const key in rounds) {
     roundsDisplay.push(

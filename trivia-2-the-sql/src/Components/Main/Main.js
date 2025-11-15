@@ -4,7 +4,7 @@ import { getCurrentUserStatus } from '../../Services/User.js';
 import { useAxios } from '../../Providers/AxiosProvider.js';
 import React, { useEffect } from 'react'
 import { GameService } from '../../Services/Game.js';
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 
 
 const Main =  () => {
@@ -48,7 +48,6 @@ const Main =  () => {
 
     return (
     <div className="titlepage">
-        <ToastContainer/>
         <div className="maintitle">Trivia 2: The SQL</div>
         <div className="buttons">
             <button

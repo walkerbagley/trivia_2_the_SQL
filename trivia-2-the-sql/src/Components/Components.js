@@ -16,6 +16,8 @@ import CreateDeck from './CreateDeck/CreateDeck.tsx';
 import './styles.css';
 import { useUserSession } from "../Providers/UserProvider.js";
 import { useEffect } from "react";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Components() {
     const { user } = useUserSession();
@@ -26,6 +28,7 @@ export default function Components() {
         return (
             <Router>
                 <Header/>
+                <ToastContainer />
                 <Routes>
                     <Route exact path='/' element={<Main/>}/>
                     <Route exact path='/host' element={<HostPage/>}/>
@@ -45,6 +48,7 @@ export default function Components() {
         return (
             <Router>
                 <Header/>
+                <ToastContainer />
                 <Routes>
                     <Route path="/login" element={<AuthRegister/>} />
                     <Route path="*" element={<Navigate to = "/login"/>} />

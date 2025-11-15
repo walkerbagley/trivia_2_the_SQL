@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import './styles.css'
 import { useAxios } from '../../Providers/AxiosProvider.js';
-import { toast, ToastContainer } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
+import { toast } from "react-toastify";
 import { GameService } from '../../Services/Game.js';
 import { getTeams } from "../Account/AccountService.js";
 import { useUserSession } from '../../Providers/UserProvider.js';
@@ -101,7 +100,6 @@ const JoinPage =  () => {
             Join Game
           </button>
         </form>
-          <ToastContainer />
     </div>
   );
 }
