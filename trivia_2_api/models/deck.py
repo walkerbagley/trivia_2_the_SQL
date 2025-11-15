@@ -2,7 +2,8 @@ from pydantic import BaseModel
 from typing import Optional
 from uuid import UUID
 
-from trivia_2_api.models.question import Question
+from .question import Question
+
 
 class Deck(BaseModel):
     id: UUID
@@ -11,12 +12,14 @@ class Deck(BaseModel):
     owner_id: UUID
     rounds: int
 
+
 class Round(BaseModel):
     id: UUID
     round_number: int
     num_questions: int
     categories: list[str] | None
     attributes: list[str] | None
+
 
 class DeckRoundRequest(BaseModel):
     categories: Optional[list[str]] = None
@@ -29,13 +32,12 @@ class DeckRequest(BaseModel):
     description: str
     rounds: list[DeckRoundRequest]
 
-class DeckUpdateRequest(BaseModel): 
+
+class DeckUpdateRequest(BaseModel):
     name: str
     description: str
+
 
 class DeckQuestion(Question):
     round_number: int
     question_number: int
-
-
-    
