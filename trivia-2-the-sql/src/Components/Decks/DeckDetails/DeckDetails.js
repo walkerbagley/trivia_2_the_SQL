@@ -2,8 +2,8 @@ import React, {useEffect, useState} from 'react';
 // import { useParams } from 'react-router-dom';
 import './styles.css';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
-import { getDeckQuestions, getDeck, getDeckRounds, updateRound, updateDeck } from '../../../Services/Decks';
-import { addQuestion, getAvailableCategories } from '../../../Services/Question.js';
+import { getDeckQuestions, getDeck, getDeckRounds, updateRound, updateDeck, addQuestionToRound, removeQuestionFromRound } from '../../../Services/Decks';
+import { getNewQuestion, getAvailableCategories } from '../../../Services/Question.js';
 import { useAxios } from '../../../Providers/AxiosProvider.js'
 import { useUserSession } from "../../../Providers/UserProvider.js";
 import { addUserDeck, removeUserDeck } from '../../../Services/User.js';
@@ -146,16 +146,63 @@ const DeckDetails =  () => {
 
     const handleAddQuestion = async (roundNumber, category, difficulty) => {
       try {
-        const newQuestion = await addQuestion(axios, category || null, difficulty || null);
+        const newQuestion = await getNewQuestion(axios, category || null, difficulty || null);
+        if (!newQuestion || !newQuestion.id) {
+          throw new Error("No question returned from API");
+        }
         
-        // TODO: You would need to implement adding the question to the specific round
+        // Calculate the correct question number for this specific round
+        const questionsInRound = questions.filter(q => q.round_number === roundNumber + 1);
+        const questionNumber = questionsInRound.length + 1;
+        
+        const ret = await addQuestionToRound(axios, rounds[roundNumber]["id"], questionNumber, newQuestion.id);
+        if (!ret || ret.status < 200 || ret.status >= 300) {
+          throw new Error("Failed to add question to round");
+        }
         toast("Question added successfully!");
-        console.log("Question added successfully! ", newQuestion);
-        setQuestions([...questions, {...newQuestion, question_number: questions.length + 1, round_number: roundNumber}]);
-        console.log(questions)
+        setQuestions([...questions, {...newQuestion, question_number: questionNumber, round_number: roundNumber + 1}]);
       } catch (error) {
         console.error("Failed to add question:", error);
         toast("No questions available for the selected filters.");
+      }
+    };
+
+    const handleRemoveQuestion = async (questionId, roundId) => {
+      try {
+        const confirmed = window.confirm("Are you sure you want to remove this question from the round? This cannot be undone.");
+        if (!confirmed) {
+          return;
+        }
+        
+        const ret = await removeQuestionFromRound(axios, roundId, questionId);
+        if (!ret || ret.status < 200 || ret.status >= 300) {
+          throw new Error("Failed to remove question from round");
+        }
+        toast("Question removed successfully!");
+        
+        // Find the question being removed to get its round and position
+        const removedQuestion = questions.find(q => q.id === questionId);
+        if (!removedQuestion) return;
+        
+        // Filter out the removed question and update question numbers for the same round
+        console.log(questions);
+        const updatedQuestions = questions
+          .filter(q => q.id !== questionId)
+          .map(question => {
+            if (question.round_number === removedQuestion.round_number && 
+                question.question_number > removedQuestion.question_number) {
+              return {
+                ...question,
+                question_number: question.question_number - 1
+              };
+            }
+            return question;
+          });
+        
+        setQuestions(updatedQuestions);
+      } catch (error) {
+        console.error("Failed to remove question:", error);
+        toast("Failed to remove question from round.");
       }
     };
  
@@ -197,7 +244,8 @@ for (const key in rounds) {
                       <button className='question-action-btn' title='Regenerate Question'>
                         <Icon path={mdiSync} size={0.8} />
                       </button>
-                      <button className='question-action-btn' title='Remove Question'>
+                      <button className='question-action-btn' title='Remove Question'
+                              onClick={() => handleRemoveQuestion(question.id, rounds[key]["id"])}>
                         <Icon path={mdiClose} size={0.8} />
                       </button>
                     </div>
@@ -242,7 +290,7 @@ for (const key in rounds) {
             const categorySelect = document.getElementById(`category-${Number(key) + 1}`);
             const difficultySelect = document.getElementById(`difficulty-${Number(key) + 1}`);
             handleAddQuestion(
-              Number(key) + 1,
+              Number(key),
               categorySelect.value || null,
               difficultySelect.value || null
             );
@@ -267,7 +315,7 @@ for (const key in rounds) {
             height="34"
             width="34"
             >
-            <circle stroke-width="3" stroke="black" r="35.5" cy="37" cx="37"></circle>
+            <circle strokeWidth="3" stroke="black" r="35.5" cy="37" cx="37"></circle>
             <g transform="scale(-1, 1) translate(-75, 0)">
             <path
                 fill="black"

@@ -101,20 +101,20 @@ export const deleteDeck = (axiosClient, id) => {
   });
 }
 
-export const addQuestion = (axiosClient, deckId, questionId) => {
+export const addQuestionToRound = async (axiosClient, roundId, question_number, questionId) => {
   let config = {
     method: 'post',
     maxBodyLength: Infinity,
-    url: '/deck/' + deckId + '/question/' + questionId
+    url: '/deck/round/' + roundId + '/' + question_number + '/' + questionId
   };
 
-  axiosClient.request(config)
-  .then((response) => {
-    JSON.stringify(response.data);
-  })
-  .catch((error) => {
+  try {
+    const response = await axiosClient.request(config);
+    return response;
+  } catch (error) {
     console.log(error);
-  });
+    throw error;
+  }
 }
 
 export const getQuestions = async (axiosClient) => {
@@ -166,24 +166,23 @@ export const getDeckRounds = async (axiosClient, deck_id) => {
     return response.data;
   } catch (error) {
     console.error("Failed to fetch rounds:", error);
-      // Propagate the error so it can be handled by the caller
   }
 }
 
-export const removeQuestion = (axiosClient, deckId, questionId) => {
+export const removeQuestionFromRound = async (axiosClient, roundId, questionId) => {
     let config = {
       method: 'delete',
       maxBodyLength: Infinity,
-      url: '/deck/' + deckId + '/question/' + questionId
+      url: '/deck/round/' + roundId + '/question/' + questionId
     };
     
-    axiosClient.request(config)
-    .then((response) => {
-      JSON.stringify(response.data);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+    try {
+      const response = await axiosClient.request(config);
+      return response;
+    } catch (error) {
+      console.error("Failed to remove question from round:", error);
+      throw error;
+    }
 }
 
 export const getSortedQuestions = async (cat, diff, axiosClient) => {

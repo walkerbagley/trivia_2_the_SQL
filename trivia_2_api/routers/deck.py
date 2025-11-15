@@ -238,28 +238,123 @@ async def _update_deck_round(round_id: UUID, round: DeckRoundRequest) -> None:
             deck_id = results.get("deck_id", None)
             if round_number is None or deck_id is None:
                 raise HTTPException(status_code=404, detail="Round not found")
+    return True
 
+
+@router.post("/round/{round_id}/{question_num}/{question_id}")
+async def add_question_to_round(
+    question_num: int, question_id: UUID, round_id: UUID
+) -> None:
+    if not all([question_num, question_id, round_id]):
+        raise HTTPException(status_code=400, detail="Invalid parameters")
+    round_req = DeckRoundRequest()
+    with db.connection() as conn:
+        with conn.cursor(row_factory=dict_row) as cur:
             cur.execute(
-                """DELETE FROM "RoundQuestions" WHERE round_id = %s""", (round_id,)
+                """INSERT INTO "RoundQuestions" (round_id, question_id, question_number) VALUES (%s, %s, %s)""",
+                (round_id, question_id, question_num),
             )
-
-            print("deleted questions")
-            generate_random_questions(cur, deck_id, round_id, round)
-            print("added questions")
-
+            # Check if the insert was successful by checking rowcount
+            if cur.rowcount == 0:
+                raise HTTPException(
+                    status_code=500, detail="Failed to add question to round"
+                )
+            cur.execute(
+                """SELECT * from "DeckRounds" WHERE round_id = %s""", (round_id,)
+            )
+            result = cur.fetchone()
+            if not result:
+                raise HTTPException(
+                    status_code=500, detail="Failed to add question to round"
+                )
+            round_req.num_questions = result["num_questions"] + 1
+            round_req.categories = result["categories"] if result["categories"] else []
+            round_req.attributes = result["attributes"] if result["attributes"] else []
+            cur.execute("""SELECT * from "Questions" WHERE id = %s""", (question_id,))
+            result = cur.fetchone()
+            if not result:
+                raise HTTPException(
+                    status_code=500, detail="Failed to add question to round"
+                )
+            if result["category"] not in round_req.categories:
+                round_req.categories.append(result["category"])
+    ret = await _update_deck_round(round_id, round_req)
+    if ret:
+        return True
     return None
 
 
-# @router.post("/question/{question_num}/{question_id}/round/{round_id}")
-# async def add_question_to_round(
-#     question_num: int, question_id: UUID, round_id: UUID
-# ) -> None:
-#     with db.connection() as conn:
-#         with conn.cursor() as cur:
-#             cur.execute(
-#                 """INSERT INTO "RoundQuestions" (round_id, question_id, question_number) VALUES (%s, %s, %s)""",
-#                 (round_id, question_id, question_num),
-#             )
+@router.delete("/round/{round_id}/question/{question_id}")
+async def remove_question_from_round(question_id: UUID, round_id: UUID) -> None:
+    if not all([question_id, round_id]):
+        raise HTTPException(status_code=400, detail="Invalid parameters")
+    round_req = DeckRoundRequest()
+    with db.connection() as conn:
+        with conn.cursor(row_factory=dict_row) as cur:
+            # First, get the question being removed to find its position
+            cur.execute(
+                """SELECT rq.question_number FROM "RoundQuestions" rq 
+                   WHERE rq.round_id = %s AND rq.question_id = %s""",
+                (round_id, question_id),
+            )
+            question_position = cur.fetchone()
+            if not question_position:
+                raise HTTPException(
+                    status_code=404, detail="Question not found in round"
+                )
+            removed_question_num = question_position["question_number"]
 
-#     await _update_deck_round(round_id, DeckRoundRequest())
-#     return None
+            cur.execute("""SELECT * from "Questions" WHERE id = %s""", (question_id,))
+            question_result = cur.fetchone()
+            if not question_result:
+                raise HTTPException(status_code=404, detail="Question not found")
+
+            cur.execute(
+                """DELETE FROM "RoundQuestions" WHERE round_id = %s AND question_id = %s""",
+                (round_id, question_id),
+            )
+            if cur.rowcount == 0:
+                raise HTTPException(
+                    status_code=404, detail="Question not found in round"
+                )
+            print(f"Successfully removed question {question_id} from round {round_id}")
+
+            # Update question numbers for all subsequent questions in the same round
+            cur.execute(
+                """UPDATE "RoundQuestions" 
+                   SET question_number = question_number - 1 
+                   WHERE round_id = %s AND question_number > %s""",
+                (round_id, removed_question_num),
+            )
+            print(
+                f"Updated {cur.rowcount} question numbers after position {removed_question_num}"
+            )
+
+            cur.execute(
+                """SELECT * from "DeckRounds" WHERE round_id = %s""", (round_id,)
+            )
+            result = cur.fetchone()
+            if not result:
+                raise HTTPException(
+                    status_code=500, detail="Failed to remove question from round"
+                )
+            round_req.num_questions = result["num_questions"] - 1
+            round_req.categories = result["categories"] if result["categories"] else []
+            round_req.attributes = result["attributes"] if result["attributes"] else []
+
+            # Only remove if no other questions in this round have this category
+            cur.execute(
+                """SELECT COUNT(*) as count FROM "RoundQuestions" rq 
+                   JOIN "Questions" q ON rq.question_id = q.id 
+                   WHERE rq.round_id = %s AND q.category = %s""",
+                (round_id, question_result["category"]),
+            )
+            category_count = cur.fetchone()
+            if category_count and category_count["count"] == 0:
+                if question_result["category"] in round_req.categories:
+                    round_req.categories.remove(question_result["category"])
+
+    ret = await _update_deck_round(round_id, round_req)
+    if ret:
+        return True
+    return None

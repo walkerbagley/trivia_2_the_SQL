@@ -71,7 +71,7 @@ export const getQuestionById = async (axiosClient, id) => {
   };
 
 
-  export const addQuestion = async (axiosClient, category = null, difficulty = null) => {
+  export const getNewQuestion = async (axiosClient, category = null, difficulty = null) => {
     const params = new URLSearchParams();
     
     if (category) {
