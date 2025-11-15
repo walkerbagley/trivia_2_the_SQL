@@ -60,10 +60,10 @@ export const createDeck = async (axiosClient, name, description, rounds=[]) => {
 
 }
 
-export const updateDeck = (axiosClient, id, name, description) => {
+export const updateDeck = async (axiosClient, id, name, description) => {
   let data = JSON.stringify({
-    "name": "test_deck 3",
-    "description": "this will be deleted"
+    "name": name,
+    "description": description
   });
 
   let config = {
@@ -76,13 +76,13 @@ export const updateDeck = (axiosClient, id, name, description) => {
     data : data
   };
 
-  axiosClient.request(config)
-  .then((response) => {
-    JSON.stringify(response.data);
-  })
-  .catch((error) => {
-    console.log(error);
-  });
+  try {
+    const response = await axiosClient.request(config);
+    return response.data;
+  } catch (error) {
+    console.error("Failed to update deck:", error);
+    throw error;
+  }
 }
 
 export const deleteDeck = (axiosClient, id) => {

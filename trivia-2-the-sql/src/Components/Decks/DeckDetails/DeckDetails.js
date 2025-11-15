@@ -2,10 +2,15 @@ import React, {useEffect, useState} from 'react';
 // import { useParams } from 'react-router-dom';
 import './styles.css';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
-import { getDeckQuestions, getDeck, getDeckRounds, updateRound } from '../../../Services/Decks';
+import { getDeckQuestions, getDeck, getDeckRounds, updateRound, updateDeck } from '../../../Services/Decks';
+import { addQuestion, getAvailableCategories } from '../../../Services/Question.js';
 import { useAxios } from '../../../Providers/AxiosProvider.js'
 import { useUserSession } from "../../../Providers/UserProvider.js";
 import { addUserDeck, removeUserDeck } from '../../../Services/User.js';
+import Icon from '@mdi/react';
+import { mdiPencilOutline, mdiCheck, mdiClose, mdiSync, mdiPlus } from '@mdi/js';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 const DeckDetails =  () => {
@@ -20,7 +25,25 @@ const DeckDetails =  () => {
   const [questions, setQuestions] = useState([]);
   const [rounds, setRounds] = useState({})
   const [deck, setDeck] = useState({});
+  const [isEditingTitle, setIsEditingTitle] = useState(false);
+  const [isEditingDescription, setIsEditingDescription] = useState(false);
+  const [tempTitle, setTempTitle] = useState('');
+  const [tempDescription, setTempDescription] = useState('');
+  const [availableCategories, setAvailableCategories] = useState([]);
   let num_rounds;
+
+  const difficulties = [1, 2, 3];
+
+  const fetchCategories = async () => {
+    try {
+      const categories = await getAvailableCategories(axios);
+      setAvailableCategories(categories);
+    } catch (error) {
+      console.error("Failed to fetch categories:", error);
+      // Fallback to empty array if fetch fails
+      setAvailableCategories([]);
+    }
+  };
 
   const fetchDeck = async () => {
     try {
@@ -40,6 +63,7 @@ const DeckDetails =  () => {
 
     useEffect(() => {
       fetchDeck();
+      fetchCategories(); // Load categories in parallel
     }, [ ]);
 
     
@@ -51,6 +75,10 @@ const DeckDetails =  () => {
       }
 
     const removeFromUserDecks = async () => {
+      const confirmed = window.confirm("Are you sure you want to remove this deck?");
+      if (!confirmed) {
+        return;
+      }
       removeUserDeck(axios, user.id, deck.id).then(()=>{
      }).catch((error)=>{
        console.error(error);
@@ -58,12 +86,82 @@ const DeckDetails =  () => {
     }
 
     const rerollRound = async (round_id, cat, num) => {
+      const confirmed = window.confirm("Are you sure you want to regenerate all questions for this round? This action cannot be undone.");
+      if (!confirmed) {
+        return;
+      }
       updateRound(axios, round_id, cat, num).then(()=>{
       fetchDeck();
      }).catch((error)=>{
        console.error(error);
     })
     }
+
+    const startEditingTitle = () => {
+      setTempTitle(deck.name || '');
+      setIsEditingTitle(true);
+    };
+
+    const startEditingDescription = () => {
+      setTempDescription(deck.description || '');
+      setIsEditingDescription(true);
+    };
+
+    const saveTitleEdit = () => {
+      setDeck({...deck, name: tempTitle});
+      setIsEditingTitle(false);
+      setTempTitle('');
+      updateDeck(axios, deck.id, tempTitle, deck.description).then(() => {
+        toast("Successfully updated deck name");
+      }).catch((error) => {
+        console.error("Failed to update deck title:", error);
+        toast("Failed to update deck title");
+      });
+    };
+
+    const saveDescriptionEdit = () => {
+      setDeck({...deck, description: tempDescription});
+      setIsEditingDescription(false);
+      setTempDescription('');
+      updateDeck(axios, deck.id, deck.name, tempDescription).then(() => {
+        toast("Successfully updated deck description");
+      }).catch((error) => {
+        console.error("Failed to update deck description:", error);
+        toast("Failed to update deck description");
+      });
+    };
+
+    const cancelTitleEdit = () => {
+      setIsEditingTitle(false);
+      setTempTitle('');
+    };
+
+    const cancelDescriptionEdit = () => {
+      setIsEditingDescription(false);
+      setTempDescription('');
+    };
+
+    const handleAddQuestion = async (roundNumber, category, difficulty) => {
+      try {
+        const newQuestion = await addQuestion(axios, category || null, difficulty || null);
+        
+        // TODO: You would need to implement adding the question to the specific round
+        toast("Question added successfully!");
+        console.log("Question added successfully! ", newQuestion);
+        setQuestions([...questions, {...newQuestion, question_number: questions.length + 1, round_number: roundNumber}]);
+        console.log(questions)
+      } catch (error) {
+        console.error("Failed to add question:", error);
+        toast("No questions available for the selected filters.");
+      }
+    };
+ 
+    const getDefaultCategory = (roundCategories) => {
+      if (roundCategories && roundCategories.length === 1) {
+        return roundCategories[0];
+      }
+      return '';
+    };
 
   const goBack = () => {
     navigate("/decks");
@@ -87,41 +185,155 @@ for (const key in rounds) {
         {
           questions ? 
           questions.map((question) => (
-            <div>
-                {question.round_number == Number(key) + 1 ? <li><div className='question'>{question.question}</div></li> : <></>}
+            <div key={question.id}>
+                {question.round_number == Number(key) + 1 ? 
+                  <li>
+                    <div className='question'>{question.question.slice(0, 115)}</div>
+                    <div className='question-actions'>
+                      <button className='question-action-btn' title='Regenerate Question'>
+                        <Icon path={mdiSync} size={0.8} />
+                      </button>
+                      <button className='question-action-btn' title='Remove Question'>
+                        <Icon path={mdiClose} size={0.8} />
+                      </button>
+                    </div>
+                  </li> 
+                : <></>}
               </div>
           ))
           : <></>
         }
       </ol>
+      <div className="add-question-container">
+        <div className="question-filters">
+          <select 
+            defaultValue={getDefaultCategory(rounds[key]["categories"])}
+            className="filter-dropdown"
+            id={`category-${Number(key) + 1}`}
+          >
+            <option value="">Any Category</option>
+            {availableCategories.map(category => (
+              <option key={category} value={category}>
+                {category.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}
+              </option>
+            ))}
+          </select>
+          <select 
+            defaultValue=""
+            className="filter-dropdown"
+            id={`difficulty-${Number(key) + 1}`}
+          >
+            <option value="">Any Difficulty</option>
+            {difficulties.map(diff => (
+              <option key={diff} value={diff}>
+                {diff}
+              </option>
+            ))}
+          </select>
+        </div>
+        <button 
+          className="add-question-btn" 
+          title="Add Question to Round"
+          onClick={() => {
+            const categorySelect = document.getElementById(`category-${Number(key) + 1}`);
+            const difficultySelect = document.getElementById(`difficulty-${Number(key) + 1}`);
+            handleAddQuestion(
+              Number(key) + 1,
+              categorySelect.value || null,
+              difficultySelect.value || null
+            );
+          }}
+        >
+          <Icon path={mdiPlus} size={1} />
+          <span>Add Question</span>
+        </button>
+      </div>
       </div>);
   }
 
 
   return (
     <div className="deckdetails-page">
-      <button onClick={() => goBack()} className='backbutton'>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 74 74"
-          height="34"
-          width="34"
-          >
-          <circle stroke-width="3" stroke="black" r="35.5" cy="37" cx="37"></circle>
-          <g transform="scale(-1, 1) translate(-75, 0)">
-          <path
-              fill="black"
-              d="M25 35.5C24.1716 35.5 23.5 36.1716 23.5 37C23.5 37.8284 24.1716 38.5 25 38.5V35.5ZM49.0607 38.0607C49.6464 37.4749 49.6464 36.5251 49.0607 35.9393L39.5147 26.3934C38.9289 25.8076 37.9792 25.8076 37.3934 26.3934C36.8076 26.9792 36.8076 27.9289 37.3934 28.5147L45.8787 37L37.3934 45.4853C36.8076 46.0711 36.8076 47.0208 37.3934 47.6066C37.9792 48.1924 38.9289 48.1924 39.5147 47.6066L49.0607 38.0607ZM25 38.5L48 38.5V35.5L25 35.5V38.5Z"
-          ></path>
-          </g>
-        </svg>
-            <span>Go Back</span>
-      </button>
-      <h1>{deck.name}</h1>
-      <h5>Deck #{deck.id}</h5>
-      <h3>{deck.description}</h3>
-      {addOrRemoveButton}
+      <div className="top-navigation">
+        <button onClick={() => goBack()} className='backbutton'>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 74 74"
+            height="34"
+            width="34"
+            >
+            <circle stroke-width="3" stroke="black" r="35.5" cy="37" cx="37"></circle>
+            <g transform="scale(-1, 1) translate(-75, 0)">
+            <path
+                fill="black"
+                d="M25 35.5C24.1716 35.5 23.5 36.1716 23.5 37C23.5 37.8284 24.1716 38.5 25 38.5V35.5ZM49.0607 38.0607C49.6464 37.4749 49.6464 36.5251 49.0607 35.9393L39.5147 26.3934C38.9289 25.8076 37.9792 25.8076 37.3934 26.3934C36.8076 26.9792 36.8076 27.9289 37.3934 28.5147L45.8787 37L37.3934 45.4853C36.8076 46.0711 36.8076 47.0208 37.3934 47.6066C37.9792 48.1924 38.9289 48.1924 39.5147 47.6066L49.0607 38.0607ZM25 38.5L48 38.5V35.5L25 35.5V38.5Z"
+            ></path>
+            </g>
+          </svg>
+              <span>Go Back</span>
+        </button>
+        {addOrRemoveButton}
+      </div>
+      <div className="deck-header">
+        <div className="deck-title-section">
+          {isEditingTitle ? (
+            <>
+              <input 
+                type="text" 
+                value={tempTitle} 
+                onChange={(e) => setTempTitle(e.target.value)}
+                className="edit-input"
+                placeholder="Deck name"
+              />
+              <div className="edit-buttons">
+                <button className="save-btn" onClick={saveTitleEdit}>
+                  <Icon path={mdiCheck} size={1} />
+                </button>
+                <button className="cancel-btn" onClick={cancelTitleEdit}>
+                  <Icon path={mdiClose} size={1} />
+                </button>
+              </div>
+            </>
+          ) : (
+            <>
+              <h1>{deck.name}</h1>
+              <button className="edit-deck-btn" onClick={startEditingTitle}>
+                <Icon path={mdiPencilOutline} size={1} />
+              </button>
+            </>
+          )}
+        </div>
+        <h5>Deck #{deck.id}</h5>
+        <div className="deck-description-section">
+          {isEditingDescription ? (
+            <>
+              <textarea 
+                value={tempDescription} 
+                onChange={(e) => setTempDescription(e.target.value)}
+                className="edit-textarea"
+                placeholder="Deck description"
+                rows={3}
+              />
+              <div className="edit-buttons">
+                <button className="save-btn" onClick={saveDescriptionEdit}>
+                  <Icon path={mdiCheck} size={1} />
+                </button>
+                <button className="cancel-btn" onClick={cancelDescriptionEdit}>
+                  <Icon path={mdiClose} size={1} />
+                </button>
+              </div>
+            </>
+          ) : (
+            <>
+              <h3>{deck.description}</h3>
+              <button className="edit-deck-btn" onClick={startEditingDescription}>
+                <Icon path={mdiPencilOutline} size={1} />
+              </button>
+            </>
+          )}
+        </div>
+      </div>
       <h2>Rounds</h2>
       {roundsDisplay}
     </div>

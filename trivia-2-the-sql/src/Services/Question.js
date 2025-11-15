@@ -69,3 +69,47 @@ export const getQuestionById = async (axiosClient, id) => {
       
     }
   };
+
+
+  export const addQuestion = async (axiosClient, category = null, difficulty = null) => {
+    const params = new URLSearchParams();
+    
+    if (category) {
+      params.append('category', category);
+    }
+    if (difficulty) {
+      params.append('difficulty', difficulty);
+    }
+
+    const config = {
+      method: 'get',
+      maxBodyLength: Infinity,
+      url: `/question/new/${params.toString() ? `?${params.toString()}` : ''}`,
+    };
+  
+    try {
+      const response = await axiosClient.request(config);
+      return response.data;
+    } catch (error) {
+      console.error("Failed to roll new question:", error);
+      throw error;
+    }
+  };
+
+  export const getAvailableCategories = async (axiosClient) => {
+    const config = {
+      method: 'get',
+      maxBodyLength: Infinity,
+      url: '/question/categories/',
+    };
+  
+    try {
+      const response = await axiosClient.request(config);
+      return response.data;
+    } catch (error) {
+      console.error("Failed to fetch available categories:", error);
+      throw error;
+    }
+  };
+
+      

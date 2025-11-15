@@ -7,9 +7,103 @@
     padding: 2em 1em;
     min-height: 90vh;
 }
+
+.deckdetails-page .top-navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 2em;
+}
 .deckdetails-page .question {
     padding: 1em;
     text-align: left;
+    flex: 1;
+}
+
+.deckdetails-page .question-actions {
+    display: flex;
+    gap: 0.5em;
+    align-items: center;
+}
+
+.deckdetails-page .question-action-btn {
+    border: 0;
+    background: none;
+    cursor: pointer;
+    padding: 0.5em;
+    border-radius: 0.5em;
+    color: var(--accent3);
+    transition: all 0.2s ease-in-out;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    height: 40px;
+}
+
+.deckdetails-page .question-action-btn:hover {
+    background-color: var(--accent3);
+    color: var(--main-background-color);
+    transform: scale(1.1);
+}
+
+.deckdetails-page .add-question-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1em;
+    margin: 1.5em 0;
+}
+
+.deckdetails-page .question-filters {
+    display: flex;
+    gap: 0.5em;
+    align-items: center;
+}
+
+.deckdetails-page .filter-dropdown {
+    border: 2px solid var(--accent3);
+    border-radius: 0.5em;
+    padding: 0.5em;
+    background-color: var(--main-background-color);
+    color: var(--main-text-color);
+    font-size: 0.9em;
+    min-width: 120px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+.deckdetails-page .filter-dropdown:focus {
+    outline: none;
+    border-color: var(--accent1);
+    box-shadow: 0 0 0 2px rgba(var(--accent1-rgb), 0.2);
+}
+
+.deckdetails-page .filter-dropdown:hover {
+    border-color: var(--accent1);
+}
+
+.deckdetails-page .add-question-btn {
+    border: 0;
+    padding: 1em 1.5em;
+    cursor: pointer;
+    background-color: var(--accent2);
+    color: var(--main-text-color);
+    border-radius: 0.5em;
+    transition: all 0.2s ease-in-out;
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    font-size: 1em;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.deckdetails-page .add-question-btn:hover {
+    background-color: var(--accent3);
+    color: var(--main-background-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 .deckdetails-page .questionlist {
     width: 80%;
@@ -23,7 +117,9 @@
     position: relative;
     display: flex;
     align-items: center;
+    justify-content: space-between;
     padding-left: 1em;
+    padding-right: 1em;
     overflow-wrap: normal;
     text-overflow: wrap;
     border: 2px solid var(--accent3);
@@ -89,4 +185,128 @@
 .deckdetails-page .round-reroll-btn:hover {
   background-color: var(--accent3);
   transition: 0.2s ease-in-out;
+}
+
+.deckdetails-page .deck-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5em;
+  margin: 1em 0;
+  position: relative;
+  width: 100%;
+}
+
+.deckdetails-page .deck-title-section,
+.deckdetails-page .deck-description-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  gap: 1em;;
+  width: 100%;
+}
+
+.deckdetails-page .deck-title-section h1,
+.deckdetails-page .deck-description-section h3 {
+  margin: 0;
+  text-align: center;
+}
+
+.deckdetails-page .deck-title-section .edit-deck-btn,
+.deckdetails-page .deck-description-section .edit-deck-btn,
+.deckdetails-page .deck-title-section .edit-buttons,
+.deckdetails-page .deck-description-section .edit-buttons {
+  transform: translateX(5%);
+}
+
+.deckdetails-page .deck-title-section .edit-input,
+.deckdetails-page .deck-description-section .edit-textarea {
+  text-align: center;
+}
+
+.deckdetails-page .edit-deck-btn {
+  border: 0;
+  background: none;
+  cursor: pointer;
+  padding: 0.5em;
+  border-radius: 0.5em;
+  color: var(--accent3);
+  transition: all 0.2s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.deckdetails-page .edit-deck-btn:hover {
+  background-color: var(--accent3);
+  color: var(--main-background-color);
+  transform: scale(1.1);
+}
+
+.deckdetails-page .edit-input,
+.deckdetails-page .edit-textarea {
+  border: 2px solid var(--accent3);
+  border-radius: 0.5em;
+  padding: 0.5em;
+  font-size: 1em;
+  background-color: var(--main-background-color);
+  color: var(--main-text-color);
+  min-width: 200px;
+}
+
+.deckdetails-page .edit-input {
+  font-size: 1.5em;
+  font-weight: bold;
+}
+
+.deckdetails-page .edit-textarea {
+  font-size: 1em;
+  resize: vertical;
+  min-height: 60px;
+}
+
+.deckdetails-page .edit-input:focus,
+.deckdetails-page .edit-textarea:focus {
+  outline: none;
+  border-color: var(--accent1);
+  box-shadow: 0 0 0 2px rgba(var(--accent1-rgb), 0.2);
+}
+
+.deckdetails-page .edit-buttons {
+  display: flex;
+  gap: 0.5em;
+}
+
+.deckdetails-page .save-btn,
+.deckdetails-page .cancel-btn {
+  border: 0;
+  background: none;
+  cursor: pointer;
+  padding: 0.5em;
+  border-radius: 0.5em;
+  transition: all 0.2s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.deckdetails-page .save-btn {
+  color: #4caf50;
+}
+
+.deckdetails-page .save-btn:hover {
+  background-color: #4caf50;
+  color: var(--main-background-color);
+  transform: scale(1.1);
+}
+
+.deckdetails-page .cancel-btn {
+  color: #f44336;
+}
+
+.deckdetails-page .cancel-btn:hover {
+  background-color: #f44336;
+  color: var(--main-background-color);
+  transform: scale(1.1);
 }

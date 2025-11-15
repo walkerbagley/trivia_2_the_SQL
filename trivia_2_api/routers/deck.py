@@ -1,13 +1,9 @@
-from operator import add
 from fastapi import APIRouter, HTTPException, Request, Query
 from fastapi.responses import JSONResponse
 from psycopg.connection import Cursor
 from psycopg.rows import class_row, dict_row
-from typing import Annotated, Optional, Union
+from typing import Annotated, Union
 from uuid import UUID
-
-from trivia_2_api.models import deck
-from trivia_2_api.models.question import Question
 
 from ..db import db
 from ..models import (
@@ -252,36 +248,6 @@ async def _update_deck_round(round_id: UUID, round: DeckRoundRequest) -> None:
             print("added questions")
 
     return None
-
-
-@router.get("/question/")
-async def roll_question(
-    category: Optional[str] = None, difficulty: Optional[int] = None
-) -> Question:
-    with db.connection() as conn:
-        with conn.cursor(row_factory=class_row(DeckQuestion)) as cur:
-            query = """SELECT q.id, q.question, q.difficulty, q.a, q.b, q.c, q.d, q.category
-                        FROM "Questions" as q
-                        WHERE 1=1
-                        """
-            params = []
-
-            if category is not None:
-                query += " AND q.category = %s"
-                params.append(category)
-
-            if difficulty and difficulty > 0 and difficulty < 4:
-                query += " AND q.difficulty = %s"
-                params.append(difficulty)
-
-            query += " ORDER BY RANDOM() LIMIT 1"
-            cur.execute(query, params)
-            question = cur.fetchone()
-            if question is None:
-                raise HTTPException(
-                    status_code=404, detail="No question found matching criteria"
-                )
-            return question
 
 
 # @router.post("/question/{question_num}/{question_id}/round/{round_id}")
