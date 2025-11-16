@@ -1,7 +1,6 @@
 .titlepage {
     color: var(--main-text-color);
-    min-height: 45vh;
-    padding: 12em 0;
+    padding-top: 12em;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -52,8 +51,8 @@
 /* Mobile styles for better readability and compact feel */
 @media (max-width: 768px) {
   .titlepage {
-    padding: 4em 1em;
-    min-height: 100vh;
+    padding: 10em 1em 0;
+    justify-content: center;
   }
 
   .titlepage .maintitle {
@@ -90,8 +89,8 @@
 
 @media (max-width: 480px) {
   .titlepage {
-    padding: 2em 0.75em;
-    min-height: 100vh;
+    padding: 10em 0.75em 0;
+    justify-content: center;
   }
 
   .titlepage .maintitle {

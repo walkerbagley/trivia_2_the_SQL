@@ -63,7 +63,7 @@ export const GameService = {
       return response.data;
     } catch (error) {
       console.error("Error joining game:", error);
-      
+      throw error;
     }
   },
 

@@ -29,19 +29,21 @@ export default function Components() {
             <Router>
                 <Header/>
                 <ToastContainer />
-                <Routes>
-                    <Route exact path='/' element={<Main/>}/>
-                    <Route exact path='/host' element={<HostPage/>}/>
-                    <Route exact path='/join' element={<JoinPage/>}/>
-                    <Route exact path='/loading/:id' element={<LoadingPage/>}/>
-                    <Route exact path='/play/:id' element={<QuestionPage/>}/>
-                    <Route exact path='/score/:id' element={<ScorePage/>}/>
-                    <Route exact path='/decks' element={<Decks/>}/>
-                    <Route path="/decks/:id" element={<DeckDetails />} />
-                    <Route exact path='/create' element={<CreateDeck/>}/>
-                    <Route exact path='/account' element={<Account/>}/>
-                    <Route exact path = '/login' element={<Navigate to = "/"/>} />
-                </Routes>
+                <div className="router-background">
+                    <Routes>
+                        <Route exact path='/' element={<Main/>}/>
+                        <Route exact path='/host' element={<HostPage/>}/>
+                        <Route exact path='/join' element={<JoinPage/>}/>
+                        <Route exact path='/loading/:id' element={<LoadingPage/>}/>
+                        <Route exact path='/play/:id' element={<QuestionPage/>}/>
+                        <Route exact path='/score/:id' element={<ScorePage/>}/>
+                        <Route exact path='/decks' element={<Decks/>}/>
+                        <Route path="/decks/:id" element={<DeckDetails />} />
+                        <Route exact path='/create' element={<CreateDeck/>}/>
+                        <Route exact path='/account' element={<Account/>}/>
+                        <Route exact path = '/login' element={<Navigate to = "/"/>} />
+                    </Routes>
+                </div>
             </Router>
         );
     } else {
@@ -49,10 +51,12 @@ export default function Components() {
             <Router>
                 <Header/>
                 <ToastContainer />
-                <Routes>
-                    <Route path="/login" element={<AuthRegister/>} />
-                    <Route path="*" element={<Navigate to = "/login"/>} />
-                </Routes>
+                <div className="router-background">
+                    <Routes>
+                        <Route path="/login" element={<AuthRegister/>} />
+                        <Route path="*" element={<Navigate to = "/login"/>} />
+                    </Routes>
+                </div>
             </Router>
         )
     }

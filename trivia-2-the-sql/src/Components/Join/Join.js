@@ -33,6 +33,7 @@ const JoinPage =  () => {
         }
         catch (error) {
           console.error("Failed to fetch teams:", error);
+          toast.error("Failed to fetch teams");
         }
       };
 
@@ -51,10 +52,20 @@ const JoinPage =  () => {
       return;
     }
     GameService.joinGame(axios, {"join_code":joinCode, "team_id":teamId}).then((data)=>{
-      navigate("/loading/"+joinCode, { state: { gameId : data.game_id, joinCode : joinCode, teamId:teamId, host:false } })
+      if (data && data.game_id) {
+        navigate("/loading/"+joinCode, { state: { gameId : data.game_id, joinCode : joinCode, teamId:teamId, host:false } })
+      } else {
+        toast.error("Invalid response from server");
+      }
     }).catch((error)=>{
       console.error(error);
-      toast.error(error);
+      let errorMessage = "Failed to join game";
+      if (error.response && error.response.status === 404) {
+        errorMessage = "Game not found. Please check your join code.";
+      } else if (error.response && error.response.data && error.response.data.detail) {
+        errorMessage = error.response.data.detail;
+      }
+      toast.error(errorMessage);
     });
   };
 

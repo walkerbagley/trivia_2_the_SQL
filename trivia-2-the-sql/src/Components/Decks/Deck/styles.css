@@ -1,19 +1,43 @@
 .deckbox {
-  overflow: wrap;
+  overflow: hidden;
   border-radius: 1em;
   padding: 1em;
   text-align: center;
   width: 100%;
   cursor: pointer;
   border: 0;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
+
 .title {
   display: block;
   width: 100%;
   color: var(--main-background-color);
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
+
 .description {
   display: block;
   color: var(--main-background-color);
   font-weight: 100;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  font-size: 1.5em;
+}
+
+/* Mobile styles */
+@media (max-width: 768px) {
+  .deckbox {
+    padding: 0.75em;
+  }
+  
+  .title {
+    font-size: 0.9em;
+  }
+  
+  .description {
+    font-size: 0.8em;
+  }
 }
