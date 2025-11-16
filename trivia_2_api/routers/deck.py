@@ -78,20 +78,21 @@ async def create_deck(request: Request, deck: DeckRequest) -> None:
 def add_round(
     cur: Cursor, deck_id: UUID, round: DeckRoundRequest, round_number: int | None = None
 ) -> None:
-    if round_number is not None:
-        cur.execute(
-            """
-                UPDATE "DeckRounds" SET round_number = round_number + 1 WHERE deck_id = %s AND round_number >= %s
-                """,
-            (deck_id, round_number),
-        )
+    if not round_number:
+        raise HTTPException(status_code=400, detail="Round number must be provided")
+    cur.execute(
+        """
+            UPDATE "DeckRounds" SET round_number = round_number + 1 WHERE deck_id = %s AND round_number >= %s
+            """,
+        (deck_id, round_number),
+    )
     print("round number set")
 
     cur.execute(
         """
                 INSERT INTO "DeckRounds" 
                 (deck_id, round_number, num_questions, categories, attributes) 
-                VALUES (%s::uuid, COALESCE(%s, (SELECT MAX(round_number) FROM "DeckRounds" WHERE deck_id = %s)) ,%s, COALESCE(%s, '{}'::text[]), COALESCE(%s, '{}'::text[])) RETURNING round_id""",
+                VALUES (%s::uuid, COALESCE(%s, (SELECT COALESCE(MAX(round_number), 0) + 1 FROM "DeckRounds" WHERE deck_id = %s)) ,%s, COALESCE(%s, '{}'::text[]), COALESCE(%s, '{}'::text[])) RETURNING round_id""",
         (
             deck_id,
             round_number,
@@ -113,6 +114,12 @@ def add_round(
 def generate_random_questions(
     cur: Cursor, deck_id: UUID, round_id: UUID, round: DeckRoundRequest
 ) -> None:
+    if not round.num_questions or round.num_questions <= 0:
+        raise HTTPException(
+            status_code=400, detail="Number of questions must be positive"
+        )
+    if not deck_id or not round_id:
+        raise HTTPException(status_code=400, detail="Invalid parameters")
     query = """INSERT INTO "RoundQuestions"(round_id, question_id, question_number) 
                     SELECT %s::uuid as round_id, 
                     q.id as question_id, 
@@ -123,7 +130,7 @@ def generate_random_questions(
                     WHERE NOT q.id = ANY(SELECT rq.question_id FROM "DeckRounds" as dr INNER JOIN "RoundQuestions" as rq ON dr.round_id = rq.round_id WHERE dr.deck_id = %s)"""
     arguments = [round_id, deck_id]
 
-    if round.categories is not None:
+    if round.categories is not None and len(round.categories) > 0:
         query += " AND category = ANY(%s)"
         arguments.append(round.categories)
 
@@ -139,10 +146,17 @@ def generate_random_questions(
 
     query += ") as q "
 
-    print(query)
-    print(arguments)
-
     cur.execute(query, arguments)
+
+    # Check if any rows were inserted
+    rows_inserted = cur.rowcount
+
+    if rows_inserted == 0:
+        raise HTTPException(
+            status_code=500,
+            detail="Failed to generate questions for the round with the given filters",
+        )
+
     return None
 
 
@@ -206,6 +220,9 @@ async def delete_deck_round(round_id: UUID) -> None:
                 """UPDATE "DeckRounds" SET round_number = round_number - 1 WHERE round_number > (SELECT round_number FROM "DeckRounds" WHERE round_id = %s)""",
                 (round_id,),
             )
+            cur.execute(
+                """DELETE FROM "RoundQuestions" WHERE round_id = %s""", (round_id,)
+            )
             cur.execute("""DELETE FROM "DeckRounds" WHERE round_id = %s""", (round_id,))
 
 
@@ -213,10 +230,12 @@ async def delete_deck_round(round_id: UUID) -> None:
 async def add_deck_round(
     deck_id: UUID,
     round: DeckRoundRequest,
-    round_number: Annotated[Union[int, None], Query()] = None,
+    round_number: int,
 ) -> None:
+    if not round_number or round_number <= 0:
+        raise HTTPException(status_code=400, detail="Invalid round number")
     with db.connection() as conn:
-        with conn.cursor() as cur:
+        with conn.cursor(row_factory=dict_row) as cur:
             add_round(cur, deck_id, round, round_number)
     return None
 

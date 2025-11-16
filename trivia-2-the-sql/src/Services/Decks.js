@@ -266,28 +266,34 @@ export const getSortedQuestions = async (cat, diff, axiosClient) => {
 }
 
 
-export const addRound = async (axiosClient, num_questions=10, categories=[], attributes=[]) => {
+export const addRound = async (axiosClient, deck_id, num_questions=10, categories=[], attributes=[], round_number=null) => {
   let data = JSON.stringify({
     "categories": categories,
     "attributes": attributes,
     "num_questions": num_questions
   });
 
+  const params = new URLSearchParams();
+  if (round_number !== null && round_number !== undefined) {
+    params.append('round_number', round_number);
+  }
+
   let config = {
     method: 'post',
     maxBodyLength: Infinity,
-    url: '/',
+    url: `/deck/${deck_id}/round${params.toString() ? `?${params.toString()}` : ''}`,
     headers: { 
       'Content-Type': 'application/json', 
     },
+    data: data
   };
 
   try {
-    const response = await axiosClient.post(config, data);
+    const response = await axiosClient.request(config);
     return response.data;
   } catch (error) {
-    console.error("Failed to fetch decks:", error);
-      // Propagate the error so it can be handled by the caller
+    console.error("Failed to add round:", error);
+    throw error;
   }
 }
 
@@ -305,4 +311,20 @@ export const updateRound = async (axiosClient, round_id, categories, num_questio
   };
 
   return axiosClient.request(config)
+}
+
+export const deleteRound = async (axiosClient, round_id) => {
+  let config = {
+    method: 'delete',
+    maxBodyLength: Infinity,
+    url: '/deck/round/' + round_id
+  };
+
+  try {
+    const response = await axiosClient.request(config);
+    return response;
+  } catch (error) {
+    console.error("Failed to delete round:", error);
+    throw error;
+  }
 }

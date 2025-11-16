@@ -9,6 +9,7 @@ import { useForm, useFieldArray, Controller } from 'react-hook-form';
 import Select from 'react-select';
 import { Multiselect } from "multiselect-react-dropdown";
 import { useUserSession } from "../../Providers/UserProvider.js";
+import { maxQuestionsPerRound } from '../../constants.js';
 
 
 
@@ -112,7 +113,7 @@ const CreateDeck = () => {
                       )}/>
                       
                       <label className='rounds_questions'>Number of questions</label>
-                      <input type="number" min={1} max={100}  {...register(`rounds.${index}.num_questions` as const, { required: 'Please insert the number of questions'})}/>
+                      <input type="number" min="1" max={maxQuestionsPerRound}  {...register(`rounds.${index}.num_questions` as const, { required: 'Please insert the number of questions'})}/>
                       </div>
                       </>
                   );

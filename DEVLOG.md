@@ -9,6 +9,8 @@
     - [ ] Edit your questions
 - [ ] enable deck creation based on the questions you have created - side window pane to view/filter your questions?
 - [ ] Add way to edit decks from the deck details page. Add an edit button that allows you to select questions to reroll from that category (select the first three questions that they should be deleted and rerolled from the question pool).
+- [ ] allow flaggin questions for review
+    - [ ] and flag for been reviewed. or enum for review status 0 == reviewed, 1 == not reviewed, 2 == needs review.
 
 ### Bugs
 

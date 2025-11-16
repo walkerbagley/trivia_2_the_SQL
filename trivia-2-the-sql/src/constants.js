@@ -1,0 +1,1 @@
+export const maxQuestionsPerRound = 30;

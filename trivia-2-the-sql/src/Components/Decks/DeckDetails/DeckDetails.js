@@ -2,18 +2,15 @@ import React, {useEffect, useState} from 'react';
 // import { useParams } from 'react-router-dom';
 import './styles.css';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
-import { getDeckQuestions, getDeck, getDeckRounds, updateRound, updateDeck, addQuestionToRound, removeQuestionFromRound, replaceQuestionInRound } from '../../../Services/Decks';
+import { getDeckQuestions, getDeck, getDeckRounds, updateRound, updateDeck, addQuestionToRound, removeQuestionFromRound, replaceQuestionInRound, addRound, deleteRound } from '../../../Services/Decks';
 import { getAvailableCategories } from '../../../Services/Question.js';
 import { useAxios } from '../../../Providers/AxiosProvider.js'
 import { useUserSession } from "../../../Providers/UserProvider.js";
 import { addUserDeck, removeUserDeck } from '../../../Services/User.js';
 import Icon from '@mdi/react';
-import { mdiPencilOutline, mdiCheck, mdiClose, mdiSync, mdiPlus } from '@mdi/js';
+import { mdiPencilOutline, mdiCheck, mdiClose, mdiSync, mdiPlus, mdiTrashCanOutline } from '@mdi/js';
 import { toast } from 'react-toastify';
-
-// TODO: add new round feature
-// TODO: delete round feature
-
+import { maxQuestionsPerRound } from '../../../constants.js';
 
 const DeckDetails =  () => {
   const { user } = useUserSession();
@@ -32,6 +29,9 @@ const DeckDetails =  () => {
   const [tempTitle, setTempTitle] = useState('');
   const [tempDescription, setTempDescription] = useState('');
   const [availableCategories, setAvailableCategories] = useState([]);
+  const [showAddRoundForm, setShowAddRoundForm] = useState(false);
+  const [newRoundCategory, setNewRoundCategory] = useState('');
+  const [newRoundQuestions, setNewRoundQuestions] = useState(5);
   let num_rounds;
 
   const difficulties = [1, 2, 3];
@@ -56,8 +56,14 @@ const DeckDetails =  () => {
       setQuestions(qs);
 
       const rs = await getDeckRounds(axios, deck.id);
-      num_rounds = deck.rounds
-      setRounds(rs)
+      num_rounds = deck.rounds;
+      
+      // Convert array to object with round_number as key for easier access
+      const roundsObject = {};
+      rs.forEach((round, index) => {
+        roundsObject[index] = round;
+      });
+      setRounds(roundsObject);
     } catch (error) {
       console.error("Failed to fetch questions:", error);
     }
@@ -249,6 +255,60 @@ const DeckDetails =  () => {
         toast("Failed to regenerate question. No questions available for the selected filters.");
       }
     };
+
+    const handleAddNewRound = () => {
+      setShowAddRoundForm(!showAddRoundForm);
+    };
+
+    const handleCreateNewRound = async () => {
+      try {
+        // Create categories array - if category is selected, use it, otherwise empty array
+        const categories = newRoundCategory ? [newRoundCategory] : [];
+        
+        // Calculate the next round number based on current rounds
+        const nextRoundNumber = Object.keys(rounds).length + 1;
+        
+        await addRound(axios, deck.id, newRoundQuestions, categories, [], nextRoundNumber);
+        
+        toast(`Successfully created new round with ${newRoundQuestions} questions${newRoundCategory ? ` in ${newRoundCategory}` : ''}!`);
+        
+        // Refresh the deck data to show the new round
+        fetchDeck();
+        
+        // Reset form
+        setShowAddRoundForm(false);
+        setNewRoundCategory('');
+        setNewRoundQuestions(5);
+      } catch (error) {
+        console.error("Failed to create new round:", error);
+        toast("Failed to create new round. Please try again.");
+      }
+    };
+
+    const handleCancelNewRound = () => {
+      setShowAddRoundForm(false);
+      setNewRoundCategory('');
+      setNewRoundQuestions(5);
+    };
+
+    const handleDeleteRound = async (roundId, roundNumber) => {
+      try {
+        const confirmed = window.confirm(`Are you sure you want to delete Round ${roundNumber}? This will permanently remove all questions in this round and cannot be undone.`);
+        if (!confirmed) {
+          return;
+        }
+        
+        await deleteRound(axios, roundId);
+        
+        toast(`Round ${roundNumber} deleted successfully!`);
+        
+        // Refresh the deck data to reflect the changes
+        fetchDeck();
+      } catch (error) {
+        console.error("Failed to delete round:", error);
+        toast("Failed to delete round. Please try again.");
+      }
+    };
  
     const getDefaultCategory = (roundCategories) => {
       if (roundCategories && roundCategories.length === 1) {
@@ -272,9 +332,18 @@ const DeckDetails =  () => {
 let roundsDisplay = [];
 for (const key in rounds) {
     roundsDisplay.push(
-    <div key={key}>
-    <h3>Round {Number(key) + 1}</h3>
-    <button className='round-reroll-btn' onClick={() => rerollRound(rounds[key]["id"], rounds[key]["categories"], rounds[key]["num_questions"])}>Generate new questions</button>
+    <div key={key} className="round-container">
+      <div className="round-header">
+        <h3 className="round-title">Round {Number(key) + 1}</h3>
+        <div className="round-actions">
+          <button className='round-reroll-btn' onClick={() => rerollRound(rounds[key]["id"], rounds[key]["categories"], rounds[key]["num_questions"])}>Generate new questions</button>
+          <button className='round-delete-btn' 
+                  title={`Delete Round ${Number(key) + 1}`}
+                  onClick={() => handleDeleteRound(rounds[key]["id"], Number(key) + 1)}>
+            <Icon path={mdiTrashCanOutline} size={0.8} />
+          </button>
+        </div>
+      </div>
     <ol className='questionlist'>
         {
           questions ?
@@ -300,8 +369,9 @@ for (const key in rounds) {
           : <></>
         }
       </ol>
-      <div className="add-question-container">
-        <div className="question-filters">
+      <div className="round-footer">
+        <div className="add-question-container">
+          <div className="question-filters">
           <select 
             defaultValue={getDefaultCategory(rounds[key]["categories"])}
             className="filter-dropdown"
@@ -343,8 +413,9 @@ for (const key in rounds) {
           <Icon path={mdiPlus} size={1} />
           <span>Add Question</span>
         </button>
+        </div>
       </div>
-      </div>);
+    </div>);
   }
 
 
@@ -432,6 +503,62 @@ for (const key in rounds) {
       </div>
       <h2>Rounds</h2>
       {roundsDisplay}
+      <div className="add-round-section">
+        {!showAddRoundForm ? (
+          <button 
+            className="add-round-btn"
+            onClick={handleAddNewRound}
+            title="Add New Round"
+          >
+            <Icon path={mdiPlus} size={1} />
+            <span>Add New Round</span>
+          </button>
+        ) : (
+          <div className="add-round-form">
+            <h3>Add New Round</h3>
+            <div className="round-form-controls">
+              <div className="form-group">
+                <label htmlFor="round-category">Category:</label>
+                <select 
+                  id="round-category"
+                  className="round-form-dropdown"
+                  value={newRoundCategory}
+                  onChange={(e) => setNewRoundCategory(e.target.value)}
+                >
+                  <option value="">Any Category</option>
+                  {availableCategories.map(category => (
+                    <option key={category} value={category}>
+                      {category.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="form-group">
+                <label htmlFor="round-questions">Number of Questions:</label>
+                <input 
+                  type="number"
+                  id="round-questions"
+                  className="round-form-input"
+                  min="1"
+                  max={maxQuestionsPerRound}
+                  value={newRoundQuestions}
+                  onChange={(e) => setNewRoundQuestions(Math.min(maxQuestionsPerRound, Math.max(1, parseInt(e.target.value) || 1)))}
+                />
+              </div>
+            </div>
+            <div className="form-actions">
+              <button className="create-round-btn" onClick={handleCreateNewRound}>
+                <Icon path={mdiCheck} size={1} />
+                <span>Create Round</span>
+              </button>
+              <button className="cancel-round-btn" onClick={handleCancelNewRound}>
+                <Icon path={mdiClose} size={1} />
+                <span>Cancel</span>
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
