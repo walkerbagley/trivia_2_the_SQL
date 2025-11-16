@@ -61,6 +61,17 @@ const Header =  () => {
                         }}>
                         Account
                     </button>
+                    {user?.is_admin && (
+                        <button
+                            className="button-52"
+                            role="button"
+                            onClick={() => {
+                                navigate('/admin');
+                                setMobileMenuOpen(false);
+                            }}>
+                            Admin
+                        </button>
+                    )}
                     <button
                         className="button-52"
                         role="button"

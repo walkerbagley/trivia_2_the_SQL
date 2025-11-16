@@ -75,7 +75,10 @@ CREATE TABLE public.Questions (
   d text,
   category text NOT NULL,
   first_answer bigint NOT NULL DEFAULT '1'::bigint,
-  CONSTRAINT Questions_pkey PRIMARY KEY (id)
+  review_status integer NOT NULL DEFAULT 1,
+  created_by uuid,
+  CONSTRAINT Questions_pkey PRIMARY KEY (id),
+  CONSTRAINT Questions_created_by_fkey FOREIGN KEY (created_by) REFERENCES public.Users(id)
 );
 CREATE TABLE public.RoundQuestions (
   question_id uuid NOT NULL,
@@ -116,5 +119,6 @@ CREATE TABLE public.Users (
   id uuid NOT NULL DEFAULT gen_random_uuid(),
   user_name text NOT NULL,
   hashed_password text NOT NULL,
+  is_admin boolean NOT NULL DEFAULT false,
   CONSTRAINT Users_pkey PRIMARY KEY (id)
 );

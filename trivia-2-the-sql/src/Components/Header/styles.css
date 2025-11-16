@@ -9,6 +9,7 @@
     align-items: center;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     position: relative;
+    min-height: 4em;
 }
 
 .navbar .title {
@@ -67,6 +68,7 @@
   .navbar {
     padding: 4px 12px;
     flex-wrap: wrap;
+    min-height: auto;
   }
   
   .navbar h2 {

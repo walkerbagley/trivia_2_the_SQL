@@ -112,4 +112,78 @@ export const getQuestionById = async (axiosClient, id) => {
     }
   };
 
-      
+  // Get a batch of questions with pagination and filters
+  export const getQuestionBatch = async (axiosClient, options = {}) => {
+    const {
+      includeUserCreated = false,
+      categories = null,
+      attributes = null,
+      difficulties = null,
+      reviewStatus = null,
+      pageSize = 25,
+      pageNum = 1
+    } = options;
+
+
+    const difficulty_map = {
+      "Any": null,
+      "Easy": 1,
+      "Medium": 2,
+      "Hard": 3
+    };
+
+    const params = new URLSearchParams();
+    
+    if (includeUserCreated) {
+      params.append('include_user_created', includeUserCreated);
+    }
+    
+    if (categories && categories.length > 0) {
+      categories.forEach(category => {
+        if (category.toLowerCase() !== "any") {
+          params.append('category', category);
+        }
+      });
+    }
+    
+    if (attributes && attributes.length > 0) {
+      attributes.forEach(attribute => {
+        params.append('attribute', attribute);
+      });
+    }
+    
+    if (difficulties && difficulties.length > 0) {
+      difficulties.forEach(difficulty => {
+        if (difficulty.toLowerCase() !== "any") {
+          const difficultyValue = difficulty_map[difficulty];
+          if (difficultyValue !== undefined) {
+            params.append('difficulty', difficultyValue);
+          } else {
+            console.error(`Invalid difficulty level: ${difficulty}`);
+          }
+        }
+      });
+    }
+
+    if (reviewStatus && reviewStatus.toLowerCase() !== "all") {
+      // Backend expects review_status as a list, so we send it as an array-like parameter
+      params.append('review_status', reviewStatus);
+    }
+    
+    params.append('page_size', pageSize);
+    params.append('page_num', pageNum);
+
+    const config = {
+      method: 'get',
+      maxBodyLength: Infinity,
+      url: `/question/?${params.toString()}`,
+    };
+  
+    try {
+      const response = await axiosClient.request(config);
+      return response.data;
+    } catch (error) {
+      console.error("Failed to fetch question batch:", error);
+      throw error;
+    }
+  };

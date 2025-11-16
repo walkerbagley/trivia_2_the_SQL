@@ -16,20 +16,27 @@ router = APIRouter(
 
 @router.get("/")
 async def get_questions(
+    include_user_created: bool = False,
     category: Annotated[Union[list[str], None], Query()] = None,
     attribute: Annotated[Union[list[str], None], Query()] = None,
-    limit: int = 10,
+    difficulty: Annotated[Union[list[int], None], Query()] = None,
+    review_status: Annotated[Union[list[str], None], Query()] = None,
+    page_size: int = Query(10, ge=1, le=100, alias="page_size"),
+    page_num: int = Query(1, ge=1, alias="page_num"),
 ) -> list[Question]:
+    offset = (page_num - 1) * page_size
+
     with db.connection() as conn:
         with conn.cursor(row_factory=class_row(Question)) as cur:
-            query = """with answers as (select id as question_id, ARRAY[a,b,c,d] as answer_arr from "Questions")
-
-                            SELECT q.id, question, difficulty, q.a,q.b,q.c,q.d,
-                            category, ARRAY(SELECT attribute FROM "QuestionAttributes" WHERE question_id = q.id) as attributes 
+            query = """SELECT q.id, question, difficulty, q.a, q.b, q.c, q.d,
+                            category, created_by, review_status,
+                            ARRAY(SELECT attribute FROM "QuestionAttributes" WHERE question_id = q.id) as attributes 
                             FROM "Questions" as q
-                            INNER JOIN answers as a ON a.question_id = q.id
-                            WHERE TRUE """
+                            WHERE 1=1"""
             arguments = []
+
+            if not include_user_created:
+                query += " AND created_by IS NULL"
 
             if category is not None:
                 query += " AND category = ANY(%s)"
@@ -39,8 +46,16 @@ async def get_questions(
                 query += ' AND q.id IN (SELECT question_id FROM "QuestionAttributes" WHERE attribute = ANY(%s))'
                 arguments.append(attribute)
 
-            query += " LIMIT %s"
-            arguments.append(limit)
+            if difficulty is not None:
+                query += " AND difficulty = ANY(%s)"
+                arguments.append(difficulty)
+
+            if review_status is not None:
+                query += " AND review_status = ANY(%s)"
+                arguments.append(review_status)
+
+            query += " LIMIT %s OFFSET %s"
+            arguments.extend([page_size, offset])
 
             cur.execute(query, arguments)
             return cur.fetchall()

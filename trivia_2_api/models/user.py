@@ -3,18 +3,23 @@ from pydantic import BaseModel, Field
 from typing import Optional
 from uuid import UUID
 
+
 class User(BaseModel):
     id: UUID
     user_name: str
     hashed_password: str
 
+
 class UserRequest(BaseModel):
     user_name: str
     hashed_password: str
 
+
 class UserResponse(BaseModel):
     id: UUID
     user_name: str
+    is_admin: bool
+
 
 class GameStatus(BaseModel):
     id: UUID
@@ -25,9 +30,10 @@ class GameStatus(BaseModel):
     team_answer: Optional[str] = None
     time_remaining: Optional[int] = None
 
+
 class UserStatus(BaseModel):
     user_status: str
-    game_status: Optional[GameStatus] = None    
+    game_status: Optional[GameStatus] = None
 
 
 class UserGameScores(BaseModel):
@@ -36,4 +42,3 @@ class UserGameScores(BaseModel):
     date: datetime
     score: Optional[int] = None
     percentage: Optional[float] = None
-

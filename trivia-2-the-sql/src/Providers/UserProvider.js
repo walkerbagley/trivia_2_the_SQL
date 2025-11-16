@@ -3,6 +3,7 @@ import { useState, createContext } from "react";
 import { useAuthSession } from "./AuthProvider";
 import { useAxios } from "./AxiosProvider";
 import {jwtDecode} from "jwt-decode";
+import { getUserById } from "../Services/User";
 
 const UserContext = createContext(null, null, null);
 
@@ -22,8 +23,9 @@ export function UserProvider({ children }) {
     useEffect(() => {
         if (token) {
             const userId = jwtDecode(token).sub;
-            axios.get(`/user/${userId}`).then((response) => {
-                setUser(response.data);
+            getUserById(axios, userId).then((response) => {
+                console.log("Fetched user:", response);
+                setUser(response);
             }).catch((error) => {
                 console.error("Failed to fetch user:", error);
                 logout();
