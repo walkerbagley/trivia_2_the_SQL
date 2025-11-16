@@ -10,8 +10,7 @@ import Select from 'react-select';
 import { Multiselect } from "multiselect-react-dropdown";
 import { useUserSession } from "../../Providers/UserProvider.js";
 import { maxQuestionsPerRound } from '../../constants.js';
-
-
+import { BackButton } from '../Decks/BackButton/BackButton.js';
 
 
 type FormValues = {
@@ -41,6 +40,10 @@ const CreateDeck = () => {
     const axios = useAxios(); 
     const navigate = useNavigate();
 
+    const goBack = () => {
+      navigate("/decks");
+    }
+
     const {fields, append, remove} = useFieldArray({
       name: 'rounds',
       control
@@ -62,8 +65,6 @@ const CreateDeck = () => {
       'humanities',
     ];
 
-
-
     const deckName = watch('deckname')
     const deckDesc = watch('deckdesc')
     const rounds = watch('rounds')
@@ -84,46 +85,49 @@ const CreateDeck = () => {
     };
 
     return (
+      <div className='background-color'>
+        <BackButton onClick={goBack} />
         <div className='createpage'>
             <h1>Create a Deck!</h1>
 
             <form className='create-deck-form' onSubmit={handleSubmit((data) => {
             })}>
               <div>
-              <label className='deckname'>Deck Name</label>
-              <input {...register('deckname', {required: 'Your deck needs a name!'})}/>
-              <p>{errors.deckname?.message}</p>
+                <label className='deckname'>Deck Name</label>
+                <input {...register('deckname', {required: 'Your deck needs a name!'})}/>
+                <p>{errors.deckname?.message}</p>
               </div>
-              <div>
-              <label className='deckdesc'>Description</label>
-              <input {...register('deckdesc')}/>
-              </div>
+                <div>
+                  <label className='deckdesc'>Description</label>
+                  <input {...register('deckdesc')}/>
+                </div>
               <div className='rounds-form'>
-                {fields.map((field, index) => {
-                  return (
-                    <>
-                      <div className='deck-round-header'>
-                      <h3>Round {index + 1}</h3>
-                      {index > 0 && <button type="button" onClick={() => remove(index)}>Remove round</button>}
-                    </div>
-                    <div className="form-control" key={field.id}>
-                      <label className='rounds_categories'>Categories</label>
-                      <Controller control={control} {...register(`rounds.${index}.categories` as const)} render={({ field: {value, onChange} }) => (
-                        <Multiselect className='multiselect' options={category_options} isObject={false} showCheckbox={true} closeOnSelect={false} onSelect={onChange} onRemove={onChange} selectedValues={value}/>
-                      )}/>
-                      
-                      <label className='rounds_questions'>Number of questions</label>
-                      <input type="number" min="1" max={maxQuestionsPerRound}  {...register(`rounds.${index}.num_questions` as const, { required: 'Please insert the number of questions'})}/>
-                      </div>
+                  {fields.map((field, index) => {
+                    return (
+                      <>
+                        <div className='deck-round-header'>
+                          <h3>Round {index + 1}</h3>
+                          {index > 0 && <button type="button" onClick={() => remove(index)}>Remove round</button>}
+                        </div>
+                        <div className="form-control" key={field.id}>
+                          <label className='rounds_categories'>Categories</label>
+                          <Controller control={control} {...register(`rounds.${index}.categories` as const)} render={({ field: {value, onChange} }) => (
+                            <Multiselect className='multiselect' options={category_options} isObject={false} showCheckbox={true} closeOnSelect={false} onSelect={onChange} onRemove={onChange} selectedValues={value}/>
+                          )}/>
+                          
+                          <label className='rounds_questions'>Number of questions</label>
+                          <input type="number" min="1" max={maxQuestionsPerRound}  {...register(`rounds.${index}.num_questions` as const, { required: 'Please insert the number of questions'})}/>
+                        </div>
                       </>
-                  );
-                })}
-                  <button className='add-round-btn' type="button" onClick={() => append({ categories: [], num_questions: '' })}>+</button>
+                    );
+                  })}
+                    <button className='add-round-btn' type="button" onClick={() => append({ categories: [], num_questions: '' })}>+</button>
               </div>
             </form>
             <button type="button" className="submit-deck-button" onClick={() => createDeckFunc()}>Create</button>
 
         </div>
+      </div>
       );
     };
 export default CreateDeck;

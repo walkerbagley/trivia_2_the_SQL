@@ -1,3 +1,10 @@
+.background-color {
+    background-color: var(--main-background-color);
+    padding-top: 1.5em;
+    padding-left:1.5em;
+    padding-bottom: 0;
+}
+
 .createpage {
     color: var(--main-text-color);
     width: 100%;
