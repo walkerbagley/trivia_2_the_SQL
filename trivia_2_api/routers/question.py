@@ -70,7 +70,7 @@ async def get_question(id: UUID) -> Question:
                             with answers as (select id as question_id, ARRAY[a,b,c,d] as answer_arr from "Questions" where id = %s)
 
                             SELECT q.id, question, difficulty, q.a,q.b,q.c,q.d,
-                            category, ARRAY(SELECT attribute FROM "QuestionAttributes" WHERE question_id = q.id) as attributes 
+                            category, review_status, created_by, ARRAY(SELECT attribute FROM "QuestionAttributes" WHERE question_id = q.id) as attributes 
                             FROM "Questions" as q
                             INNER JOIN answers as a ON a.question_id = q.id
                             WHERE q.id = %s """,

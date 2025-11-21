@@ -5,6 +5,16 @@ from typing import Optional
 from uuid import UUID
 
 
+# class GameQuestion(BaseModel):
+#     id: UUID
+#     question: str
+#     a: Optional[str]
+#     b: Optional[str]
+#     c: Optional[str]
+#     d: Optional[str]
+#     first_answer: Optional[int] = None
+
+
 class Question(BaseModel):
     id: UUID
     question: str
