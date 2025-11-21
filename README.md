@@ -8,7 +8,6 @@ Walker Bagley, Dagny Brand, Zach Brown, Patrick Schlosser
 - Start the backend API (FastAPI / Uvicorn):
 
 ```powershell
-cd trivia_2_api
 uvicorn trivia_2_api.main:app --reload --host 127.0.0.1 --port 8000
 ```
 

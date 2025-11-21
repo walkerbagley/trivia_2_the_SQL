@@ -1,4 +1,3 @@
-import React from 'react'
 import './styles.css'
 import { useAxios } from '../../../Providers/AxiosProvider.js'
 import { useState, useEffect, useRef } from 'react';
@@ -16,7 +15,7 @@ const QuestionPage =  () => {
     const [question, setQuestion] = useState("");
     const [scores, setScores] = useState([]);
     const [options, setOptions] = useState({"a": [], "b": [], "c": [], "d": []});
-    const liveOptions = useRef({"a": [], "b": [], "c": [], "d": []});
+    const optionsRef = useRef({"a": [], "b": [], "c": [], "d": []});
     const [roundNumber, setRoundNumber] = useState(0);
     const [questionNumber, setQuestionNumber] = useState(0);
     const questionNumberRef = useRef(0);
@@ -26,9 +25,7 @@ const QuestionPage =  () => {
     function shuffleArray(arr) {
         const length = arr.length;
         const shuffled = new Array(length); // Create an empty array of the same length
-        // Adjust the offset in case it's larger than the array length
-        const normalizedOffset = ((randomNumRef % length) + length) % length;
-    
+        const normalizedOffset = randomNumRef.current % length;
         for (let i = 0; i < length; i++) {
             const newIndex = (i + normalizedOffset) % length; // Calculate new position
             shuffled[newIndex] = arr[i]; // Move the element to its new position
@@ -37,11 +34,11 @@ const QuestionPage =  () => {
     }
 
     const answerQuestion = (letter) => {
+        setActive(letter);
         try {
             GameService.submitAnswer(axios,location.state.gameId,{"round_number":roundNumber,"question_number":questionNumber,"answer":options[letter][1]}).catch((error)=>{
                 console.error(error);
             });
-            console.log("submitted ", letter);
         } catch (error) {
             console.error(error);
         }
@@ -49,34 +46,38 @@ const QuestionPage =  () => {
 
     const getGameStatus = () => {
         getCurrentUserStatus(axios).then((data) => {
-            console.log('options ', options);
             if (data===null || data.game_status===null || data.game_status.status === 'complete'){
                 navigate("/score/"+location.state.joinCode, { state: { gameId : location.state.gameId } });
             }
             if (data?.game_status?.time_remaining){
                 setTimeRemaining(data.game_status.time_remaining);
             }
-            if (data?.game_status?.team_answer !== null){
-                // console.log(data.game_status.team_answer, typeof(data.game_status.team_answer))
-                setActive(liveOptions.current[data.game_status.team_answer][1]);
-                // setActive(data.game_status.team_answer);
+            if (data?.game_status?.team_answer !== null && data?.game_status?.team_answer !== undefined){
+                for (const [letter, value] of Object.entries(optionsRef.current)){
+                    if (value[1] === data.game_status.team_answer){
+                        setActive(letter);
+                    }
+                }
             }
-            setRoundNumber(data?.game_status?.round_number);
-            setQuestionNumber(Number(data.game_status.question_number));
-            GameService.getGameScores(axios, location.state.gameId).then((s) => {
-                setScores(s);
-            }).catch((error)=>{
-                console.error(error);
-            });
+            if (roundNumber!==data?.game_status?.round_number) {
+                setRoundNumber(data?.game_status?.round_number);
+            }
+            if (questionNumber!==data?.game_status?.question_number) {
+                setQuestionNumber(Number(data.game_status.question_number));
+                GameService.getGameScores(axios, location.state.gameId).then((s) => {
+                    setScores(s);
+                }).catch((error)=>{
+                    console.error(error);
+                });
+            }
             if (questionNumberRef.current!=Number(data.game_status.question_number)){
                 questionNumberRef.current = Number(data.game_status.question_number);
                 setActive("");
                 getQuestionById(axios, data.game_status.question_id).then((resp) => {
                     randomNumRef.current = Math.floor(Math.random() * (4));
                     setQuestion(resp.question);
-                    // const NonshuffledOptions = ([[resp.a, "a"], [resp.b, "b"],[resp.c, "c"], [resp.d, "d"]]);
                     const shuffledOptions = shuffleArray([[resp.a, "a"], [resp.b, "b"], [resp.c, "c"], [resp.d, "d"]]);
-                    liveOptions.current = { "a": shuffledOptions[0], "b": shuffledOptions[1], "c": shuffledOptions[2], "d": shuffledOptions[3] };
+                    optionsRef.current = { "a": shuffledOptions[0], "b": shuffledOptions[1], "c": shuffledOptions[2], "d": shuffledOptions[3] };
                     setOptions({ "a": shuffledOptions[0], "b": shuffledOptions[1], "c": shuffledOptions[2], "d": shuffledOptions[3] });
                 }).catch((error)=>{
                     console.error(error);
@@ -89,18 +90,17 @@ const QuestionPage =  () => {
 
       useEffect(() => { // set team answer when active changes
         try{
-            console.log("active ",active, typeof(active))
             if (active === "" || active === null){
                 setCurrAnswer("No Answer");
                 return;
             }
-            if (options[active] === null || options[active] === undefined ) {
+            if (options[active] === null || options[active] === undefined || !options[active][0]) {
+                setCurrAnswer("No Answer");
                 return;
             }
             setCurrAnswer(options[active][0])
-            console.log('curr answer set')
         } catch{
-            console.log('error with options')
+            console.error('useEffect error in setting currAnswer')
         }
       }, [active])
 
@@ -109,7 +109,7 @@ const QuestionPage =  () => {
     useEffect(() => {
         const interval = setInterval(() => {
           getGameStatus();
-        }, 1000);
+        }, 3000);
         return () => clearInterval(interval);
       }, []);
 
@@ -144,25 +144,25 @@ const QuestionPage =  () => {
                 <div className='question-grid-container'>
                     <div className='question-grid-item'>
                         <button onClick={()=>{answerQuestion('a')}} disabled={location.state.host}
-                            className={active == "a" ? 'selected-answer-button' : ""}>
+                            className={active === "a" ? 'selected-answer-button' : ""}>
                                 <strong>A</strong> {options["a"][0]}
                         </button>
                     </div>
                     <div className='question-grid-item'>
                         <button onClick={()=>{answerQuestion('b')}} disabled={location.state.host}
-                            className={active == "b" ? 'selected-answer-button' : ""}>
+                            className={active === "b" ? 'selected-answer-button' : ""}>
                             <strong>B</strong> {options["b"][0]}
                         </button>
                     </div>
                     <div className='question-grid-item'>
                         <button onClick={()=>{answerQuestion('c')}} disabled={location.state.host}
-                            className={active == "c" ? 'selected-answer-button' : ""}>
+                            className={active === "c" ? 'selected-answer-button' : ""}>
                             <strong>C</strong> {options["c"][0]}
                         </button>
                     </div>
                     <div className='question-grid-item'>
                         <button onClick={()=>{answerQuestion('d')}} disabled={location.state.host}
-                            className={active == "d" ? 'selected-answer-button' : ""}>
+                            className={active === "d" ? 'selected-answer-button' : ""}>
                             <strong>D</strong> {options["d"][0]}
                         </button>
                     </div>

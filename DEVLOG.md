@@ -12,6 +12,7 @@
 - [ ] allow flaggin questions for review
     - [ ] and flag for been reviewed. or enum for review status 0 == reviewed, 1 == not reviewed, 2 == needs review.
 - [ ] Admin page to edit all quetions
+- [ ] Summary screen at the end of each round
 
 ### Bugs
 

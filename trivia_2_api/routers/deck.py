@@ -183,7 +183,7 @@ async def get_deck_questions(
 ) -> list[DeckQuestion]:
     with db.connection() as conn:
         with conn.cursor(row_factory=class_row(DeckQuestion)) as cur:
-            query = """SELECT q.id, q.question, q.difficulty, q.a, q.b, q.c, q.d, q.category, ARRAY(SELECT attribute FROM "QuestionAttributes" WHERE question_id = q.id) as attributes,
+            query = """SELECT q.id, q.question, q.difficulty, q.a, q.b, q.c, q.d, q.category, q.review_status, q.created_by, ARRAY(SELECT attribute FROM "QuestionAttributes" WHERE question_id = q.id) as attributes,
                         dr.round_number, rq.question_number
                         FROM "DeckRounds" as dr
                         INNER JOIN "RoundQuestions" as rq ON dr.round_id = rq.round_id
