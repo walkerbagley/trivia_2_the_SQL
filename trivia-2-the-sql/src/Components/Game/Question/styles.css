@@ -6,44 +6,61 @@
 }
 
 .question-page .center {
-  padding: 2em;
+  padding: 1em;
   align-items: center;
   text-align: center;
 }
 
 .question-page h1, .question-page .center h2 {
-  margin: 0;
+  margin: 0.25em 0;
 }
 
 .question-page .question-text {
-  font-size: 3em;
+  font-size: 2em;
+  line-height: 1.2;
+}
+
+.question-page .question-text-md {
+  font-size: 1.75em;
+  line-height: 1.2;
+}
+
+.question-page .question-text-sm {
+  font-size: 1.5em;
+  line-height: 1.2;
+}
+
+.question-page .question-text-xs {
+  font-size: 1.25em;
+  line-height: 1.2;
 }
 
 .question-page .question-grid-container { 
   display: grid; 
   grid-template-columns: repeat(2, 1fr); 
-  gap: 1em; 
-  padding: 2em;
+  gap: 0.75em; 
+  padding: 1em;
 } 
     
 .question-page .question-grid-item {
   text-align: center; 
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   overflow: hidden;
-  border-radius: 1em;
+  border-radius: 0.75em;
 }
 
 .question-page .question-grid-item button {
-  width: 100%; /* Makes the button fill the entire width of the grid item */
-  height: 100%; /* Makes the button fill the entire height of the grid item */
-  font-size: medium;
-  padding: 2em;
-  background-color: white; /* Primary blue background color */
-  color: black; /* White text color */
-  border: none; /* Removes default button border */
-  border-radius: 1em;
-  cursor: pointer; /* Changes cursor to pointer on hover */
-  transition: 0.2s ease-in-out; /* Adds a smooth hover effect */
+  width: 100%;
+  height: 100%;
+  font-size: 1rem;
+  padding: 1.25em;
+  background-color: white;
+  color: black;
+  border: none;
+  border-radius: 0.75em;
+  cursor: pointer;
+  transition: 0.2s ease-in-out;
+  min-height: 80px;
 }
 
 .question-page .question-grid-item button:hover {
@@ -57,22 +74,19 @@
 }
 
 .question-page .next-question-button {
-  justify-content: end;
-}
-
-.question-page .next-question-button {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 1em;
+  gap: 0.75em;
+  padding: 0.5em 1em;
 }
 
 .question-page .next-question-button button {
   border: 3px solid var(--accent3);
   color: var(--accent3);
-  font-size: medium;
+  font-size: 1rem;
   cursor: pointer;
-  padding: 0.5em;
+  padding: 0.5em 1em;
   border-radius: 0.5em;
   background-color: transparent;
   transition: 0.2s ease-in-out;
@@ -81,4 +95,111 @@
 .question-page .next-question-button button:hover {
   color: var(--main-background-color);
   background-color: var(--accent3);
+}
+
+/* Tablet screens */
+@media (max-width: 768px) {
+  .question-page .center {
+    padding: 0.75em;
+  }
+
+  .question-page .question-text {
+    font-size: 1.5em;
+  }
+
+  .question-page .question-text-md {
+    font-size: 1.35em;
+  }
+
+  .question-page .question-text-sm {
+    font-size: 1.2em;
+  }
+
+  .question-page .question-text-xs {
+    font-size: 1.05em;
+  }
+
+  .question-page .center h2 {
+    font-size: 1.25em;
+  }
+
+  .question-page .question-grid-container {
+    gap: 0.5em;
+    padding: 0.75em;
+  }
+
+  .question-page .question-grid-item button {
+    font-size: 0.9rem;
+    padding: 1em;
+    min-height: 70px;
+  }
+
+  .question-page .next-question-button button {
+    font-size: 0.9rem;
+    padding: 0.4em 0.8em;
+  }
+}
+
+/* Mobile screens */
+@media (max-width: 480px) {
+  .question-page .center {
+    padding: 0.5em;
+  }
+
+  .question-page .question-text {
+    font-size: 1.25em;
+  }
+
+  .question-page .question-text-md {
+    font-size: 1.15em;
+  }
+
+  .question-page .question-text-sm {
+    font-size: 1.05em;
+  }
+
+  .question-page .question-text-xs {
+    font-size: 0.95em;
+  }
+
+  .question-page .center h2 {
+    font-size: 1em;
+  }
+
+  .question-page .center p {
+    font-size: 0.9em;
+  }
+
+  .question-page .question-grid-container {
+    grid-template-columns: 1fr;
+    gap: 0.5em;
+    padding: 0.5em;
+  }
+
+  .question-page .question-grid-item button {
+    font-size: 0.85rem;
+    padding: 0.75em;
+    min-height: 60px;
+  }
+
+  .question-page .next-question-button {
+    flex-direction: column;
+    gap: 0.5em;
+    padding: 0.5em;
+  }
+
+  .question-page .next-question-button button {
+    font-size: 0.85rem;
+    padding: 0.4em 0.75em;
+    width: 100%;
+    max-width: 200px;
+  }
+
+  .question-page div h1 {
+    font-size: 1.5em;
+  }
+
+  .question-page div h3 {
+    font-size: 1em;
+  }
 }
