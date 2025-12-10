@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useMemo } from 'react';
+import { createContext, useContext, useMemo } from 'react';
 import { useAuthSession } from './AuthProvider';
 import axios from 'axios';
 
