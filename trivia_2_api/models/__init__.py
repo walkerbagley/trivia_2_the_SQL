@@ -4,6 +4,7 @@ from .auth import (
     AuthUser,
     RegisterRequest,
     RegisterResponse,
+    DualTokenResponse,
 )
 from .deck import (
     Deck,
