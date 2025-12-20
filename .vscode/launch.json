@@ -7,10 +7,17 @@
             "request": "launch",
             "module": "uvicorn",
             "args": [
-                "trivia_2_api/main:app",
-                "--reload"
+                "trivia_2_api.main:app",
+                "--reload",
+                "--host",
+                "127.0.0.1",
+                "--port",
+                "8000"
             ],
-            "jinja": true
+            "jinja": true,
+            "justMyCode": true,
+            "console": "integratedTerminal",
+            "python": "${workspaceFolder}/.venv/Scripts/python.exe"
         }
     ]
 }
