@@ -5,7 +5,8 @@ from typing import Annotated, Optional, Union
 from uuid import UUID
 
 from ..db import db
-from ..models import Question, QuestionRequest
+from ..models import Question, QuestionRequest, CreateQuestionRequest
+import random
 
 router = APIRouter(
     prefix="/question",
@@ -61,6 +62,21 @@ async def get_questions(
             return cur.fetchall()
 
 
+@router.get("/my/{user_id}")
+async def get_my_questions(user_id: UUID) -> list[Question]:
+    with db.connection() as conn:
+        with conn.cursor(row_factory=class_row(Question)) as cur:
+            cur.execute(
+                """SELECT q.id, question, difficulty, q.a, q.b, q.c, q.d,
+                            category,
+                            FROM "Questions" as q
+                            WHERE created_by = %s
+                            ORDER BY q.id DESC""",
+                (user_id,),
+            )
+            return cur.fetchall()
+
+
 @router.get("/{id}")
 async def get_question(id: UUID) -> Question:
     with db.connection() as conn:
@@ -83,30 +99,37 @@ async def get_question(id: UUID) -> Question:
 
 
 @router.post("/")
-async def create_question(question: QuestionRequest) -> UUID:
+async def create_question(question: CreateQuestionRequest) -> UUID:
+    if len(question.distractors) != 3:
+        raise HTTPException(
+            status_code=400, detail="Exactly 3 distractors are required"
+        )
+
+    if not question.category:
+        question.category = "general"
+    question.category = question.category.lower()
+
     with db.connection() as conn:
         with conn.cursor(row_factory=dict_row) as cur:
             cur.execute(
-                """INSERT INTO "Questions" (question, difficulty, a, b, c, d, category) VALUES (%s, %s, %s, %s, %s, %s, %s) RETURNING id""",
+                """INSERT INTO "Questions" (question, difficulty, a, b, c, d, category, first_answer, is_private, created_by) 
+                   VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s) RETURNING id""",
                 (
                     question.question,
                     question.difficulty,
-                    question.a,
-                    question.b,
-                    question.c,
-                    question.d,
+                    question.correct_answer,
+                    question.distractors[0],
+                    question.distractors[1],
+                    question.distractors[2],
                     question.category,
+                    1,
+                    question.is_private,
+                    question.created_by,
                 ),
             )
             question_id = (cur.fetchone()).get("id", None)
             if question_id is None:
                 raise HTTPException(status_code=500, detail="Failed to create question")
-
-            if len(question.attributes) > 0:
-                cur.executemany(
-                    """INSERT INTO "QuestionAttributes" (question_id, attribute) VALUES (%s,%s)""",
-                    [(question_id, attribute) for attribute in question.attributes],
-                )
 
             return JSONResponse(status_code=201, content={"id": str(question_id)})
 

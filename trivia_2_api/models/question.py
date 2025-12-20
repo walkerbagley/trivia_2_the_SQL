@@ -41,3 +41,13 @@ class QuestionRequest(BaseModel):
     attributes: list[str] = []
     review_status: Optional[int]
     created_by: Optional[UUID]
+
+
+class CreateQuestionRequest(BaseModel):
+    question: str
+    category: Optional[str]
+    correct_answer: str
+    distractors: list[str]
+    difficulty: Optional[int] = 1
+    is_private: Optional[bool] = False
+    created_by: UUID

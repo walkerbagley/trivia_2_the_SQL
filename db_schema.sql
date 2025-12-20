@@ -77,6 +77,7 @@ CREATE TABLE public.Questions (
   first_answer bigint NOT NULL DEFAULT '1'::bigint,
   review_status integer NOT NULL DEFAULT 1,
   created_by uuid,
+  is_private boolean NOT NULL DEFAULT false,
   CONSTRAINT Questions_pkey PRIMARY KEY (id),
   CONSTRAINT Questions_created_by_fkey FOREIGN KEY (created_by) REFERENCES public.Users(id)
 );

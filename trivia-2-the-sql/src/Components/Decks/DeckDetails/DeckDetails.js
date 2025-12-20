@@ -2,8 +2,8 @@ import React, {useEffect, useState} from 'react';
 // import { useParams } from 'react-router-dom';
 import './styles.css';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
-import { getDeckQuestions, getDeck, getDeckRounds, updateRound, updateDeck, addQuestionToRound, removeQuestionFromRound, replaceQuestionInRound, addRound, deleteRound } from '../../../Services/Decks';
-import { getAvailableCategories } from '../../../Services/Question.js';
+import { getDeckQuestions, getDeck, getDeckRounds, updateRound, updateDeck, addQuestionToRound, removeQuestionFromRound, replaceQuestionInRound, addRound, deleteRound, addSpecificQuestionToRound } from '../../../Services/Decks';
+import { getAvailableCategories, getMyQuestions } from '../../../Services/Question.js';
 import { useAxios } from '../../../Providers/AxiosProvider.js'
 import { useUserSession } from "../../../Providers/UserProvider.js";
 import { addUserDeck, removeUserDeck } from '../../../Services/User.js';
@@ -33,6 +33,10 @@ const DeckDetails =  () => {
   const [showAddRoundForm, setShowAddRoundForm] = useState(false);
   const [newRoundCategory, setNewRoundCategory] = useState('');
   const [newRoundQuestions, setNewRoundQuestions] = useState(5);
+  const [showMyQuestionsModal, setShowMyQuestionsModal] = useState(false);
+  const [selectedRoundForMyQuestion, setSelectedRoundForMyQuestion] = useState(null);
+  const [myQuestions, setMyQuestions] = useState([]);
+  const [questionSearchTerm, setQuestionSearchTerm] = useState('');
   let num_rounds;
 
   const difficulties = [1, 2, 3];
@@ -292,6 +296,54 @@ const DeckDetails =  () => {
       setNewRoundQuestions(5);
     };
 
+    const handleShowMyQuestions = async (roundNumber) => {
+      try {
+        const userQuestions = await getMyQuestions(axios, user.id);
+        setMyQuestions(userQuestions);
+        setSelectedRoundForMyQuestion(roundNumber);
+        setShowMyQuestionsModal(true);
+        setQuestionSearchTerm('');
+      } catch (error) {
+        console.error("Failed to fetch user questions:", error);
+        toast("Failed to load your questions. Please try again.");
+      }
+    };
+
+    const handleAddMyQuestion = async (questionId) => {
+      try {
+        const questionsInRound = questions.filter(q => q.round_number === selectedRoundForMyQuestion + 1);
+        const questionNumber = questionsInRound.length + 1;
+        
+        const response = await addSpecificQuestionToRound(
+          axios,
+          rounds[selectedRoundForMyQuestion]["id"],
+          questionNumber,
+          questionId
+        );
+        
+        if (!response || response.status < 200 || response.status >= 300) {
+          throw new Error("Failed to add question to round");
+        }
+        
+        const newQuestion = response.data.question;
+        newQuestion.round_number = selectedRoundForMyQuestion + 1;
+        
+        toast("Your question added successfully!");
+        setQuestions([...questions, newQuestion]);
+        setShowMyQuestionsModal(false);
+        setQuestionSearchTerm('');
+      } catch (error) {
+        console.error("Failed to add question:", error);
+        toast("Failed to add your question to the round.");
+      }
+    };
+
+    const handleCloseMyQuestionsModal = () => {
+      setShowMyQuestionsModal(false);
+      setQuestionSearchTerm('');
+      setSelectedRoundForMyQuestion(null);
+    };
+
     const handleDeleteRound = async (roundId, roundNumber) => {
       try {
         const confirmed = window.confirm(`Are you sure you want to delete Round ${roundNumber}? This will permanently remove all questions in this round and cannot be undone.`);
@@ -398,22 +450,32 @@ for (const key in rounds) {
             ))}
           </select>
         </div>
-        <button 
-          className="add-question-btn" 
-          title="Add Question to Round"
-          onClick={() => {
-            const categorySelect = document.getElementById(`category-${Number(key) + 1}`);
-            const difficultySelect = document.getElementById(`difficulty-${Number(key) + 1}`);
-            handleAddQuestion(
-              Number(key),
-              categorySelect.value || null,
-              difficultySelect.value || null
-            );
-          }}
-        >
-          <Icon path={mdiPlus} size={1} />
-          <span>Add Question</span>
-        </button>
+        <div className="add-question-buttons">
+          <button 
+            className="add-question-btn" 
+            title="Add Question to Round"
+            onClick={() => {
+              const categorySelect = document.getElementById(`category-${Number(key) + 1}`);
+              const difficultySelect = document.getElementById(`difficulty-${Number(key) + 1}`);
+              handleAddQuestion(
+                Number(key),
+                categorySelect.value || null,
+                difficultySelect.value || null
+              );
+            }}
+          >
+            <Icon path={mdiPlus} size={1} />
+            <span>Add Question</span>
+          </button>
+          <button 
+            className="add-my-question-btn" 
+            title="Add My Question to Round"
+            onClick={() => handleShowMyQuestions(Number(key))}
+          >
+            <Icon path={mdiPlus} size={1} />
+            <span>Add My Question</span>
+          </button>
+        </div>
         </div>
       </div>
     </div>);
@@ -543,6 +605,54 @@ for (const key in rounds) {
           </div>
         )}
       </div>
+
+      {showMyQuestionsModal && (
+        <div className="modal-overlay" onClick={handleCloseMyQuestionsModal}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h2>Select Your Question</h2>
+              <button className="modal-close-btn" onClick={handleCloseMyQuestionsModal}>
+                <Icon path={mdiClose} size={1} />
+              </button>
+            </div>
+            <div className="modal-body">
+              <input
+                type="text"
+                className="question-search-input"
+                placeholder="Search your questions..."
+                value={questionSearchTerm}
+                onChange={(e) => setQuestionSearchTerm(e.target.value)}
+              />
+              <div className="my-questions-list">
+                {myQuestions
+                  .filter(q => 
+                    q.question.toLowerCase().includes(questionSearchTerm.toLowerCase())
+                  )
+                  .map((question) => (
+                    <div key={question.id} className="my-question-item">
+                      <div className="my-question-text">
+                        {question.question}
+                      </div>
+                      <button 
+                        className="select-question-btn"
+                        onClick={() => handleAddMyQuestion(question.id)}
+                      >
+                        Add
+                      </button>
+                    </div>
+                  ))}
+                {myQuestions.filter(q => 
+                  q.question.toLowerCase().includes(questionSearchTerm.toLowerCase())
+                ).length === 0 && (
+                  <div className="no-questions-message">
+                    {questionSearchTerm ? 'No questions match your search.' : 'You have not created any questions yet.'}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

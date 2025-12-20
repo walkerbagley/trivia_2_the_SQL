@@ -15,6 +15,23 @@ export const getQuestionById = async (axiosClient, id) => {
       
     }
   };
+
+  // Get all questions created by a specific user
+  export const getMyQuestions = async (axiosClient, userId) => {
+    const config = {
+      method: 'get',
+      maxBodyLength: Infinity,
+      url: `/question/my/${userId}`,
+    };
+  
+    try {
+      const response = await axiosClient.request(config);
+      return response.data;
+    } catch (error) {
+      console.error(`Failed to fetch questions for user ${userId}:`, error);
+      throw error;
+    }
+  };
   
   // Create a new question
   export const createQuestion = async (axiosClient, question) => {

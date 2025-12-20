@@ -7,7 +7,7 @@
             "request": "launch",
             "module": "uvicorn",
             "args": [
-                "trivia_2_api/main:app",
+                "trivia_2_api.main:app",
                 "--reload"
             ],
             "jinja": true

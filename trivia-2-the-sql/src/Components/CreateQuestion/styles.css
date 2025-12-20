@@ -1,0 +1,171 @@
+.background-color {
+    background-color: var(--main-background-color);
+    padding-top: 1.5em;
+    padding-left: 1.5em;
+    padding-bottom: 0;
+}
+
+.createpage {
+    color: var(--main-text-color);
+    width: 100%;
+    min-height: 100vh;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: var(--main-background-color);
+}
+
+.create-question-form {
+    width: 50vw;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1em;
+    margin-bottom: 3em;
+}
+
+.form-section {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--main-background-color);
+    padding: 1em 1.5em;
+    border-radius: 1em;
+    box-shadow: 10px 10px 10px #bebebe,
+        -10px -10px 10px #ffffff;
+}
+
+.form-section label {
+    font-weight: 700;
+    margin-bottom: 0.5em;
+}
+
+.form-section input,
+.form-section textarea {
+    padding: 0.5em;
+    border-radius: 0.5em;
+    border: 3px solid var(--accent3);
+    background-color: transparent;
+    color: var(--main-text-color);
+    font-family: inherit;
+}
+
+.form-section input:focus,
+.form-section textarea:focus {
+    border: 3px solid var(--accent2);
+    outline: none;
+}
+
+.form-section textarea {
+    resize: vertical;
+    min-height: 60px;
+}
+
+.form-row {
+    width: 100%;
+    display: flex;
+    gap: 1em;
+}
+
+.form-section-inline {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: var(--main-background-color);
+    padding: 1em 1.5em;
+    border-radius: 1em;
+    box-shadow: 10px 10px 10px #bebebe,
+        -10px -10px 10px #ffffff;
+}
+
+.form-section-inline label {
+    font-weight: 700;
+    margin-right: 1em;
+}
+
+.form-section-inline select {
+    padding: 0.5em;
+    border-radius: 0.5em;
+    border: 3px solid var(--accent3);
+    background-color: transparent;
+    color: var(--main-text-color);
+    cursor: pointer;
+}
+
+.form-section-inline select:focus {
+    border: 3px solid var(--accent2);
+    outline: none;
+}
+
+.checkbox-section {
+    gap: 1em;
+}
+
+.checkbox-section input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    accent-color: var(--accent2);
+}
+
+.error-message {
+    color: #e74c3c;
+    font-size: 0.9em;
+    margin-top: 0.5em;
+    margin-bottom: 0;
+}
+
+.submit-question-button {
+    margin-top: 2em;
+    border: 0;
+    background-color: var(--accent3);
+    padding: 1em 2em;
+    font-size: medium;
+    font-weight: 100;
+    color: var(--main-background-color);
+    cursor: pointer;
+    border-radius: 0.5em;
+}
+
+.submit-question-button:hover {
+    padding: 1em 3em;
+    transition: 0.2s ease-in-out;
+}
+
+/* Mobile styles */
+@media (max-width: 768px) {
+    .create-question-form {
+        width: 90vw;
+    }
+
+    .form-row {
+        flex-direction: column;
+    }
+
+    .form-section,
+    .form-section-inline {
+        padding: 0.75em 1em;
+    }
+
+    .submit-question-button:hover {
+        padding: 1em 2em;
+    }
+}
+
+@media (max-width: 480px) {
+    .createpage h1 {
+        font-size: 1.5em;
+    }
+
+    .create-question-form {
+        width: 95vw;
+        gap: 0.75em;
+    }
+
+    .form-section label,
+    .form-section-inline label {
+        font-size: 0.9em;
+    }
+}

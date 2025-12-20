@@ -142,6 +142,22 @@ export const addQuestionToRound = async (axiosClient, roundId, questionNumber, c
   }
 }
 
+export const addSpecificQuestionToRound = async (axiosClient, roundId, questionNumber, questionId) => {
+  let config = {
+    method: 'post',
+    maxBodyLength: Infinity,
+    url: `/deck/round/${roundId}/${questionNumber}/${questionId}`
+  };
+
+  try {
+    const response = await axiosClient.request(config);
+    return response;
+  } catch (error) {
+    console.log(error);
+    throw error;
+  }
+}
+
 export const replaceQuestionInRound = async (axiosClient, roundId, questionId, questionNumber, category = null, difficulty = null) => {
   const params = new URLSearchParams();
   

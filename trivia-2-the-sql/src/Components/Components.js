@@ -13,6 +13,7 @@ import AuthForm from './Auth/AuthForm.js';
 import AuthRegister from './Auth/AuthRegister.js';
 import DeckDetails from './Decks/DeckDetails/DeckDetails.js';
 import CreateDeck from './CreateDeck/CreateDeck.tsx';
+import CreateQuestion from './CreateQuestion/CreateQuestion.js';
 import { Admin } from './Admin';
 import './styles.css';
 import { useUserSession } from "../Providers/UserProvider.js";
@@ -41,6 +42,7 @@ export default function Components() {
                         <Route exact path='/decks' element={<Decks/>}/>
                         <Route path="/decks/:id" element={<DeckDetails />} />
                         <Route exact path='/create' element={<CreateDeck/>}/>
+                        <Route exact path='/create-question' element={<CreateQuestion/>}/>
                         <Route exact path='/account' element={<Account/>}/>
                         <Route exact path='/admin' element={
                             user?.is_admin ? <Admin /> : <Navigate to="/" />
