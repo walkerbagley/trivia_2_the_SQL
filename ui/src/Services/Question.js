@@ -48,7 +48,7 @@ export const getQuestionById = async (axiosClient, id) => {
       return response.data; // Returns the created question's ID
     } catch (error) {
       console.error("Failed to create question:", error);
-      
+      throw error;
     }
   };
   

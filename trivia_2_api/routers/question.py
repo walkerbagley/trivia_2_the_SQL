@@ -68,7 +68,8 @@ async def get_my_questions(user_id: UUID) -> list[Question]:
         with conn.cursor(row_factory=class_row(Question)) as cur:
             cur.execute(
                 """SELECT q.id, question, difficulty, q.a, q.b, q.c, q.d,
-                            category,
+                            category, created_by, review_status, first_answer,
+                            ARRAY(SELECT attribute FROM "QuestionAttributes" WHERE question_id = q.id) as attributes 
                             FROM "Questions" as q
                             WHERE created_by = %s
                             ORDER BY q.id DESC""",

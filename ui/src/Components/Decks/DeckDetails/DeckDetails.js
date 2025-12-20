@@ -299,6 +299,10 @@ const DeckDetails =  () => {
     const handleShowMyQuestions = async (roundNumber) => {
       try {
         const userQuestions = await getMyQuestions(axios, user.id);
+        if (!userQuestions || userQuestions.length === 0) {
+          toast.error("No questions found.");
+          return;
+        }
         setMyQuestions(userQuestions);
         setSelectedRoundForMyQuestion(roundNumber);
         setShowMyQuestionsModal(true);

@@ -45,7 +45,7 @@ class QuestionRequest(BaseModel):
 
 class CreateQuestionRequest(BaseModel):
     question: str
-    category: Optional[str]
+    category: Optional[str] = "general"
     correct_answer: str
     distractors: list[str]
     difficulty: Optional[int] = 1

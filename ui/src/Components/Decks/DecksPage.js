@@ -61,6 +61,7 @@ const Decks =  () => {
       </div>
       <h1>Deck List</h1>
       <Link to={'/create'} className='no-underline'><button>Create Deck</button></Link>
+      <Link to={'/create-question'} className='no-underline'><button>Create Question</button></Link>
       <div className="grid-container">
         {decks ? 
         decks.map((deck) => (

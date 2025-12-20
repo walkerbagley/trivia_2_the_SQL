@@ -36,6 +36,7 @@ const CreateQuestion = () => {
       correct_answer: data.correct_answer,
       distractors: [data.distractor1, data.distractor2, data.distractor3],
       difficulty: parseInt(data.difficulty),
+      category: data.category || 'general',
       is_private: data.is_private,
       created_by: user.id
     };
