@@ -18,7 +18,7 @@ export const GameService = {
   },
 
   getCurrentGameState: async (axios, gameId) => {
-      const response = await axios.get(`/games/${gameId}/state`);
+      const response = await axios.get(`/game/${gameId}/state`);
       return response.data;
   },
 

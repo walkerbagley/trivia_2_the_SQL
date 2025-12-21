@@ -1,7 +1,7 @@
 import string
 
 from datetime import datetime
-from fastapi import APIRouter, HTTPException, Request
+from fastapi import APIRouter, HTTPException, Request, status
 from fastapi.responses import JSONResponse
 from psycopg.rows import class_row, dict_row
 from random import choices
@@ -71,7 +71,7 @@ async def create_game(request: Request, game: GameRequest) -> None:
             )
 
 
-@router.get("/games/{game_id}/state")
+@router.get("/{game_id}/state")
 async def get_game_state(game_id: str, request: Request):
     """Get current game state including question_id"""
     user = request.state.user
@@ -385,7 +385,7 @@ async def get_game_scores(game_id: UUID) -> list[dict]:
         with conn.cursor(row_factory=dict_row) as cur:
             cur.execute(
                 """ 
-                        SELECT t.name, sum(CASE WHEN a.answer = 'a' THEN 1 ELSE 0 END) as score
+                        SELECT t.id, t.name, sum(CASE WHEN a.answer = 'a' THEN 1 ELSE 0 END) as score
                         FROM "GamePlayers" as gp
                         INNER JOIN "Teams" as t ON gp.team_id = t.id
                         INNER JOIN "Games" as g ON gp.game_id = g.id

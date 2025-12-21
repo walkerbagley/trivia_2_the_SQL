@@ -1,19 +1,20 @@
-import React, {useState, useEffect} from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom';
 import { GameService } from '../../../Services/Game';
 import { useAxios } from '../../../Providers/AxiosProvider';
+import { useSupabase } from '../../../Providers/SupabaseProvider';
 import { toast } from "react-toastify";
-import { getCurrentUserStatus } from '../../../Services/User';
 
 import './styles.css'
 
-// The joinCode is the gameid
 const LoadingPage = () => {
     const axios = useAxios();
+    const { supabase, isReady } = useSupabase();
     const navigate = useNavigate();
     const location = useLocation();
     const [fact, setFact] = useState("");
     const [teams, setTeams] = useState([]);
+    const channelsRef = useRef([]);
 
     // console.log("In Loading page, gameid:",location.state);
 
@@ -756,70 +757,147 @@ const LoadingPage = () => {
     ]
     
     function getFact(){
-        let i = Math.round(Math.random() * (facts.length))
-        return facts[i]
+        let i = Math.round(Math.random() * (facts.length - 1));
+        return facts[i];
     }
-    // timeout for fun facts
+
+    // Initial data fetch
+    const getInitialData = async () => {
+        try {
+            // Get initial teams
+            const teamData = await GameService.getTeamNames(axios, location.state.gameId);
+            setTeams(teamData);
+            
+            // Set initial fact
+            setFact(getFact());
+        } catch (error) {
+            console.error('Error fetching initial data:', error);
+        }
+    };
+
+    // Handle game status updates
+    const handleGameUpdate = (gameData) => {
+        console.log('Game status update:', gameData);
+        
+        if (gameData.status === 'in_progress') {
+            navigate("/play/" + location.state.joinCode, {
+                state: {
+                    gameId: location.state.gameId,
+                    host: location.state.host
+                }
+            });
+        }
+    };
+
+    // Handle team/player updates
+    const handlePlayerUpdate = async () => {
+        try {
+            const teamData = await GameService.getTeamNames(axios, location.state.gameId);
+            setTeams(teamData);
+        } catch (error) {
+            console.error('Error updating teams:', error);
+        }
+    };
+
+    // Setup Realtime subscriptions
+    useEffect(() => {
+        if (!supabase || !isReady || !location.state.gameId) return;
+
+        console.log('Setting up LoadingPage Realtime subscriptions...');
+        
+        // Initial fetch
+        getInitialData();
+
+        // Subscribe to Games table for status changes
+        const gamesChannel = supabase
+            .channel(`loading-game-${location.state.gameId}`)
+            .on(
+                'postgres_changes',
+                {
+                    event: 'UPDATE',
+                    schema: 'public',
+                    table: 'Games',
+                    filter: `id=eq.${location.state.gameId}`
+                },
+                (payload) => {
+                    handleGameUpdate(payload.new);
+                }
+            )
+            .subscribe((status) => {
+                console.log('Games subscription status:', status);
+            });
+
+        // Subscribe to GamePlayers table for team changes
+        const playersChannel = supabase
+            .channel(`loading-players-${location.state.gameId}`)
+            .on(
+                'postgres_changes',
+                {
+                    event: '*', // INSERT, UPDATE, DELETE
+                    schema: 'public',
+                    table: 'GamePlayers',
+                    filter: `game_id=eq.${location.state.gameId}`
+                },
+                () => {
+                    handlePlayerUpdate();
+                }
+            )
+            .subscribe((status) => {
+                console.log('GamePlayers subscription status:', status);
+            });
+
+        channelsRef.current = [gamesChannel, playersChannel];
+
+        // Cleanup
+        return () => {
+            console.log('Cleaning up LoadingPage subscriptions...');
+            channelsRef.current.forEach(channel => {
+                supabase.removeChannel(channel);
+            });
+            channelsRef.current = [];
+        };
+    }, [supabase, isReady, location.state.gameId]);
+
+    // Rotate fun facts every 8 seconds
     useEffect(() => {
         const interval = setInterval(() => {
-          setFact(getFact());
+            setFact(getFact());
         }, 8000);
         return () => clearInterval(interval);
-      }, []);
-      
-      // Timeout to see if game has started
-      useEffect(() => {
-          const interval = setInterval(() => {
-            getGameStatus();
-            updateTeams();
-          }, 1000);
-          return () => clearInterval(interval);
-        }, []);
+    }, []);
 
-    // check if game has started
-    const getGameStatus = () => {
-        getCurrentUserStatus(axios).then((data) => {
-            if (data.game_status){
-                if (data.game_status.status === "in_progress"){
-                    navigate("/play/"+location.state.joinCode, { state: { gameId : location.state.gameId , host : location.state.host} });
+    function handleStartGame(){
+        GameService.startGame(axios, location.state.gameId).then((resp) => {
+            // No need to navigate - Realtime will handle it
+            // But keep as fallback
+            navigate("/play/" + location.state.joinCode, {
+                state: {
+                    gameId: location.state.gameId,
+                    joinCode: location.state.joinCode,
+                    host: location.state.host
                 }
-            } else {
-                console.error("Game Status is null from loading page:",data)
-            }
-        });
-    };
-
-    function updateTeams(){
-        GameService.getTeamNames(axios, location.state.gameId).then((data)=>{
-            setTeams(data);
+            });
+        }).catch((error) => {
+            console.error("Failed to start game", error);
+            toast.error('You may not start this game.');
         });
     }
 
-
-    function handleStartGame(){
-        GameService.startGame(axios,location.state.gameId).then((resp)=>{
-            navigate("/play/"+location.state.joinCode, { state: { gameId : location.state.gameId, joinCode: location.state.joinCode, host : location.state.host } });
-        }).catch((error)=>{
-            console.error("Failed to start game", error);
-            toast.error('You may not start this game.')
-        });
-    };
-
     function endGame() {
-        GameService.endGame(axios, location.state.gameId).then((resp)=>{
+        GameService.endGame(axios, location.state.gameId).then((resp) => {
             navigate("/");
-        }).catch((error)=>{
+        }).catch((error) => {
             console.error("Failed to end game", error);
-            toast.error('You may not end this game.')
+            toast.error('You may not end this game.');
         });
     }
 
     function leaveGame(){
-        GameService.leaveGame(axios, location.state.gameId).then((resp)=>{
+        GameService.leaveGame(axios, location.state.gameId).then((resp) => {
             navigate("/");
-        }).catch((error)=>{
+        }).catch((error) => {
             console.error("Failed to leave game", error);
-            toast.error('You may not leave this game.')
+            toast.error('You may not leave this game.');
         });
     }  
 
@@ -835,27 +913,27 @@ const LoadingPage = () => {
             <p className='center'>Waiting for Players...</p>
             <h2 className='center'>Team List</h2>
             <div className='grid-container'>
-                {teams ? 
-                teams.map((t) => (
-                <div className='grid-item' key={t.id}>
-                    <h3>{t}</h3>
-                </div>
+                {teams && teams.length > 0 ? 
+                teams.map((t, index) => (
+                    <div className='grid-item' key={index}>
+                        <h3>{t}</h3>
+                    </div>
                 ))
-                : <></>
+                : <p className='center'>No teams yet...</p>
                 }
             </div>
             {location.state.host ? (
-            <div className='game-controls'>
-                <button className='join-btn' onClick={()=>handleStartGame()}>Start Game!</button>
-                <button className='join-btn' onClick={()=>endGame()}>End Game</button>
-            </div>
-            ) :
-            (
                 <div className='game-controls'>
-                    <button className='join-btn' onClick={()=>leaveGame()}>Leave Game</button>
+                    <button className='join-btn' onClick={handleStartGame}>Start Game!</button>
+                    <button className='join-btn' onClick={endGame}>End Game</button>
+                </div>
+            ) : (
+                <div className='game-controls'>
+                    <button className='join-btn' onClick={leaveGame}>Leave Game</button>
                 </div>
             )}
         </div>
     );
 };
+
 export default LoadingPage;

@@ -22,6 +22,7 @@ const QuestionPage = () => {
     const [questionNumber, setQuestionNumber] = useState(0);
     const [timeRemaining, setTimeRemaining] = useState(0);
     const [currentTeamId, setCurrentTeamId] = useState(null);
+    const [teamAnswers, setTeamAnswers] = useState({});
     
     // Refs for tracking state
     const optionsRef = useRef({"a": [], "b": [], "c": [], "d": []});
@@ -30,6 +31,8 @@ const QuestionPage = () => {
     const randomNumRef = useRef(Math.floor(Math.random() * 4));
     const lastAnswerRef = useRef(null);
     const channelsRef = useRef([]);
+
+    let allAnswered = false;
 
     const getQuestionSizeClass = (questionText) => {
         const length = questionText.length;
@@ -133,7 +136,7 @@ const QuestionPage = () => {
             
             // Fetch the new question
             if (gameData.current_question > 0) {
-                // Note: You'll need to pass the question_id somehow
+                // TODO: Note: You'll need to pass the question_id somehow
                 // Option 1: Add question_id to Games table
                 // Option 2: Calculate from DeckRounds/RoundQuestions
                 // For now, we'll use a workaround via API
@@ -157,6 +160,17 @@ const QuestionPage = () => {
 
     const handleAnswerUpdate = (payload) => {
         const answer = payload.new;
+
+        if (location.state.host) {
+            allAnswered = scores.length > 0 && scores.every(team => teamAnswers[team.team_id]);
+            setTeamAnswers(prev => ({
+                ...prev,
+                [answer.team_id]: {
+                    answer: answer.answer,
+                    team_id: answer.team_id
+                }
+            }));
+        }
         
         // Only update if it's for current team, round, and question
         if (answer.team_id === currentTeamId &&
@@ -378,6 +392,11 @@ const QuestionPage = () => {
 
     return (
         <div className='question-page'>
+            {location.state.host && allAnswered && (
+                <div className='all-answered'>
+                    ✅ All teams have answered!
+                </div>
+            )}
             <div className='center'>
                 <h2>Time Remaining: {timeRemaining}</h2>
                 <h1 className='question-text'>Round {roundNumber}</h1>
@@ -450,6 +469,27 @@ const QuestionPage = () => {
                     }
                 </ul>
             </div>
+            {location.state.host && (
+                <div>
+                    <h2>Team Answers</h2>
+                    <div className='team-answers'>
+                        {Object.entries(teamAnswers).map(([teamId, data]) => {
+                            // Find team name from scores
+                            const team = scores.find(s => s.team_id === teamId);
+                            const teamName = team ? team.name : 'Unknown Team';
+                            
+                            return (
+                                <div key={teamId} className='team-answer-item'>
+                                    <strong>{teamName}:</strong> {data.answer || 'No answer yet'}
+                                </div>
+                            );
+                        })}
+                        {Object.keys(teamAnswers).length === 0 && (
+                            <p>No answers submitted yet</p>
+                        )}
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

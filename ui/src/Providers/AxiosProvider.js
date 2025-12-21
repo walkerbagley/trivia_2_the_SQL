@@ -1,7 +1,8 @@
 import { createContext, useContext } from 'react';
 import axios from 'axios';
 
-const baseURL = `http://localhost:${process.env.REACT_APP_API_PORT ?? 8000}`;
+const baseURL = `http://${process.env.REACT_APP_API_HOST ?? 'localhost'}:${process.env.REACT_APP_API_PORT ?? 8000}`;
+console.log("API Base URL:", baseURL);
 
 const AxiosContext = createContext(null);
 
