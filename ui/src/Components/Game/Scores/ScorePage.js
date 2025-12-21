@@ -2,6 +2,7 @@ import { useLocation } from "react-router-dom";
 import { GameService } from '../../../Services/Game.js'
 import { useAxios } from '../../../Providers/AxiosProvider.js'
 import React, { useEffect, useState } from "react";
+import './styles.css';
 
 const ScorePage = () => {
     const location = useLocation();
@@ -24,26 +25,28 @@ const ScorePage = () => {
 
     return (
         <div className="scores-page">
-            <h1>Let's tally the trivia!</h1>
-            <div>
-            <ol>
-                {scores && scores.length > 0 ? (
-                    scores
-                    .sort((a, b) => b.score - a.score) // Sort in descending order by score
-                    .map((s) => (
-                        <li key={s.name}>
-                            <div className="score-card">
-                                <p className="name">{s.name}</p>
-                                <p>{s.score}</p>
+            <div className="scores-page__container">
+                <h1 className="scores-page__title">🏆 Final Scores 🏆</h1>
+                <div className="scores-page__list">
+                    {scores && scores.length > 0 ? (
+                        scores
+                        .sort((a, b) => b.score - a.score)
+                        .map((s, index) => (
+                            <div key={s.name} className={`score-card ${index === 0 ? 'score-card--first' : index === 1 ? 'score-card--second' : index === 2 ? 'score-card--third' : ''}`}>
+                                <div className="score-card__rank">
+                                    {index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `#${index + 1}`}
+                                </div>
+                                <div className="score-card__content">
+                                    <p className="score-card__name">{s.name}</p>
+                                    <p className="score-card__score">{s.score} pts</p>
+                                </div>
                             </div>
-                        </li>
-                    ))
-                ) : (
-                    <p>No scores available.</p> // Optional: Message for empty scores
-                )}
-            </ol>
+                        ))
+                    ) : (
+                        <p className="scores-page__empty">No scores available.</p>
+                    )}
+                </div>
             </div>
-
         </div>
     );
 

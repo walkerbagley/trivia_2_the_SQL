@@ -5,6 +5,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { GameService } from '../../../Services/Game.js';
 import { getQuestionById } from '../../../Services/Question.js'
+import ScoresModal from '../Scores/ScoreModel.js';
 
 const QuestionPage = () => {
     const axios = useAxios();
@@ -23,6 +24,7 @@ const QuestionPage = () => {
     const [timeRemaining, setTimeRemaining] = useState(0);
     const [currentTeamId, setCurrentTeamId] = useState(null);
     const [teamAnswers, setTeamAnswers] = useState({});
+    const [showScoresModal, setShowScoresModal] = useState(false);
     
     // Refs for tracking state
     const optionsRef = useRef({"a": [], "b": [], "c": [], "d": []});
@@ -33,6 +35,10 @@ const QuestionPage = () => {
     const channelsRef = useRef([]);
 
     let allAnswered = false;
+
+    const toggleScoresModal = () => {
+        setShowScoresModal(!showScoresModal);
+    };
 
     const getQuestionSizeClass = (questionText) => {
         const length = questionText.length;
@@ -447,10 +453,14 @@ const QuestionPage = () => {
                     <>
                         <button onClick={nextQuestion}>Next Question</button>
                         <button onClick={endGame}>End Game</button>
+                        <button onClick={() => setShowScoresModal(true)}>View Scores</button>
                     </>
                 )}
                 {!location.state.host && (
-                    <button onClick={leaveGame}>Leave Game</button>
+                    <>
+                        <button onClick={leaveGame}>Leave Game</button>
+                        <button onClick={() => setShowScoresModal(true)}>View Scores</button>
+                    </>
                 )}
             </div>
             <div className='center'>
@@ -490,6 +500,11 @@ const QuestionPage = () => {
                     </div>
                 </div>
             )}
+            <ScoresModal 
+                isOpen={showScoresModal}
+                onClose={() => setShowScoresModal(false)}
+                scores={scores}
+            />
         </div>
     );
 };
