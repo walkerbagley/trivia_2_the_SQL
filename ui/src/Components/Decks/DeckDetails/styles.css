@@ -15,9 +15,97 @@
     width: 100%;
     margin-bottom: 2em;
 }
+
+.deckdetails-page .questionlist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 1em;
+    margin-bottom: 1em;
+}
+
+.deckdetails-page .question-content {
+    flex: 1;
+}
+
+.deckdetails-page .question-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5em;
+}
+
+.deckdetails-page .question-text-container {
+    flex: 1;
+}
+
 .deckdetails-page .question {
-    padding: 1em;
+    padding: 0.5em 0;
     text-align: left;
+}
+
+.deckdetails-page .answer-preview {
+    padding: 0.5em 0;
+    text-align: left;
+    color: var(--accent1);
+    font-size: 0.9em;
+    font-style: italic;
+}
+
+.deckdetails-page .expand-toggle-btn {
+    border: 0;
+    background: none;
+    cursor: pointer;
+    padding: 0.25em;
+    border-radius: 0.5em;
+    color: var(--accent2);
+    transition: all 0.2s ease-in-out;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 32px;
+    height: 32px;
+    margin-top: 0.5em;
+}
+
+.deckdetails-page .expand-toggle-btn:hover {
+    background-color: var(--accent2);
+    color: var(--main-background-color);
+}
+
+.deckdetails-page .answer-options {
+    margin-top: 1em;
+    padding: 1em;
+    background-color: rgba(var(--accent3-rgb, 100, 100, 100), 0.1);
+    border-radius: 0.5em;
+    border-left: 3px solid var(--accent2);
+}
+
+.deckdetails-page .answer-option {
+    padding: 0.75em;
+    margin: 0.5em 0;
+    text-align: left;
+    background-color: var(--main-background-color);
+    border-radius: 0.5em;
+    border: 1px solid var(--accent3);
+    display: flex;
+    gap: 0.75em;
+}
+
+.deckdetails-page .answer-option.correct {
+    border-color: var(--accent1);
+    background-color: rgba(var(--accent1-rgb, 100, 200, 100), 0.05);
+}
+
+.deckdetails-page .answer-option .option-label {
+    font-weight: bold;
+    color: var(--accent2);
+    min-width: 80px;
+}
+
+.deckdetails-page .answer-option.correct .option-label {
+    color: var(--accent1);
+}
+
+.deckdetails-page .answer-option .option-text {
     flex: 1;
 }
 

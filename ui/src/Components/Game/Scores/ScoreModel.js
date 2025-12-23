@@ -2,8 +2,6 @@ import React from 'react';
 import './model.css';
 
 const ScoresModal = ({ isOpen, onClose, scores }) => {
-    if (!isOpen) return null;
-
     const getTrophyIcon = (index) => {
         if (index === 0) return '🥇';
         if (index === 1) return '🥈';
@@ -28,6 +26,8 @@ const ScoresModal = ({ isOpen, onClose, scores }) => {
         window.addEventListener('keydown', handleEscape);
         return () => window.removeEventListener('keydown', handleEscape);
     }, [isOpen, onClose]);
+
+    if (!isOpen) return null;
 
     return (
         <div className='modal-overlay' onClick={handleOverlayClick}>

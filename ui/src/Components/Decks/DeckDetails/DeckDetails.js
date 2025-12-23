@@ -8,7 +8,7 @@ import { useAxios } from '../../../Providers/AxiosProvider.js'
 import { useUserSession } from "../../../Providers/UserProvider.js";
 import { addUserDeck, removeUserDeck } from '../../../Services/User.js';
 import Icon from '@mdi/react';
-import { mdiPencilOutline, mdiCheck, mdiClose, mdiSync, mdiPlus, mdiTrashCanOutline } from '@mdi/js';
+import { mdiPencilOutline, mdiCheck, mdiClose, mdiSync, mdiPlus, mdiTrashCanOutline, mdiChevronDown, mdiChevronUp } from '@mdi/js';
 import { toast } from 'react-toastify';
 import { maxQuestionsPerRound } from '../../../constants.js';
 import { BackButton } from '../BackButton/BackButton.js';
@@ -37,6 +37,7 @@ const DeckDetails =  () => {
   const [selectedRoundForMyQuestion, setSelectedRoundForMyQuestion] = useState(null);
   const [myQuestions, setMyQuestions] = useState([]);
   const [questionSearchTerm, setQuestionSearchTerm] = useState('');
+  const [expandedQuestions, setExpandedQuestions] = useState({});
   let num_rounds;
 
   const difficulties = [1, 2, 3];
@@ -348,6 +349,14 @@ const DeckDetails =  () => {
       setSelectedRoundForMyQuestion(null);
     };
 
+    const toggleQuestionExpanded = (questionId) => {
+      setExpandedQuestions(prev => ({
+        ...prev,
+        [questionId]: !prev[questionId]
+      }));
+      console.log(questions.find(question => question.id === questionId))
+    };
+
     const handleDeleteRound = async (roundId, roundNumber) => {
       try {
         const confirmed = window.confirm(`Are you sure you want to delete Round ${roundNumber}? This will permanently remove all questions in this round and cannot be undone.`);
@@ -408,7 +417,46 @@ for (const key in rounds) {
             <div key={question.id}>
                 {question.round_number == Number(key) + 1 ? 
                   <li>
-                    <div className='question'>{question.question.slice(0, 115)}</div>
+                    <div className='question-content'>
+                      <div className='question-header'>
+                        <button 
+                          className='expand-toggle-btn' 
+                          onClick={() => toggleQuestionExpanded(question.id)}
+                          title={expandedQuestions[question.id] ? 'Hide answer options' : 'Show answer options'}
+                        >
+                          <Icon path={expandedQuestions[question.id] ? mdiChevronUp : mdiChevronDown} size={0.8} />
+                        </button>
+                        <div className='question-text-container'>
+                          <div className='question'>{question.question.slice(0, 150)}</div>
+                        </div>
+                      </div>
+                      {expandedQuestions[question.id] && (
+                        <div className='answer-options'>
+                          <div className='answer-option correct'>
+                            <span className='option-label'>Correct:</span>
+                            <span className='option-text'>{question.a?.slice(0, 150)}{question.a?.length > 150 ? '...' : ''}</span>
+                          </div>
+                          {question.b && (
+                            <div className='answer-option'>
+                              <span className='option-label'>Option 2:</span>
+                              <span className='option-text'>{question.b?.slice(0, 150)}{question.b?.length > 150 ? '...' : ''}</span>
+                            </div>
+                          )}
+                          {question.c && (
+                            <div className='answer-option'>
+                              <span className='option-label'>Option 3:</span>
+                              <span className='option-text'>{question.c?.slice(0, 150)}{question.c?.length > 150 ? '...' : ''}</span>
+                            </div>
+                          )}
+                          {question.d && (
+                            <div className='answer-option'>
+                              <span className='option-label'>Option 4:</span>
+                              <span className='option-text'>{question.d?.slice(0, 150)}{question.d?.length > 150 ? '...' : ''}</span>
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </div>
                     <div className='question-actions'>
                       <button className='question-action-btn' title='Regenerate Question'
                               onClick={() => handleReplaceQuestion(question.id, rounds[key]["id"], question.question_number, Number(key))}>
