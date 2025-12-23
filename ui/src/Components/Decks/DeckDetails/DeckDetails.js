@@ -127,10 +127,10 @@ const DeckDetails =  () => {
       setTempTitle('');
       updateDeck(axios, deck.id, tempTitle, deck.description).then(() => {
         console.log("Updated deck title");
-        toast("Successfully updated deck name");
+        toast.success("Successfully updated deck name");
       }).catch((error) => {
         console.error("Failed to update deck title:", error);
-        toast("Failed to update deck title");
+        toast.error("Failed to update deck title");
       });
     };
 
@@ -139,10 +139,10 @@ const DeckDetails =  () => {
       setIsEditingDescription(false);
       setTempDescription('');
       updateDeck(axios, deck.id, deck.name, tempDescription).then(() => {
-        toast("Successfully updated deck description");
+        toast.success("Successfully updated deck description");
       }).catch((error) => {
         console.error("Failed to update deck description:", error);
-        toast("Failed to update deck description");
+        toast.error("Failed to update deck description");
       });
     };
 
@@ -177,11 +177,11 @@ const DeckDetails =  () => {
         const newQuestion = response.data.question;
         newQuestion.round_number = roundNumber + 1;
         
-        toast("Question added successfully!");
+        toast.success("Question added successfully!");
         setQuestions([...questions, newQuestion]);
       } catch (error) {
         console.error("Failed to add question:", error);
-        toast("No questions available for the selected filters.");
+        toast.error("No questions available for the selected filters.");
       }
     };
 
@@ -196,14 +196,13 @@ const DeckDetails =  () => {
         if (!ret || ret.status < 200 || ret.status >= 300) {
           throw new Error("Failed to remove question from round");
         }
-        toast("Question removed successfully!");
+        toast.success("Question removed successfully!");
         
         // Find the question being removed to get its round and position
         const removedQuestion = questions.find(q => q.id === questionId);
         if (!removedQuestion) return;
         
         // Filter out the removed question and update question numbers for the same round
-        console.log(questions);
         const updatedQuestions = questions
           .filter(q => q.id !== questionId)
           .map(question => {
@@ -220,7 +219,7 @@ const DeckDetails =  () => {
         setQuestions(updatedQuestions);
       } catch (error) {
         console.error("Failed to remove question:", error);
-        toast("Failed to remove question from round.");
+        toast.error("Failed to remove question from round.");
       }
     };
 
@@ -248,7 +247,7 @@ const DeckDetails =  () => {
         const newQuestion = response.data.question;
         newQuestion.round_number = Math.floor(roundIndex) + 1;
         
-        toast("Question replaced successfully!");
+        toast.success("Question replaced successfully!");
         
         const updatedQuestions = questions.map(q => 
           q.id === questionId ? newQuestion : q
@@ -257,7 +256,7 @@ const DeckDetails =  () => {
         
       } catch (error) {
         console.error("Failed to replace question:", error);
-        toast("Failed to regenerate question. No questions available for the selected filters.");
+        toast.error("Failed to regenerate question. No questions available for the selected filters.");
       }
     };
 
@@ -275,7 +274,7 @@ const DeckDetails =  () => {
         
         await addRound(axios, deck.id, newRoundQuestions, categories, [], nextRoundNumber);
         
-        toast(`Successfully created new round with ${newRoundQuestions} questions${newRoundCategory ? ` in ${newRoundCategory}` : ''}!`);
+        toast.success(`Successfully created new round with ${newRoundQuestions} questions${newRoundCategory ? ` in ${newRoundCategory}` : ''}!`);
         
         // Refresh the deck data to show the new round
         fetchDeck();
@@ -286,7 +285,7 @@ const DeckDetails =  () => {
         setNewRoundQuestions(5);
       } catch (error) {
         console.error("Failed to create new round:", error);
-        toast("Failed to create new round. Please try again.");
+        toast.error("Failed to create new round. Please try again.");
       }
     };
 
@@ -309,7 +308,7 @@ const DeckDetails =  () => {
         setQuestionSearchTerm('');
       } catch (error) {
         console.error("Failed to fetch user questions:", error);
-        toast("Failed to load your questions. Please try again.");
+        toast.error("Failed to load your questions. Please try again.");
       }
     };
 
@@ -332,13 +331,13 @@ const DeckDetails =  () => {
         const newQuestion = response.data.question;
         newQuestion.round_number = selectedRoundForMyQuestion + 1;
         
-        toast("Your question added successfully!");
+        toast.success("Your question added successfully!");
         setQuestions([...questions, newQuestion]);
         setShowMyQuestionsModal(false);
         setQuestionSearchTerm('');
       } catch (error) {
         console.error("Failed to add question:", error);
-        toast("Failed to add your question to the round.");
+        toast.error("Failed to add your question to the round.");
       }
     };
 
@@ -353,7 +352,6 @@ const DeckDetails =  () => {
         ...prev,
         [questionId]: !prev[questionId]
       }));
-      console.log(questions.find(question => question.id === questionId))
     };
 
     const handleFlagQuestion = async (questionId) => {
@@ -399,13 +397,13 @@ const DeckDetails =  () => {
         
         await deleteRound(axios, roundId);
         
-        toast(`Round ${roundNumber} deleted successfully!`);
+        toast.success(`Round ${roundNumber} deleted successfully!`);
         
         // Refresh the deck data to reflect the changes
         fetchDeck();
       } catch (error) {
         console.error("Failed to delete round:", error);
-        toast("Failed to delete round. Please try again.");
+        toast.error("Failed to delete round. Please try again.");
       }
     };
  

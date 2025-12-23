@@ -207,7 +207,7 @@ async def roll_question(
 ) -> Question:
     with db.connection() as conn:
         with conn.cursor(row_factory=class_row(Question)) as cur:
-            query = """SELECT q.id, q.question, q.difficulty, q.a, q.b, q.c, q.d, q.category
+            query = """SELECT q.id, q.question, q.difficulty, q.a, q.b, q.c, q.d, q.category, q.review_status, q.created_by
                         FROM "Questions" as q
                         WHERE 1=1
                         """
