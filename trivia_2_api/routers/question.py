@@ -136,11 +136,11 @@ async def create_question(question: CreateQuestionRequest) -> UUID:
 
 
 @router.put("/{id}")
-async def update_question(id: UUID, question: QuestionRequest) -> None:
+async def update_question(id: UUID, question: QuestionRequest) -> Question:
     with db.connection() as conn:
         with conn.cursor() as cur:
             cur.execute(
-                """UPDATE "Questions" SET question = %s, difficulty = %s, a = %s, b = %s, c = %s, d = %s, category = %s WHERE id = %s""",
+                """UPDATE "Questions" SET question = %s, difficulty = %s, a = %s, b = %s, c = %s, d = %s, category = %s, review_status = %s WHERE id = %s""",
                 (
                     question.question,
                     question.difficulty,
@@ -149,9 +149,13 @@ async def update_question(id: UUID, question: QuestionRequest) -> None:
                     question.c,
                     question.d,
                     question.category,
+                    question.review_status,
                     id,
                 ),
             )
+
+            if cur.rowcount == 0:
+                raise HTTPException(status_code=404, detail="Question not found")
 
             cur.execute(
                 """DELETE FROM "QuestionAttributes" WHERE question_id = %s""", (id,)
@@ -162,6 +166,21 @@ async def update_question(id: UUID, question: QuestionRequest) -> None:
                     """INSERT INTO "QuestionAttributes" (question_id, attribute) VALUES (%s,%s)""",
                     [(id, attribute) for attribute in question.attributes],
                 )
+
+            conn.commit()
+
+        # Fetch and return the updated question
+        with conn.cursor(row_factory=class_row(Question)) as cur:
+            cur.execute(
+                """SELECT q.id, question, difficulty, q.a, q.b, q.c, q.d,
+                          category, created_by, review_status,
+                          ARRAY(SELECT attribute FROM "QuestionAttributes" WHERE question_id = q.id) as attributes 
+                          FROM "Questions" as q
+                          WHERE q.id = %s""",
+                (id,),
+            )
+            ret = cur.fetchone()
+            return ret
 
 
 @router.delete("/{id}")

@@ -53,6 +53,8 @@ Current categories and attributes (10/7/2024):
 - Categories: `{'hobbies', 'sports', 'kids', 'world', 'tv', 'newest', 'general', 'pop culture', 'brain-teasers', 'religion', 'entertainment', 'humanities', 'stem', 'history'}`
 - Attributes: `{'music', 'literature', 'animals', 'chemistry', 'max', 'math', 'quotes', 'cartoon', 'geography', 'biology', 'politics', 'tv', 'physics', 'movies', 'video-games', 'mythology', 'celebrities', 'cs', 'videogames', 'people', 'usa'}`
 
+enum for review status 0 == reviewed, 1 == not reviewed, 2 == needs review
+
 
 ### Dev Plan fa2024
 Oct 9th: Clean and parse data, standup database

@@ -66,7 +66,7 @@ export const getQuestionById = async (axiosClient, id) => {
       return response.data;
     } catch (error) {
       console.error(`Failed to update question with ID ${id}:`, error);
-      
+      throw error;
     }
   };
   

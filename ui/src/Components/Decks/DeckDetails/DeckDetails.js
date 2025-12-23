@@ -3,12 +3,12 @@ import React, {useEffect, useState} from 'react';
 import './styles.css';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
 import { getDeckQuestions, getDeck, getDeckRounds, updateRound, updateDeck, addQuestionToRound, removeQuestionFromRound, replaceQuestionInRound, addRound, deleteRound, addSpecificQuestionToRound } from '../../../Services/Decks';
-import { getAvailableCategories, getMyQuestions } from '../../../Services/Question.js';
+import { getAvailableCategories, getMyQuestions, updateQuestion } from '../../../Services/Question.js';
 import { useAxios } from '../../../Providers/AxiosProvider.js'
 import { useUserSession } from "../../../Providers/UserProvider.js";
 import { addUserDeck, removeUserDeck } from '../../../Services/User.js';
 import Icon from '@mdi/react';
-import { mdiPencilOutline, mdiCheck, mdiClose, mdiSync, mdiPlus, mdiTrashCanOutline, mdiChevronDown, mdiChevronUp } from '@mdi/js';
+import { mdiPencilOutline, mdiCheck, mdiClose, mdiSync, mdiPlus, mdiTrashCanOutline, mdiChevronDown, mdiChevronUp, mdiFlagOutline } from '@mdi/js';
 import { toast } from 'react-toastify';
 import { maxQuestionsPerRound } from '../../../constants.js';
 import { BackButton } from '../BackButton/BackButton.js';
@@ -179,7 +179,6 @@ const DeckDetails =  () => {
         
         toast("Question added successfully!");
         setQuestions([...questions, newQuestion]);
-        console.log(questions)
       } catch (error) {
         console.error("Failed to add question:", error);
         toast("No questions available for the selected filters.");
@@ -357,6 +356,40 @@ const DeckDetails =  () => {
       console.log(questions.find(question => question.id === questionId))
     };
 
+    const handleFlagQuestion = async (questionId) => {
+      try {
+        const currentQuestion = questions.find(q => q.id === questionId);
+        if (!currentQuestion) {
+          throw new Error("Question not found");
+        }
+
+        const updatedQuestionData = {
+          question: currentQuestion.question,
+          difficulty: currentQuestion.difficulty,
+          a: currentQuestion.a || "",
+          b: currentQuestion.b || "",
+          c: currentQuestion.c || null,
+          d: currentQuestion.d || null,
+          category: currentQuestion.category,
+          review_status: 2,
+          attributes: currentQuestion.attributes || [],
+          created_by: currentQuestion.created_by || null
+        };
+
+        await updateQuestion(axios, questionId, updatedQuestionData);
+        
+        toast.success("Question flagged for review successfully!");
+        
+        const updatedQuestions = questions.map(q => 
+          q.id === questionId ? { ...q, review_status: 2 } : q
+        );
+        setQuestions(updatedQuestions);
+      } catch (error) {
+        console.error("Failed to flag question:", error);
+        toast.error("Failed to flag question for review.");
+      }
+    };
+
     const handleDeleteRound = async (roundId, roundNumber) => {
       try {
         const confirmed = window.confirm(`Are you sure you want to delete Round ${roundNumber}? This will permanently remove all questions in this round and cannot be undone.`);
@@ -458,6 +491,10 @@ for (const key in rounds) {
                       )}
                     </div>
                     <div className='question-actions'>
+                      <button className='question-action-btn' title='Flag for Review'
+                              onClick={() => handleFlagQuestion(question.id)}>
+                        <Icon path={mdiFlagOutline} size={0.8} />
+                      </button>
                       <button className='question-action-btn' title='Regenerate Question'
                               onClick={() => handleReplaceQuestion(question.id, rounds[key]["id"], question.question_number, Number(key))}>
                         <Icon path={mdiSync} size={0.8} />
