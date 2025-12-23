@@ -12,11 +12,17 @@
   border: 0;
   padding: 1em;
   cursor: pointer;
-  box-shadow:  10px 10px 10px #bebebe,
-             -10px -10px 10px #ffffff;
+  box-shadow:  5px 5px 10px rgba(190, 190, 190, 0.5),
+             -5px -5px 10px rgba(255, 255, 255, 0.5);
   background-color: var(--accent3);
   color: var(--main-background-color);
   border-radius: 0.5em;
+}
+
+.deckspage .create-buttons-container {
+  display: flex;
+  gap: 1.5em;
+  margin: 1em 0;
 }
 
 .deckspage .grid-container { 

@@ -60,8 +60,10 @@ const Decks =  () => {
         <button onClick={()=>{setFilter(false)}} style={{backgroundColor: filter ? "var(--main-background-color)" : "var(--accent1)", color: filter ? "var(--accent1)" : "var(--main-background-color)"}}>All Decks</button>
       </div>
       <h1>Deck List</h1>
-      <Link to={'/create'} className='no-underline'><button>Create Deck</button></Link>
-      <Link to={'/create-question'} className='no-underline'><button>Create Question</button></Link>
+      <div className='create-buttons-container'>
+        <Link to={'/create'} className='no-underline'><button>Create Deck</button></Link>
+        <Link to={'/create-question'} className='no-underline'><button>Create Question</button></Link>
+      </div>
       <div className="grid-container">
         {decks ? 
         decks.map((deck) => (
